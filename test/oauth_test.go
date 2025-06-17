@@ -209,7 +209,10 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 		)
 
 		Describe("Messaging Service connects successfully", func() {
-			Skip("Broker instability with issuer identifier - EBP-1058")
+			BeforeEach(func() {
+				Skip("Broker instability with issuer identifier - EBP-1058")
+			})
+
 			It("When given access token d, no id token and an issuer identifier", func() {
 				var err error
 				messagingService, err = builder.WithAuthenticationStrategy(config.OAuth2Authentication(
