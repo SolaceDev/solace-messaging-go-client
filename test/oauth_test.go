@@ -205,10 +205,24 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 			Entry("When given id token a, no access token and no issuer identifier", "", tokenA, ""),
 			Entry("When given id token b, access token c and no issuer identifier", tokenC, tokenB, ""),
 			Entry("When given id token b, access token d and no issuer identifier", tokenD, tokenB, ""),
-
 			Entry("When given access token c, no id token and no issuer identifier", tokenC, "", ""),
-			// Entry("When given access token d, no id token and an issuer identifier", tokenD, "", issuerIdentifier),
 		)
+
+		Describe("Messaging Service connects successfully", func() {
+			It("When given access token d, no id token and an issuer identifier", func() {
+				var err error
+				messagingService, err = builder.WithAuthenticationStrategy(config.OAuth2Authentication(
+					tokenD,
+					"",
+					issuerIdentifier,
+				)).Build()
+				Expect(err).ToNot(HaveOccurred())
+				Expect(messagingService.Connect()).ToNot(HaveOccurred())
+				helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
+					Expect(client.ClientUsername).To(Equal("solclient_oauth"))
+				})
+			})
+		})
 
 		Describe("When the messaging service tries to connect after multiple token updates", func() {
 			Context("When the multiple updates were applied before the first connection with valid tokens", func() {
