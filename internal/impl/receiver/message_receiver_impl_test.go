@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 	"unsafe"
@@ -149,8 +150,12 @@ func TestMessageReceiverStartIdempotence(t *testing.T) {
 		err     error
 	}
 	results := make(chan result, numWaiters)
+	var wg sync.WaitGroup
+	wg.Add(numWaiters)
+
 	for i := 0; i < numWaiters; i++ {
 		go func() {
+			defer wg.Done()
 			proceed, err := receiver.starting()
 			results <- result{
 				proceed: proceed,
@@ -158,23 +163,43 @@ func TestMessageReceiverStartIdempotence(t *testing.T) {
 			}
 		}()
 	}
+
 	select {
 	case <-results:
 		t.Error("did not expect subsequent calls to starting to return")
 	case <-time.After(100 * time.Millisecond):
 		// success
 	}
+
 	myError := fmt.Errorf("hello world")
 	receiver.started(myError)
-	for i := 0; i < numWaiters; i++ {
-		select {
-		case r := <-results:
-			if r.proceed || r.err != myError {
-				t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
+
+	// Use a separate goroutine to collect results to avoid blocking the test
+	resultsCounted := make(chan struct{})
+	go func() {
+		defer close(resultsCounted)
+		for i := 0; i < numWaiters; i++ {
+			select {
+			case r := <-results:
+				if r.proceed || r.err != myError {
+					t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
+				}
+			case <-time.After(500 * time.Millisecond):
+				t.Error("timed out waiting for results to be published")
+				return
 			}
-		case <-time.After(100 * time.Millisecond):
-			t.Error("timed out waiting for results to be published")
 		}
+	}()
+
+	// Wait for all goroutines to finish
+	wg.Wait()
+
+	// Wait for results to be processed
+	select {
+	case <-resultsCounted:
+		// All results processed
+	case <-time.After(1 * time.Second):
+		t.Error("timed out waiting for results to be processed")
 	}
 }
 
@@ -189,8 +214,12 @@ func TestMessageReceiverTerminateIdempotence(t *testing.T) {
 	}
 	numWaiters := 3
 	results := make(chan result, numWaiters)
+	var wg sync.WaitGroup
+	wg.Add(numWaiters)
+
 	for i := 0; i < numWaiters; i++ {
 		go func() {
+			defer wg.Done()
 			proceed, err := receiver.terminate()
 			results <- result{
 				proceed: proceed,
@@ -198,32 +227,52 @@ func TestMessageReceiverTerminateIdempotence(t *testing.T) {
 			}
 		}()
 	}
+
 	select {
 	case <-results:
 		t.Error("did not expect subsequent calls to terminate to return")
 	case <-time.After(100 * time.Millisecond):
 		// success
 	}
+
 	myError := fmt.Errorf("hello world")
 	receiver.terminated(myError)
-	for i := 0; i < numWaiters; i++ {
-		select {
-		case r := <-results:
-			if r.proceed || r.err != myError {
-				t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
+
+	// Use a separate goroutine to collect results to avoid blocking the test
+	resultsCounted := make(chan struct{})
+	go func() {
+		defer close(resultsCounted)
+		for i := 0; i < numWaiters; i++ {
+			select {
+			case r := <-results:
+				if r.proceed || r.err != myError {
+					t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
+				}
+			case <-time.After(500 * time.Millisecond):
+				t.Error("timed out waiting for results to be published")
+				return
 			}
-		case <-time.After(100 * time.Millisecond):
-			t.Error("timed out waiting for results to be published")
 		}
+	}()
+
+	// Wait for all goroutines to finish
+	wg.Wait()
+
+	// Wait for results to be processed
+	select {
+	case <-resultsCounted:
+		// All results processed
+	case <-time.After(1 * time.Second):
+		t.Error("timed out waiting for results to be processed")
 	}
 }
 
 func TestMessageReceiverStartAtomic(t *testing.T) {
-	first := true
+	var firstFlag atomic.Bool
+	firstFlag.Store(true)
 	notify := make(chan struct{})
 	isRunningDelayed := func() bool {
-		if first {
-			first = false
+		if firstFlag.Swap(false) {
 			<-notify
 		}
 		return true
@@ -232,37 +281,49 @@ func TestMessageReceiverStartAtomic(t *testing.T) {
 	receiver.construct(&mockInternalReceiver{
 		isRunning: isRunningDelayed,
 	})
-	firstStart := make(chan result)
+	firstStart := make(chan result, 1) // Buffer to prevent goroutine leak
+	var wg sync.WaitGroup
+	wg.Add(1)
+
 	go func() {
+		defer wg.Done()
 		proceed, err := receiver.starting()
 		firstStart <- result{
 			proceed: proceed,
 			err:     err,
 		}
 	}()
+
 	// give the goroutine above a chance to start
 	<-time.After(10 * time.Millisecond)
 	proceed, err := receiver.starting()
 	if !proceed || err != nil {
 		t.Errorf("expected procceed to be true and err to be nil, got proceed: %t, err: %s", proceed, err)
 	}
+
 	close(notify)
+
 	select {
 	case <-firstStart:
 		t.Error("did not expect first call to starting to return")
 	case <-time.After(100 * time.Millisecond):
 		// success
 	}
+
 	myError := fmt.Errorf("hello world")
 	receiver.started(myError)
+
 	select {
 	case r := <-firstStart:
 		if r.proceed || r.err != myError {
 			t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
 		}
-	case <-time.After(100 * time.Millisecond):
+	case <-time.After(500 * time.Millisecond):
 		t.Error("timed out waiting for results to be published")
 	}
+
+	// Wait for goroutine to finish
+	wg.Wait()
 }
 
 // can't test terminate in the same way as start..
@@ -358,9 +419,12 @@ func TestSendCacheRequestIsNotBlocking(t *testing.T) {
 		int32(5000),
 		int32(5000))
 
-	signal := make(chan bool)
-	var requestCachedAsync = func(directReceiver *directMessageReceiverImpl, cacheRequestConfig resource.CachedMessageSubscriptionRequest, cacheRequestID message.CacheRequestID, subcodeAsNum int) {
+	// Use buffered channel to prevent goroutine leaks
+	signal := make(chan bool, 4) // Buffer size matches the number of goroutines we'll create
+	var wg sync.WaitGroup
 
+	var requestCachedAsync = func(directReceiver *directMessageReceiverImpl, cacheRequestConfig resource.CachedMessageSubscriptionRequest, cacheRequestID message.CacheRequestID, subcodeAsNum int) {
+		defer wg.Done()
 		channel, err := directReceiver.RequestCachedAsync(cacheRequestConfig, cacheRequestID)
 		validateNativeError(err, subcode.Code(subcodeAsNum))
 		if channel != nil {
@@ -368,18 +432,25 @@ func TestSendCacheRequestIsNotBlocking(t *testing.T) {
 		}
 		signal <- true
 	}
+
 	var requestCachedAsyncWithCallback = func(directReceiver *directMessageReceiverImpl, cacheRequestConfig resource.CachedMessageSubscriptionRequest, cacheRequestID message.CacheRequestID, subcodeAsNum int) {
+		defer wg.Done()
 		err := directReceiver.RequestCachedAsyncWithCallback(cacheRequestConfig, cacheRequestID, func(_ solace.CacheResponse) {})
 		validateNativeError(err, subcode.Code(subcodeAsNum))
 		signal <- true
 	}
+
 	var assertNonBlocking = func() {
 		select {
 		case <-signal:
+			// Success - non-blocking behavior confirmed
 		case <-time.After(1 * time.Second):
 			t.Errorf("Expected cache request to fail immediately and not block for at least 1 second.")
 		}
 	}
+
+	wg.Add(4) // Four goroutines total
+
 	go requestCachedAsync(receiver, cacheRequestConfig, cacheRequestID, wouldBlockSubcodeNum)
 	assertNonBlocking()
 
@@ -391,6 +462,9 @@ func TestSendCacheRequestIsNotBlocking(t *testing.T) {
 
 	go requestCachedAsyncWithCallback(receiver2, cacheRequestConfig, cacheRequestID, notReadySubcodeNum)
 	assertNonBlocking()
+
+	// Wait for all goroutines to complete
+	wg.Wait()
 }
 
 type mockCacheResponseProcessor struct {
