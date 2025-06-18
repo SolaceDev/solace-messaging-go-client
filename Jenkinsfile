@@ -24,9 +24,9 @@ library 'jenkins-pipeline-library@main'
 
 /*
   Go Version examples:
-    auto-v1.17.x: Latest patch of 1.17 release
-    auto-v1.17.2: Specific patch of 1.17 release
-    auto-v1.17.0: First release of 1.17 (Despite go versioning this as 1.17)
+    auto-v1.19.x: Latest patch of 1.19 release
+    auto-v1.19.2: Specific patch of 1.19 release
+    auto-v1.19.0: First release of 1.19 (Despite go versioning this as 1.19)
     auto-latest: Most recent patch version of latest minor release
     auto-previous: Most recent patch version of previous minor release
     auto-2previous: Most recent patch version of second last minor release
@@ -35,8 +35,8 @@ library 'jenkins-pipeline-library@main'
 */
 
 builder.goapi([
-  "buildCheckGoVer": 'auto-v1.17.x',
-  "validationGoVer": 'auto-v1.17.x',
+  "buildCheckGoVer": 'auto-v1.19.x',
+  "validationGoVer": 'auto-v1.19.x',
   "getTestPermutations": {
     List<List<String>> permutations = []
     for (platform in [builder.LINUX_ARM, builder.LINUX_X86_64, builder.DARWIN_X86_64,  builder.DARWIN_ARM]) {
