@@ -157,9 +157,9 @@ func TestExecutorTerminationWhileWaitingForTaskSubmission(t *testing.T) {
 	taskBuffer := NewChannelBasedPublisherTaskBuffer(100, func() chan core.SendTask { return testSharedBuffer })
 	go taskBuffer.Run()
 
-	var called atomic.Bool
+	var called int32
 	myTask := func(interrupt chan struct{}) {
-		called.Store(true)
+		atomic.StoreInt32(&called, 1)
 	}
 
 	success := taskBuffer.Submit(myTask)
@@ -192,7 +192,7 @@ func TestExecutorTerminationWhileWaitingForTaskSubmission(t *testing.T) {
 		t.Error("expected task buffer to be shut down gracefully")
 	}
 
-	if !called.Load() {
+	if atomic.LoadInt32(&called) != 1 {
 		t.Error("task was never called")
 	}
 }
@@ -240,7 +240,7 @@ func TestExecutorTerminateJoin(t *testing.T) {
 	// Wait for the task to be started
 	taskStarted.Wait()
 
-	var unblocked atomic.Bool
+	var unblocked int32 = 0 // initial state
 	terminateSuccess := make(chan struct{})
 
 	go func() {
@@ -248,14 +248,14 @@ func TestExecutorTerminateJoin(t *testing.T) {
 		if graceful {
 			t.Error("expected task buffer to be shut down ungracefully")
 		}
-		if !unblocked.Load() {
+		if atomic.LoadInt32(&unblocked) != 1 {
 			t.Error("expected terminate to block until threads were joined")
 		}
 		close(terminateSuccess)
 	}()
 
 	<-time.After(100 * time.Millisecond)
-	unblocked.Store(true)
+	atomic.StoreInt32(&unblocked, 1)
 	close(blocker)
 
 	select {
@@ -293,19 +293,19 @@ func TestExecutorTerminateNow(t *testing.T) {
 	// Wait for the task to be started
 	taskStarted.Wait()
 
-	var unblocked atomic.Bool
+	var unblocked int32
 	terminateSuccess := make(chan struct{})
 
 	go func() {
 		taskBuffer.TerminateNow()
-		if unblocked.Load() {
+		if atomic.LoadInt32(&unblocked) == 1 {
 			t.Error("expected terminate now to return immediately")
 		}
 		close(terminateSuccess)
 	}()
 
 	<-time.After(100 * time.Millisecond)
-	unblocked.Store(true)
+	atomic.StoreInt32(&unblocked, 1)
 	close(blocker)
 
 	select {

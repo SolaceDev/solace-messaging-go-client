@@ -276,11 +276,11 @@ func TestMessagePublisherTerminateIdempotence(t *testing.T) {
 }
 
 func TestMessagePublisherStartAtomic(t *testing.T) {
-	var firstFlag atomic.Bool
-	firstFlag.Store(true)
+	var firstFlag int32
+	atomic.StoreInt32(&firstFlag, 1)
 	notify := make(chan struct{})
 	isRunningDelayed := func() bool {
-		if firstFlag.Swap(false) {
+		if atomic.SwapInt32(&firstFlag, 0) == 1 {
 			<-notify
 		}
 		return true
