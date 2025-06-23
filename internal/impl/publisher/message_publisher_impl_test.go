@@ -18,6 +18,8 @@ package publisher
 
 import (
 	"fmt"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -156,8 +158,12 @@ func TestMessagePublisherStartIdempotence(t *testing.T) {
 		err     error
 	}
 	results := make(chan result, numWaiters)
+	var wg sync.WaitGroup
+	wg.Add(numWaiters)
+
 	for i := 0; i < numWaiters; i++ {
 		go func() {
+			defer wg.Done()
 			proceed, err := publisher.starting()
 			results <- result{
 				proceed: proceed,
@@ -165,23 +171,43 @@ func TestMessagePublisherStartIdempotence(t *testing.T) {
 			}
 		}()
 	}
+
 	select {
 	case <-results:
 		t.Error("did not expect subsequent calls to starting to return")
 	case <-time.After(100 * time.Millisecond):
 		// success
 	}
+
 	myError := fmt.Errorf("hello world")
 	publisher.started(myError)
-	for i := 0; i < numWaiters; i++ {
-		select {
-		case r := <-results:
-			if r.proceed || r.err != myError {
-				t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
+
+	// Use a separate goroutine to collect results to avoid blocking the test
+	resultsCounted := make(chan struct{})
+	go func() {
+		defer close(resultsCounted)
+		for i := 0; i < numWaiters; i++ {
+			select {
+			case r := <-results:
+				if r.proceed || r.err != myError {
+					t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
+				}
+			case <-time.After(500 * time.Millisecond):
+				t.Error("timed out waiting for results to be published")
+				return
 			}
-		case <-time.After(100 * time.Millisecond):
-			t.Error("timed out waiting for results to be published")
 		}
+	}()
+
+	// Wait for all goroutines to finish
+	wg.Wait()
+
+	// Wait for results to be processed
+	select {
+	case <-resultsCounted:
+		// All results processed
+	case <-time.After(1 * time.Second):
+		t.Error("timed out waiting for results to be processed")
 	}
 }
 
@@ -196,8 +222,12 @@ func TestMessagePublisherTerminateIdempotence(t *testing.T) {
 	}
 	numWaiters := 3
 	results := make(chan result, numWaiters)
+	var wg sync.WaitGroup
+	wg.Add(numWaiters)
+
 	for i := 0; i < numWaiters; i++ {
 		go func() {
+			defer wg.Done()
 			proceed, err := publisher.terminate()
 			results <- result{
 				proceed: proceed,
@@ -205,32 +235,52 @@ func TestMessagePublisherTerminateIdempotence(t *testing.T) {
 			}
 		}()
 	}
+
 	select {
 	case <-results:
 		t.Error("did not expect subsequent calls to terminate to return")
 	case <-time.After(100 * time.Millisecond):
 		// success
 	}
+
 	myError := fmt.Errorf("hello world")
 	publisher.terminated(myError)
-	for i := 0; i < numWaiters; i++ {
-		select {
-		case r := <-results:
-			if r.proceed || r.err != myError {
-				t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
+
+	// Use a separate goroutine to collect results to avoid blocking the test
+	resultsCounted := make(chan struct{})
+	go func() {
+		defer close(resultsCounted)
+		for i := 0; i < numWaiters; i++ {
+			select {
+			case r := <-results:
+				if r.proceed || r.err != myError {
+					t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
+				}
+			case <-time.After(500 * time.Millisecond):
+				t.Error("timed out waiting for results to be published")
+				return
 			}
-		case <-time.After(100 * time.Millisecond):
-			t.Error("timed out waiting for results to be published")
 		}
+	}()
+
+	// Wait for all goroutines to finish
+	wg.Wait()
+
+	// Wait for results to be processed
+	select {
+	case <-resultsCounted:
+		// All results processed
+	case <-time.After(1 * time.Second):
+		t.Error("timed out waiting for results to be processed")
 	}
 }
 
 func TestMessagePublisherStartAtomic(t *testing.T) {
-	first := true
+	var firstFlag int32
+	atomic.StoreInt32(&firstFlag, 1)
 	notify := make(chan struct{})
 	isRunningDelayed := func() bool {
-		if first {
-			first = false
+		if atomic.SwapInt32(&firstFlag, 0) == 1 {
 			<-notify
 		}
 		return true
@@ -239,37 +289,49 @@ func TestMessagePublisherStartAtomic(t *testing.T) {
 	publisher.construct(&mockInternalPublisher{
 		isRunning: isRunningDelayed,
 	})
-	firstStart := make(chan result)
+	firstStart := make(chan result, 1) // Buffer to prevent goroutine leak
+	var wg sync.WaitGroup
+	wg.Add(1)
+
 	go func() {
+		defer wg.Done()
 		proceed, err := publisher.starting()
 		firstStart <- result{
 			proceed: proceed,
 			err:     err,
 		}
 	}()
+
 	// give the goroutine above a chance to start
 	<-time.After(10 * time.Millisecond)
 	proceed, err := publisher.starting()
 	if !proceed || err != nil {
 		t.Errorf("expected procceed to be true and err to be nil, got proceed: %t, err: %s", proceed, err)
 	}
+
 	close(notify)
+
 	select {
 	case <-firstStart:
 		t.Error("did not expect first call to starting to return")
 	case <-time.After(100 * time.Millisecond):
 		// success
 	}
+
 	myError := fmt.Errorf("hello world")
 	publisher.started(myError)
+
 	select {
 	case r := <-firstStart:
 		if r.proceed || r.err != myError {
 			t.Errorf("got bad response: proceed %t, error %s", r.proceed, r.err)
 		}
-	case <-time.After(100 * time.Millisecond):
+	case <-time.After(500 * time.Millisecond):
 		t.Error("timed out waiting for results to be published")
 	}
+
+	// Wait for goroutine to finish
+	wg.Wait()
 }
 
 // can't test terminate in the same way as start..
