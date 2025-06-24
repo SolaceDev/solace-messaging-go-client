@@ -18,6 +18,7 @@ package test
 
 import (
 	"strconv"
+	"sync/atomic"
 	"time"
 
 	"solace.dev/go/messaging"
@@ -102,7 +103,7 @@ var _ = Describe("Partitioned Queue Tests", func() {
 
 			messageHandler := func(message message.InboundMessage) {
 				// count the received messages dispatched for the receiver
-				receivedMessageCount += 1
+				atomic.AddUint64(&receivedMessageCount, 1)
 			}
 
 			receiverOne.ReceiveAsync(messageHandler)
