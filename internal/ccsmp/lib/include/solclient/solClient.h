@@ -4392,7 +4392,7 @@ solClient_session_isCapable(
                                       
 /**
 * Adds a Topic subscription to a Session similar to ::solClient_session_topicSubscribeExt(), 
-* but this function also allows the application to specifiy a different message receive callback and different user_p.
+* but this function also allows the application to specify a different message receive callback and different user_p.
 *
 * The argument list includes a pointer to a struct solClient_session_rxMsgDispatchFuncInfo.
 * Specifying a NULL pointer to this structure, or if struct solClient_session_rxMsgDispatchFuncInfo references a
@@ -4514,7 +4514,7 @@ solClient_session_isCapable(
 
 /**
 * Removes a Topic subscription from a Session similar to ::solClient_session_topicUnsubscribeExt(), 
-* but this function also allows the application to specifiy a different message receive callback and different user_p.
+* but this function also allows the application to specify a different message receive callback and different user_p.
 *
 * The argument list includes a pointer to a struct solClient_session_rxMsgDispatchFuncInfo.
 * Specifying a NULL pointer to this structure, or if struct solClient_session_rxMsgDispatchFuncInfo references a

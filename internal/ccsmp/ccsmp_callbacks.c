@@ -49,7 +49,7 @@ requestResponseReplyMessageReceiveCallback(solClient_opaqueSession_pt opaqueSess
     solClient_rxMsgCallback_returnCode_t goReplyMessageReceiveCallback(solClient_opaqueSession_pt, solClient_opaqueMsg_pt, void *, char *);
     char * correlationId = NULL;
     // when receiving message that is not a reply deliver to subscription dispatch
-    if ( SOLCLIENT_OK != solClientgo_msg_isRequestReponseMsg(msg_p, &correlationId) ) {
+    if ( SOLCLIENT_OK != solClientgo_msg_isRequestResponseMsg(msg_p, &correlationId) ) {
         // discard any message that is not a reply message
         // note any subscription that matches the replyto topic will get an independent dispatch callback
         return SOLCLIENT_CALLBACK_OK;

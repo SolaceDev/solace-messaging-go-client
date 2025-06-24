@@ -38,7 +38,7 @@ type RequestReplyMessagePublisher interface {
 	TerminateAsyncCallback(gracePeriod time.Duration, callback func(error))
 
 	// PublishBytes sends a request for a reply of type byte array to the specified destination.
-	// The API will handle correlation of messages so no additional work is requried.
+	// The API will handle correlation of messages so no additional work is required.
 	// Takes a requestMessage to send, a replyMessageHandler function to handle the
 	// response, a requestsDestination to deliver the requestMessage to, a replyTimeout
 	// indicating the maximum wait time for a response message and an optional
@@ -52,7 +52,7 @@ type RequestReplyMessagePublisher interface {
 	PublishBytes(message []byte, replyMessageHandler ReplyMessageHandler, destination *resource.Topic, replyTimeout time.Duration, userContext interface{}) error
 
 	// PublishString sends a request for a reply of type string to the specified destination.
-	// The API will handle correlation of messages so no additional work is requried.
+	// The API will handle correlation of messages so no additional work is required.
 	// Takes a requestMessage to send, a replyMessageHandler function to handle the
 	// response, a requestsDestination to deliver the requestMessage to, a replyTimeout
 	// indicating the maximum wait time for a response message and an optional
@@ -66,7 +66,7 @@ type RequestReplyMessagePublisher interface {
 	PublishString(message string, replyMessageHandler ReplyMessageHandler, destination *resource.Topic, replyTimeout time.Duration, userContext interface{}) error
 
 	// Publish sends a request for a reply non-blocking with optional user context.
-	// The API will handle correlation of messages so no additional work is requried.
+	// The API will handle correlation of messages so no additional work is required.
 	// Takes a requestMessage to send, a replyMessageHandler function to handle the
 	// response, a requestsDestination to deliver the requestMessage to, a replyTimeout
 	// indicating the maximum wait time for a response message and an optional

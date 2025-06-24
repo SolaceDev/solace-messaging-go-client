@@ -23,11 +23,9 @@ import (
 	"solace.dev/go/messaging"
 	"solace.dev/go/messaging/pkg/solace"
 	"solace.dev/go/messaging/pkg/solace/config"
+	"solace.dev/go/messaging/pkg/solace/message"
 	"solace.dev/go/messaging/pkg/solace/metrics"
 	"solace.dev/go/messaging/pkg/solace/resource"
-
-	//"solace.dev/go/messaging/pkg/solace/subcode"
-	"solace.dev/go/messaging/pkg/solace/message"
 	"solace.dev/go/messaging/test/helpers"
 	"solace.dev/go/messaging/test/testcontext"
 

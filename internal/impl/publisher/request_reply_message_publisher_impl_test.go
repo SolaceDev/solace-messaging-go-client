@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
 	//    "unsafe"
 
 	"solace.dev/go/messaging/internal/ccsmp"
@@ -852,7 +853,7 @@ func TestRequestReplyCallPublishWithBadReplyHandler(t *testing.T) {
 }
 
 func TestRequestReplyCallPublishWithNegativeDuration(t *testing.T) {
-	// test wait beahviour for negative timeouts
+	// test wait behaviour for negative timeouts
 	// expects no timeout error for any response with no replier
 	publisherReplyToTopic := "testReplyTopic"
 	testTopic := resource.TopicOf("hello/world")
@@ -930,7 +931,7 @@ func TestRequestReplyCallPublishWithNegativeDuration(t *testing.T) {
 }
 
 func TestRequestReplyMessagePublisherPublishFailureFromTimeout(t *testing.T) {
-	// test wait beahviour for negative timeouts
+	// test wait behaviour for negative timeouts
 	// expects no timeout error for any response with no replier
 	publisherReplyToTopic := "testReplyTopic"
 	testTopic := resource.TopicOf("hello/world")

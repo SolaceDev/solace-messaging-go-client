@@ -218,7 +218,7 @@ func (context *testContainersTestContext) Teardown() error {
 func (context *testContainersTestContext) gatherBrokerDiagnostics(destinationPath string) error {
 	fmt.Println()
 	pubsubHostname := context.config.TestContainers.BrokerHostname
-	// gather all important infomation and logs from pubsubHostname container
+	// gather all important information and logs from pubsubHostname container
 	fmt.Println("Run gather-diagnostics for " + pubsubHostname + "...")
 	resp, output, err := context.dockerExec(pubsubHostname, []string{"/bin/bash", "-l", "-c", "\"gather-diagnostics\""})
 	if err != nil {
