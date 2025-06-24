@@ -244,7 +244,7 @@ func (publisher *requestReplyMessagePublisherImpl) Terminate(gracePeriod time.Du
 				case <-publisher.correlationComplete:
 					// success
 				case <-timer.C:
-					graceful = false
+					// did not gracefully shutdown
 				}
 			} else {
 				// Block forever as our grace period is negative
@@ -786,7 +786,7 @@ func (publisher *requestReplyMessagePublisherImpl) createReplyCorrelation(userCo
 
 	return correlationID, func() (retMsg apimessage.InboundMessage, retErr error) {
 		retErr = nil
-		var ok bool = true
+		var ok bool
 		var sentErr error = nil
 		// wait for request send
 		select {
