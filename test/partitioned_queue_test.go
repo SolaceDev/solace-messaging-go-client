@@ -17,8 +17,8 @@
 package test
 
 import (
-	"fmt"
 	"strconv"
+	"sync/atomic"
 	"time"
 
 	"solace.dev/go/messaging"
@@ -58,6 +58,7 @@ var _ = Describe("Partitioned Queue Tests", func() {
 			var messagingServices [4]solace.MessagingService
 			var partitionKeys [9]string
 			var rebalanceDelayDuration = time.Duration(rebalanceDelay) * 2
+			var receivedMessageCount uint64 = 0
 
 			//generate partition keys
 			for i := 0; i < 9; i++ {
@@ -101,7 +102,8 @@ var _ = Describe("Partitioned Queue Tests", func() {
 			publisher.Terminate(rebalanceDelayDuration * time.Second)
 
 			messageHandler := func(message message.InboundMessage) {
-				fmt.Println("message received")
+				// count the received messages dispatched for the receiver
+				atomic.AddUint64(&receivedMessageCount, 1)
 			}
 
 			receiverOne.ReceiveAsync(messageHandler)
@@ -129,6 +131,10 @@ var _ = Describe("Partitioned Queue Tests", func() {
 				totalMessagesReceived := receiverOneMetrics.
 					GetValue(metrics.PersistentMessagesReceived) + receiverTwoMetrics.GetValue(metrics.PersistentMessagesReceived) + receiverThreeMetrics.GetValue(metrics.PersistentMessagesReceived)
 				return totalMessagesReceived
+			}).WithTimeout(rebalanceDelayDuration * time.Second).Should(Equal(publisherMetrics.GetValue(metrics.TotalMessagesSent)))
+
+			Eventually(func() uint64 {
+				return receivedMessageCount // what was actually received in the API callback
 			}).WithTimeout(rebalanceDelayDuration * time.Second).Should(Equal(publisherMetrics.GetValue(metrics.TotalMessagesSent)))
 
 			Expect(receiverOne.Terminate(10 * time.Second)).ToNot(HaveOccurred())
@@ -279,7 +285,6 @@ var _ = Describe("Partitioned Queue Tests", func() {
 			receiverTwo, _ := messagingServices[2].CreatePersistentMessageReceiverBuilder().
 				WithSubscriptions(resource.TopicSubscriptionOf(topicName)).Build(partitionedQueue)
 			receiverTwoMessageHandler := func(message message.InboundMessage) {
-				//fmt.Println("Received message in receiverTwo")
 				// count the received messages dispatched for the receiver
 				receiverTwoMessageCount += 1
 			}
