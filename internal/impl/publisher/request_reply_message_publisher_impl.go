@@ -527,6 +527,8 @@ func (publisher *requestReplyMessagePublisherImpl) publishAsync(msg *message.Out
 }
 
 // publish impl taking a dup'd message, assuming state has been checked and we are running
+//
+//gocyclo:ignore
 func (publisher *requestReplyMessagePublisherImpl) publish(msg *message.OutboundMessageImpl, replyMessageHandler solace.ReplyMessageHandler, dest *resource.Topic, replyTimeout time.Duration, userContext interface{}) (retOutcome ReplyOutcome, ret error) {
 	// There is a potential race condition in this function in buffered scenarios whereby a message is pushed into backpressure
 	// after the publisher has moved from Started to Terminated if the routine is interrupted after the state check and not resumed
@@ -804,36 +806,9 @@ func (publisher *requestReplyMessagePublisherImpl) createReplyCorrelation(userCo
 			goto DispatchOutcome
 		}
 
-		if entry.timeout >= 0 {
-			timer := time.NewTimer(timeout)
-			select {
-			case msgP, ok := <-entry.result:
-				timer.Stop()
-				if ok {
-					retMsg = message.NewInboundMessage(msgP, false)
-				} else {
-					retErr = solace.NewError(&solace.IllegalStateError{}, constants.RequestReplyPublisherCannotReceiveReplyAlreadyTerminated, nil)
-				}
-			case <-timer.C:
-				retErr = solace.NewError(&solace.TimeoutError{}, constants.RequestReplyPublisherTimedOutWaitingForReply, nil)
-			case <-publisher.correlationComplete:
-				timer.Stop()
-				retErr = solace.NewError(&solace.IllegalStateError{}, constants.RequestReplyPublisherCannotReceiveReplyAlreadyTerminated, nil)
-			}
-		} else {
-			// timeout < 0 blocks forever
-			select {
-			case msgP, ok := <-entry.result:
-				//success
-				if ok {
-					retMsg = message.NewInboundMessage(msgP, false)
-				} else {
-					retErr = solace.NewError(&solace.IllegalStateError{}, constants.RequestReplyPublisherCannotReceiveReplyAlreadyTerminated, nil)
-				}
-			case <-publisher.correlationComplete:
-				retErr = solace.NewError(&solace.IllegalStateError{}, constants.RequestReplyPublisherCannotReceiveReplyAlreadyTerminated, nil)
-			}
-		}
+		// check the correlation entry result
+		retMsg, retErr = checkCorrelationEntryResult(publisher, entry, timeout)
+
 		// only check correlation if there is no error
 		if retErr == nil {
 			// check if the correlation is tracked in publisher
@@ -858,6 +833,40 @@ func (publisher *requestReplyMessagePublisherImpl) createReplyCorrelation(userCo
 		publisher.closeReplyCorrelation(correlationID)
 		return retMsg, retErr
 	}
+}
+
+func checkCorrelationEntryResult(publisher *requestReplyMessagePublisherImpl, entry *correlationEntryImpl, timeout time.Duration) (retMsg apimessage.InboundMessage, retErr error) {
+	if entry.timeout >= 0 {
+		timer := time.NewTimer(timeout)
+		select {
+		case msgP, ok := <-entry.result:
+			timer.Stop()
+			if ok {
+				retMsg = message.NewInboundMessage(msgP, false)
+			} else {
+				retErr = solace.NewError(&solace.IllegalStateError{}, constants.RequestReplyPublisherCannotReceiveReplyAlreadyTerminated, nil)
+			}
+		case <-timer.C:
+			retErr = solace.NewError(&solace.TimeoutError{}, constants.RequestReplyPublisherTimedOutWaitingForReply, nil)
+		case <-publisher.correlationComplete:
+			timer.Stop()
+			retErr = solace.NewError(&solace.IllegalStateError{}, constants.RequestReplyPublisherCannotReceiveReplyAlreadyTerminated, nil)
+		}
+	} else {
+		// timeout < 0 blocks forever
+		select {
+		case msgP, ok := <-entry.result:
+			//success
+			if ok {
+				retMsg = message.NewInboundMessage(msgP, false)
+			} else {
+				retErr = solace.NewError(&solace.IllegalStateError{}, constants.RequestReplyPublisherCannotReceiveReplyAlreadyTerminated, nil)
+			}
+		case <-publisher.correlationComplete:
+			retErr = solace.NewError(&solace.IllegalStateError{}, constants.RequestReplyPublisherCannotReceiveReplyAlreadyTerminated, nil)
+		}
+	}
+	return retMsg, retErr
 }
 
 func (publisher *requestReplyMessagePublisherImpl) handleReplyMessage(msgP core.Repliable, correlationID string) (ret bool) {

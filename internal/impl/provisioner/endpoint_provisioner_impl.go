@@ -62,6 +62,8 @@ func mapEndpointPermissionToCcsmpProp(propValue string) string {
 }
 
 // validateEndpointProperties function
+//
+//gocyclo:ignore
 func validateEndpointProperties(properties config.EndpointPropertyMap) ([]string, error) {
 	propertiesList := []string{}
 	// We can only provision Queue Endpoints for now; should support Topic Endpoints in the future

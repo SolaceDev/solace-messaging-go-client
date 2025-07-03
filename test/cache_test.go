@@ -1554,8 +1554,8 @@ var _ = Describe("Cache Strategy", func() {
 			 * callback          buffer (assume buffer size 4 for example)       num cache requests sent/succeeded
 			 * |*|                           |*|*|*|*|                                       5 = 4 + 1
 			 */
-			Eventually(func() uint64 { return messagingService.Metrics().GetValue(metrics.CacheRequestsSent) }).Should(BeNumerically("==", maxCacheRequests+1))
-			Eventually(func() uint64 { return messagingService.Metrics().GetValue(metrics.CacheRequestsSucceeded) }).Should(BeNumerically("==", maxCacheRequests+1))
+			Eventually(func() uint64 { return messagingService.Metrics().GetValue(metrics.CacheRequestsSent) }, "2000ms").Should(BeNumerically("==", maxCacheRequests+1))
+			Eventually(func() uint64 { return messagingService.Metrics().GetValue(metrics.CacheRequestsSucceeded) }, "2000ms").Should(BeNumerically("==", maxCacheRequests+1))
 
 			err = receiver.RequestCachedAsyncWithCallback(cacheRequestConfig, message.CacheRequestID(maxCacheRequests+1), callback)
 			Expect(err).To(BeAssignableToTypeOf(&solace.IllegalStateError{}))

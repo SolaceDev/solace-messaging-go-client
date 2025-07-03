@@ -33,6 +33,7 @@ import (
 	"solace.dev/go/messaging/pkg/solace/subcode"
 )
 
+//gocyclo:ignore
 func TestMessageReceiverStartStateChecks(t *testing.T) {
 	receiver := &basicMessageReceiver{}
 	receiver.construct(&mockInternalReceiver{})

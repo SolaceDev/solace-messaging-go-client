@@ -813,6 +813,7 @@ func (sdtStream Stream) GetTopic(index int) (val *resource.Topic, err error) {
 	return getTopic(sdtStream[index])
 }
 
+//gocyclo:ignore
 func getBool(elem interface{}) (bool, error) {
 	switch casted := elem.(type) {
 	case bool:

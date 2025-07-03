@@ -106,33 +106,33 @@ func ConfigureCacheInstanceIfNotPresent(semp SEMPv2, msgVpnName string, distribu
 func ConfigureCacheTopicIfNotPresent(semp SEMPv2, msgVpnName string, distributedCache DistributedCacheConfig, cacheCluster CacheClusterConfig, cacheTopic string) error {
 	inst, _, err := semp.Monitor().DistributedCacheApi.GetMsgVpnDistributedCacheClusterTopics(semp.MonitorCtx(), msgVpnName, distributedCache.Name, cacheCluster.Name, nil)
 
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
 	for _, topic_group := range inst.Data {
 		if topic_group.Topic == cacheTopic {
-                /* NOTE: We return nil because we've found the topic to be pre-configured for the cache cluster on the
-                 * broker, and so don't need to reconfigure it. This method intends to configure only one topic at a
-                 * time, so we don't need to worry about other configured topics.
-                 */
+			/* NOTE: We return nil because we've found the topic to be pre-configured for the cache cluster on the
+			 * broker, and so don't need to reconfigure it. This method intends to configure only one topic at a
+			 * time, so we don't need to worry about other configured topics.
+			 */
 			return nil
 		}
 	}
-		_, _, err = semp.Config().DistributedCacheApi.CreateMsgVpnDistributedCacheClusterTopic(semp.ConfigCtx(),
-			config.MsgVpnDistributedCacheClusterTopic{
-				CacheName:   distributedCache.Name,
-				ClusterName: cacheCluster.Name,
-				MsgVpnName:  msgVpnName,
-				Topic:       cacheTopic,
-			},
-			msgVpnName,
-			distributedCache.Name,
-			cacheCluster.Name,
-			nil)
-		if err != nil {
-			return err
-		}
+	_, _, err = semp.Config().DistributedCacheApi.CreateMsgVpnDistributedCacheClusterTopic(semp.ConfigCtx(),
+		config.MsgVpnDistributedCacheClusterTopic{
+			CacheName:   distributedCache.Name,
+			ClusterName: cacheCluster.Name,
+			MsgVpnName:  msgVpnName,
+			Topic:       cacheTopic,
+		},
+		msgVpnName,
+		distributedCache.Name,
+		cacheCluster.Name,
+		nil)
+	if err != nil {
+		return err
+	}
 	return err
 }
 
@@ -206,7 +206,6 @@ const (
 	CacheOperationalStateNotAvailable CacheOperationalState = "not-available"
 )
 
-// func (ctx *testContainersTestContext) initCache() error {
 func (ctx *testContextCommon) initCache() error {
 	var msgVpnName = ctx.Cache().Vpn
 	err := CreateMessageVpnIfNotPresent(ctx.SEMPv2(), GetDefaultCacheMessageVpnConfig(ctx.Cache().Vpn))
