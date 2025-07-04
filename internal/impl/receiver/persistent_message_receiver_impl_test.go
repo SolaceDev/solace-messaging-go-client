@@ -97,6 +97,7 @@ func TestPersistentBuilderSetReplay(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestPersistentMessageReceiverImplLifecycle(t *testing.T) {
 	gracePeriod := 10 * time.Second
 
@@ -1099,6 +1100,7 @@ func TestPersistentMessageReceiverTerminateIdempotence(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestPersistentReceiverUnsolicitedTermination(t *testing.T) {
 	internalReceiver := &mockInternalReceiver{}
 	receiver := &persistentMessageReceiverImpl{}

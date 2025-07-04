@@ -57,7 +57,7 @@ solClient_rxMsgCallback_returnCode_t
 cacheFilterCallback(solClient_opaqueSession_pt opaqueSession_p, solClient_opaqueMsg_pt msg_p, void * user_p);
 
 solClient_returnCode_t
-solClientgo_msg_isRequestReponseMsg(solClient_opaqueMsg_pt msg_p, char **correlationId_p) {
+solClientgo_msg_isRequestResponseMsg(solClient_opaqueMsg_pt msg_p, char **correlationId_p) {
     solClient_returnCode_t rc = SOLCLIENT_FAIL;
     const char *correlationId = NULL;
     if ( correlationId_p == NULL ) {

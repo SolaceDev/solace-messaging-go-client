@@ -505,7 +505,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 						Expect(client.TlsCipherDescription).To(HavePrefix("AES128-SHA"))
 					})
 				})
-				// Originially this explicitly test tls1.1
+				// Originally this explicitly test tls1.1
 				// on systems with new openssl (3.0 or later) tls1.1 is no longer supported from the client
 				// As a result this is adapted to explicitly verify tls1.2 in anticipation for tls1.3
 				// once openssl 1.1 support is deprecated this maybe

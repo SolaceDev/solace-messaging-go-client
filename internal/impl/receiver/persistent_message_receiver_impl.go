@@ -1092,6 +1092,7 @@ func (receiver *persistentMessageReceiverImpl) messageCallback(msg core.Receivab
 	return true
 }
 
+//gocyclo:ignore
 func (receiver *persistentMessageReceiverImpl) run() {
 	defer close(receiver.terminationComplete)
 	// Block until an rx callback is set
@@ -1220,30 +1221,15 @@ func (builder *persistentMessageReceiverBuilderImpl) Build(queue *resource.Queue
 
 	// For each property, make sure it is present, and then make sure that the appropriate ccsmp properties are set
 	var doCreateMissingResource bool = false
-	if strategy, ok := builder.properties[config.ReceiverPropertyPersistentMissingResourceCreationStrategy]; ok {
-		if strategyAsMissingResourceCreationStrategy, ok := strategy.(config.MissingResourcesCreationStrategy); ok {
-			strategy = string(strategyAsMissingResourceCreationStrategy)
-		}
-		prop, present, err := validation.StringPropertyValidation(string(config.ReceiverPropertyPersistentMissingResourceCreationStrategy), strategy,
-			string(config.PersistentReceiverCreateOnStartMissingResources), string(config.PersistentReceiverDoNotCreateMissingResources))
-		if present {
-			if err != nil {
-				return nil, err
-			}
-			doCreateMissingResource = prop == string(config.PersistentReceiverCreateOnStartMissingResources)
-		}
+	doCreateMissingResource, err = checkCreateMissingResourceProperty(builder)
+	if err != nil {
+		return nil, err
 	}
 
 	var doAutoAck bool = false
-	if ackStrategyInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageAckStrategy]; ok {
-		ackStrategy, present, err := validation.StringPropertyValidation(string(config.ReceiverPropertyPersistentMessageAckStrategy), ackStrategyInterface,
-			config.PersistentReceiverAutoAck, config.PersistentReceiverClientAck)
-		if present {
-			if err != nil {
-				return nil, err
-			}
-			doAutoAck = ackStrategy == config.PersistentReceiverAutoAck
-		}
+	doAutoAck, err = checkAutoAckProperty(builder)
+	if err != nil {
+		return nil, err
 	}
 
 	var receiverStateChangeListener solace.ReceiverStateChangeListener = nil
@@ -1267,22 +1253,11 @@ func (builder *persistentMessageReceiverBuilderImpl) Build(queue *resource.Queue
 		ccsmp.SolClientFlowPropStartState, ccsmp.SolClientPropDisableVal,
 	}
 
-	// Add queue name
-	if queue == nil {
-		return nil, solace.NewError(&solace.IllegalArgumentError{}, constants.PersistentReceiverMissingQueue, nil)
+	// Set queue name and its durability
+	properties, err = setQueueNameAndDurabilityProperties(queue, properties)
+	if err != nil {
+		return nil, err
 	}
-	if queue.GetName() != "" || queue.IsDurable() {
-		properties = append(properties, ccsmp.SolClientFlowPropBindName, queue.GetName())
-	}
-
-	// Set queue durability
-	var isDurable string
-	if queue.IsDurable() {
-		isDurable = ccsmp.SolClientPropEnableVal
-	} else {
-		isDurable = ccsmp.SolClientPropDisableVal
-	}
-	properties = append(properties, ccsmp.SolClientFlowPropBindEntityDurable, isDurable)
 
 	// If we have a selector configured, add that to the flow props
 	if selector, ok := builder.properties[config.ReceiverPropertyPersistentMessageSelectorQuery]; ok {
@@ -1296,95 +1271,15 @@ func (builder *persistentMessageReceiverBuilderImpl) Build(queue *resource.Queue
 	}
 
 	// If we have a replay strategy configured, add that to the flow props
-	if replayStrategyInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageReplayStrategy]; ok {
-		replayStrategy, present, err := validation.StringPropertyValidation(
-			string(config.ReceiverPropertyPersistentMessageReplayStrategy),
-			replayStrategyInterface,
-			config.PersistentReplayAll,
-			config.PersistentReplayTimeBased,
-			config.PersistentReplayIDBased,
-		)
-		// First check the replay strategy, then configure the start time based off the configured strategy
-		if present {
-			if err != nil {
-				return nil, err
-			}
-			var replayStart string
-			switch replayStrategy {
-			case config.PersistentReplayAll:
-				replayStart = ccsmp.SolClientFlowPropReplayStartLocationBeginning
-			case config.PersistentReplayTimeBased:
-				if startTimeInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageReplayStrategyTimeBasedStartTime]; ok && startTimeInterface != nil {
-					const datePrefix = "DATE:"
-					if startTimeAsTime, ok := startTimeInterface.(time.Time); ok {
-						replayStart = fmt.Sprintf("%s%d", datePrefix, startTimeAsTime.Unix())
-					} else {
-						// Any value that is not time.Time is assumed to have a valid value requiring no manipulation
-						// This may fail at startup of the resulting receiver when the flow is bound
-						replayStart = fmt.Sprintf("%s%v", datePrefix, startTimeInterface)
-					}
-				} else {
-					return nil, solace.NewError(&solace.IllegalArgumentError{}, constants.PersistentReceiverMustSpecifyTime, nil)
-				}
-			case config.PersistentReplayIDBased:
-				if rmidInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageReplayStrategyIDBasedReplicationGroupMessageID]; ok && rmidInterface != nil {
-					if rmidType, ok := rmidInterface.(rgmid.ReplicationGroupMessageID); ok {
-						// we want to accept ReplicationGroupMessageID as well as strings, so we should convert the RGMID to a string
-						// we don't necessarily want to support all stringer linked types so we will leave the validator as is
-						rmidInterface = rmidType.String()
-					}
-					rmid, _, err := validation.StringPropertyValidation(string(config.ReceiverPropertyPersistentMessageReplayStrategyIDBasedReplicationGroupMessageID), rmidInterface)
-					if err != nil {
-						return nil, err
-					}
-					if len(rmid) == 0 {
-						return nil, solace.NewError(&solace.IllegalArgumentError{}, "message ID must not be empty", nil)
-					}
-					replayStart = rmid
-				} else {
-					return nil, solace.NewError(&solace.IllegalArgumentError{}, constants.PersistentReceiverMustSpecifyRGMID, nil)
-				}
-			}
-			properties = append(properties, ccsmp.SolClientFlowPropReplayStartLocation, replayStart)
-		}
+	properties, err = setReplyProperty(builder, properties)
+	if err != nil {
+		return nil, err
 	}
 
 	// message settlement outcome property
-	if settlementOutcomesInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageRequiredOutcomeSupport]; ok {
-		if settlementOutcomesStr, ok := settlementOutcomesInterface.(string); ok {
-			addedOutcomes := make(map[string]bool) // to track duplicates
-			settlementOutcomes := strings.Split(settlementOutcomesStr, ",")
-			// iterate through to validate the message settlement outcome values
-			for _, settlementOutcome := range settlementOutcomes {
-				_, present, err := validation.StringPropertyValidation(
-					string(config.ReceiverPropertyPersistentMessageRequiredOutcomeSupport),
-					settlementOutcome,
-					string(config.PersistentReceiverAcceptedOutcome),
-					string(config.PersistentReceiverFailedOutcome),
-					string(config.PersistentReceiverRejectedOutcome))
-
-				if !present || err != nil {
-					return nil, solace.NewError(&solace.IllegalArgumentError{},
-						fmt.Sprintf("invalid value for receiver message settlement outcome, expected either 'ACCEPTED', 'FAILED' or 'REJECTED', got %T", settlementOutcome), nil)
-				}
-
-				// ignore duplicate message settlement outcomes from the ccsmp properties array
-				if _, added := addedOutcomes[settlementOutcome]; !added {
-					// add the corresponding ccsmp property to the properties array
-					switch config.MessageSettlementOutcome(settlementOutcome) {
-					case config.PersistentReceiverFailedOutcome:
-						properties = append(properties, ccsmp.SolClientFlowPropRequiredOutcomeFailed, ccsmp.SolClientPropEnableVal)
-					case config.PersistentReceiverRejectedOutcome:
-						properties = append(properties, ccsmp.SolClientFlowPropRequiredOutcomeRejected, ccsmp.SolClientPropEnableVal)
-					case config.PersistentReceiverAcceptedOutcome:
-					default:
-						logging.Default.Info(builder.String() + ": Receiver message settlement outcome of 'ACCEPTED' is supported by default")
-					}
-					// mark it as added
-					addedOutcomes[settlementOutcome] = true
-				}
-			}
-		}
+	properties, err = setSettlementOutcomesProperty(builder, properties)
+	if err != nil {
+		return nil, err
 	}
 
 	// Create the receiver with the given properties
@@ -1516,6 +1411,131 @@ func (builder *persistentMessageReceiverBuilderImpl) String() string {
 	return fmt.Sprintf("solace.PersistentMessageReceiverBuilder at %p", builder)
 }
 
+// Set the queue name and durability propertiees in the properties array
+func setQueueNameAndDurabilityProperties(queue *resource.Queue, properties []string) ([]string, error) {
+	// message settlement outcome property
+
+	// Add queue name
+	if queue == nil {
+		return properties, solace.NewError(&solace.IllegalArgumentError{}, constants.PersistentReceiverMissingQueue, nil)
+	}
+	if queue.GetName() != "" || queue.IsDurable() {
+		properties = append(properties, ccsmp.SolClientFlowPropBindName, queue.GetName())
+	}
+
+	// Set queue durability
+	var isDurable string
+	if queue.IsDurable() {
+		isDurable = ccsmp.SolClientPropEnableVal
+	} else {
+		isDurable = ccsmp.SolClientPropDisableVal
+	}
+	properties = append(properties, ccsmp.SolClientFlowPropBindEntityDurable, isDurable)
+
+	return properties, nil
+}
+
+// Set the Reply property in the properties array
+func setReplyProperty(builder *persistentMessageReceiverBuilderImpl, properties []string) ([]string, error) {
+	// If we have a replay strategy configured, add that to the flow props
+	if replayStrategyInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageReplayStrategy]; ok {
+		replayStrategy, present, err := validation.StringPropertyValidation(
+			string(config.ReceiverPropertyPersistentMessageReplayStrategy),
+			replayStrategyInterface,
+			config.PersistentReplayAll,
+			config.PersistentReplayTimeBased,
+			config.PersistentReplayIDBased,
+		)
+		// First check the replay strategy, then configure the start time based off the configured strategy
+		if present {
+			if err != nil {
+				return properties, err
+			}
+			var replayStart string
+			switch replayStrategy {
+			case config.PersistentReplayAll:
+				replayStart = ccsmp.SolClientFlowPropReplayStartLocationBeginning
+			case config.PersistentReplayTimeBased:
+				if startTimeInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageReplayStrategyTimeBasedStartTime]; ok && startTimeInterface != nil {
+					const datePrefix = "DATE:"
+					if startTimeAsTime, ok := startTimeInterface.(time.Time); ok {
+						replayStart = fmt.Sprintf("%s%d", datePrefix, startTimeAsTime.Unix())
+					} else {
+						// Any value that is not time.Time is assumed to have a valid value requiring no manipulation
+						// This may fail at startup of the resulting receiver when the flow is bound
+						replayStart = fmt.Sprintf("%s%v", datePrefix, startTimeInterface)
+					}
+				} else {
+					return properties, solace.NewError(&solace.IllegalArgumentError{}, constants.PersistentReceiverMustSpecifyTime, nil)
+				}
+			case config.PersistentReplayIDBased:
+				if rmidInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageReplayStrategyIDBasedReplicationGroupMessageID]; ok && rmidInterface != nil {
+					if rmidType, ok := rmidInterface.(rgmid.ReplicationGroupMessageID); ok {
+						// we want to accept ReplicationGroupMessageID as well as strings, so we should convert the RGMID to a string
+						// we don't necessarily want to support all stringer linked types so we will leave the validator as is
+						rmidInterface = rmidType.String()
+					}
+					rmid, _, err := validation.StringPropertyValidation(string(config.ReceiverPropertyPersistentMessageReplayStrategyIDBasedReplicationGroupMessageID), rmidInterface)
+					if err != nil {
+						return properties, err
+					}
+					if len(rmid) == 0 {
+						return properties, solace.NewError(&solace.IllegalArgumentError{}, "message ID must not be empty", nil)
+					}
+					replayStart = rmid
+				} else {
+					return properties, solace.NewError(&solace.IllegalArgumentError{}, constants.PersistentReceiverMustSpecifyRGMID, nil)
+				}
+			}
+			properties = append(properties, ccsmp.SolClientFlowPropReplayStartLocation, replayStart)
+		}
+	}
+	return properties, nil
+}
+
+// Set the message settlement outcomes property in the properties array
+func setSettlementOutcomesProperty(builder *persistentMessageReceiverBuilderImpl, properties []string) ([]string, error) {
+	// message settlement outcome property
+	if settlementOutcomesInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageRequiredOutcomeSupport]; ok {
+		if settlementOutcomesStr, ok := settlementOutcomesInterface.(string); ok {
+			addedOutcomes := make(map[string]bool) // to track duplicates
+			settlementOutcomes := strings.Split(settlementOutcomesStr, ",")
+			// iterate through to validate the message settlement outcome values
+			for _, settlementOutcome := range settlementOutcomes {
+				_, present, err := validation.StringPropertyValidation(
+					string(config.ReceiverPropertyPersistentMessageRequiredOutcomeSupport),
+					settlementOutcome,
+					string(config.PersistentReceiverAcceptedOutcome),
+					string(config.PersistentReceiverFailedOutcome),
+					string(config.PersistentReceiverRejectedOutcome))
+
+				if !present || err != nil {
+					return properties, solace.NewError(&solace.IllegalArgumentError{},
+						fmt.Sprintf("invalid value for receiver message settlement outcome, expected either 'ACCEPTED', 'FAILED' or 'REJECTED', got %T", settlementOutcome), nil)
+				}
+
+				// ignore duplicate message settlement outcomes from the ccsmp properties array
+				if _, added := addedOutcomes[settlementOutcome]; !added {
+					// add the corresponding ccsmp property to the properties array
+					switch config.MessageSettlementOutcome(settlementOutcome) {
+					case config.PersistentReceiverFailedOutcome:
+						properties = append(properties, ccsmp.SolClientFlowPropRequiredOutcomeFailed, ccsmp.SolClientPropEnableVal)
+					case config.PersistentReceiverRejectedOutcome:
+						properties = append(properties, ccsmp.SolClientFlowPropRequiredOutcomeRejected, ccsmp.SolClientPropEnableVal)
+					case config.PersistentReceiverAcceptedOutcome:
+					default:
+						logging.Default.Info(builder.String() + ": Receiver message settlement outcome of 'ACCEPTED' is supported by default")
+					}
+					// mark it as added
+					addedOutcomes[settlementOutcome] = true
+				}
+			}
+		}
+	}
+
+	return properties, nil
+}
+
 // Validate the subscription type is one supported by
 func checkPersistentMessageReceiverSubscriptionType(subscription resource.Subscription) error {
 	switch subscription.(type) {
@@ -1523,6 +1543,43 @@ func checkPersistentMessageReceiverSubscriptionType(subscription resource.Subscr
 		return nil
 	}
 	return solace.NewError(&solace.IllegalArgumentError{}, fmt.Sprintf(constants.PersistentReceiverUnsupportedSubscriptionType, subscription), nil)
+}
+
+// Validate that the CreateMissingResource property is set
+func checkCreateMissingResourceProperty(builder *persistentMessageReceiverBuilderImpl) (bool, error) {
+	// For each property, make sure it is present, and then make sure that the appropriate ccsmp properties are set
+	var doCreateMissingResource bool = false
+	if strategy, ok := builder.properties[config.ReceiverPropertyPersistentMissingResourceCreationStrategy]; ok {
+		if strategyAsMissingResourceCreationStrategy, ok := strategy.(config.MissingResourcesCreationStrategy); ok {
+			strategy = string(strategyAsMissingResourceCreationStrategy)
+		}
+		prop, present, err := validation.StringPropertyValidation(string(config.ReceiverPropertyPersistentMissingResourceCreationStrategy), strategy,
+			string(config.PersistentReceiverCreateOnStartMissingResources), string(config.PersistentReceiverDoNotCreateMissingResources))
+		if present {
+			if err != nil {
+				return false, err
+			}
+			doCreateMissingResource = prop == string(config.PersistentReceiverCreateOnStartMissingResources)
+		}
+	}
+	return doCreateMissingResource, nil
+}
+
+// Validate that the AutoAck property is set
+func checkAutoAckProperty(builder *persistentMessageReceiverBuilderImpl) (bool, error) {
+	// For each property, make sure it is present, and then make sure that the appropriate ccsmp properties are set
+	var doAutoAck bool = false
+	if ackStrategyInterface, ok := builder.properties[config.ReceiverPropertyPersistentMessageAckStrategy]; ok {
+		ackStrategy, present, err := validation.StringPropertyValidation(string(config.ReceiverPropertyPersistentMessageAckStrategy), ackStrategyInterface,
+			config.PersistentReceiverAutoAck, config.PersistentReceiverClientAck)
+		if present {
+			if err != nil {
+				return false, err
+			}
+			doAutoAck = ackStrategy == config.PersistentReceiverAutoAck
+		}
+	}
+	return doAutoAck, nil
 }
 
 func isSupportedMessageSettlementOutcome(messageSettlementOutcome config.MessageSettlementOutcome) bool {

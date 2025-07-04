@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
 	//    "unsafe"
 
 	"solace.dev/go/messaging/internal/ccsmp"
@@ -164,6 +165,7 @@ func TestRequestReplyMessagePublisherBuilderWithInvalidCustomPropertiesMapWrongS
 	}
 }
 
+//gocyclo:ignore
 func TestRequestReplyMessagePublisherImplLifecycle(t *testing.T) {
 	gracePeriod := 10 * time.Second
 
@@ -374,6 +376,7 @@ func TestRequestReplyMessagePublisherImplLifecycle(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestRequestReplyMessagePublisherImplLifecycleNoBuffer(t *testing.T) {
 	publisher := &requestReplyMessagePublisherImpl{}
 	publisher.construct(&mockInternalPublisher{}, backpressureConfigurationDirect, 1)
@@ -459,6 +462,7 @@ func TestRequestReplyMessagePublisherImplLifecycleNoBuffer(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestRequestReplyMessagePublisherLifecycleIdempotence(t *testing.T) {
 	publisher := &requestReplyMessagePublisherImpl{}
 	publisher.construct(&mockInternalPublisher{}, backpressureConfigurationWait, 1)
@@ -640,6 +644,7 @@ func TestRequestReplyMessagePublisherTerminateWithUnpublishedMessages(t *testing
 	}
 }
 
+//gocyclo:ignore
 func TestRequestReplyMessagePublisherUnsolicitedTerminationWithUnpublishedMessages(t *testing.T) {
 	internalPublisher := &mockInternalPublisher{}
 	publisher := &requestReplyMessagePublisherImpl{}
@@ -852,7 +857,7 @@ func TestRequestReplyCallPublishWithBadReplyHandler(t *testing.T) {
 }
 
 func TestRequestReplyCallPublishWithNegativeDuration(t *testing.T) {
-	// test wait beahviour for negative timeouts
+	// test wait behaviour for negative timeouts
 	// expects no timeout error for any response with no replier
 	publisherReplyToTopic := "testReplyTopic"
 	testTopic := resource.TopicOf("hello/world")
@@ -929,8 +934,9 @@ func TestRequestReplyCallPublishWithNegativeDuration(t *testing.T) {
 
 }
 
+//gocyclo:ignore
 func TestRequestReplyMessagePublisherPublishFailureFromTimeout(t *testing.T) {
-	// test wait beahviour for negative timeouts
+	// test wait behaviour for negative timeouts
 	// expects no timeout error for any response with no replier
 	publisherReplyToTopic := "testReplyTopic"
 	testTopic := resource.TopicOf("hello/world")
@@ -1043,6 +1049,7 @@ func TestRequestReplyMessagePublisherPublishFailureFromTimeout(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestRequestReplyMessagePublisherPublishReplyByCorrelation(t *testing.T) {
 	// publish request message
 	// then receive a reply message without matching correlation id, expect no reply in handler
@@ -1221,6 +1228,7 @@ func TestRequestReplyMessagePublisherPublishReplyByCorrelation(t *testing.T) {
 	publisher.Terminate(1)
 }
 
+//gocyclo:ignore
 func TestRequestReplyMessagePublisherPublishFunctionalityBufferedWait(t *testing.T) {
 	publisher := &requestReplyMessagePublisherImpl{}
 	publisher.construct(&mockInternalPublisher{}, backpressureConfigurationWait, 1)

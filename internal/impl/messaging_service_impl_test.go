@@ -26,6 +26,7 @@ import (
 	"solace.dev/go/messaging/pkg/solace"
 )
 
+//gocyclo:ignore
 func TestMessagingServiceLifecycleValidations(t *testing.T) {
 	service := newMessagingServiceImpl(logging.Default)
 	mockTransport := &solClientTransportMock{}

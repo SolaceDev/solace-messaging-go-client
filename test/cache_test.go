@@ -140,7 +140,7 @@ var _ = Describe("Cache Strategy", func() {
 				Eventually(channel, "5s").Should(Receive(&cacheResponse))
 			}
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert CacheRequestOutcome is NoData
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeNoData))
@@ -1412,7 +1412,7 @@ var _ = Describe("Cache Strategy", func() {
 			var cacheResponse solace.CacheResponse
 			Eventually(channel, "5s").Should(Receive(&cacheResponse))
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert CacheRequestOutcome is SuspectData
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeSuspectData))
@@ -1554,8 +1554,8 @@ var _ = Describe("Cache Strategy", func() {
 			 * callback          buffer (assume buffer size 4 for example)       num cache requests sent/succeeded
 			 * |*|                           |*|*|*|*|                                       5 = 4 + 1
 			 */
-			Eventually(func() uint64 { return messagingService.Metrics().GetValue(metrics.CacheRequestsSent) }).Should(BeNumerically("==", maxCacheRequests+1))
-			Eventually(func() uint64 { return messagingService.Metrics().GetValue(metrics.CacheRequestsSucceeded) }).Should(BeNumerically("==", maxCacheRequests+1))
+			Eventually(func() uint64 { return messagingService.Metrics().GetValue(metrics.CacheRequestsSent) }, "2000ms").Should(BeNumerically("==", maxCacheRequests+1))
+			Eventually(func() uint64 { return messagingService.Metrics().GetValue(metrics.CacheRequestsSucceeded) }, "2000ms").Should(BeNumerically("==", maxCacheRequests+1))
 
 			err = receiver.RequestCachedAsyncWithCallback(cacheRequestConfig, message.CacheRequestID(maxCacheRequests+1), callback)
 			Expect(err).To(BeAssignableToTypeOf(&solace.IllegalStateError{}))
@@ -1592,7 +1592,7 @@ var _ = Describe("Cache Strategy", func() {
 			var cacheResponse solace.CacheResponse
 			Eventually(channel, "5s").Should(Receive(&cacheResponse))
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert cache request outcome failed.
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeFailed))
@@ -1654,7 +1654,7 @@ var _ = Describe("Cache Strategy", func() {
 				Fail("Got unrecognized cache response process strategy")
 			}
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert CacheRequestOutcome is NoData
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeNoData))
@@ -1696,7 +1696,7 @@ var _ = Describe("Cache Strategy", func() {
 			var cacheResponse solace.CacheResponse
 			Eventually(channel, "5s").Should(Receive(&cacheResponse))
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert response CacheRequestOutcome is Ok
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))
@@ -1734,7 +1734,7 @@ var _ = Describe("Cache Strategy", func() {
 			Expect(channel).ToNot(BeNil())
 			Eventually(channel, "5s").Should(Receive(&cacheResponse))
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert CacheRequestOutcome is NoData
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeNoData))
@@ -1759,7 +1759,7 @@ var _ = Describe("Cache Strategy", func() {
 			Expect(channel).ToNot(BeNil())
 			Eventually(channel, "5s").Should(Receive(&cacheResponse))
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert response CacheRequestOutcome is Ok
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))
@@ -1826,7 +1826,7 @@ var _ = Describe("Cache Strategy", func() {
 				Fail("Got unexpected cache response process strategy")
 			}
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert cache request outcome is Ok
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))
@@ -1919,7 +1919,7 @@ var _ = Describe("Cache Strategy", func() {
 			var cacheResponse solace.CacheResponse
 			Eventually(channel, "10s").Should(Receive(&cacheResponse))
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(firstCacheRequestID))
 			// assert CacheRequestOutcome is Ok
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))
@@ -1962,7 +1962,7 @@ var _ = Describe("Cache Strategy", func() {
 			var cacheResponse solace.CacheResponse
 			Eventually(channel, "15s").Should(Receive(&cacheResponse))
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert CacheRequestOutcome is Failed
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeFailed))
@@ -2009,7 +2009,7 @@ var _ = Describe("Cache Strategy", func() {
 			var cacheResponse solace.CacheResponse
 			Eventually(cacheResponseChan, "5s").Should(Receive(&cacheResponse))
 			Expect(cacheResponse).ToNot(BeNil())
-			// assert cache reponse ID matches cache request ID
+			// assert cache response ID matches cache request ID
 			Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 			// assert CacheRequestOutcome is Ok
 			Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))
@@ -2126,11 +2126,11 @@ var _ = Describe("Cache Strategy", func() {
 					Fail("Got unrecognized cacheRequestStrategy")
 				}
 				Expect(cacheResponse).ToNot(BeNil())
-				// assert that the cache request ID from the reponse matches the request
+				// assert that the cache request ID from the response matches the request
 				Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 				// assert that the CacheRequestOutcome is Ok
 				Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))
-				// assert err from tje cache response is nil
+				// assert err from the cache response is nil
 				Expect(cacheResponse.GetError()).To(BeNil())
 
 				for i := 0; i < numExpectedCachedMessages; i++ {
@@ -2530,7 +2530,7 @@ var _ = Describe("Cache Strategy", func() {
 				var cacheResponse solace.CacheResponse
 				Eventually(cacheResponseChan, "10s").Should(Receive(&cacheResponse))
 				Expect(cacheResponse).ToNot(BeNil())
-				// assert cache reponse ID matches cache request ID
+				// assert cache response ID matches cache request ID
 				Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 				// assert CacheRequestOutcome is Ok
 				Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))
@@ -2688,7 +2688,7 @@ var _ = Describe("Cache Strategy", func() {
 				var cacheResponse solace.CacheResponse
 				Eventually(cacheResponseChan, "10s").Should(Receive(&cacheResponse))
 				Expect(cacheResponse).ToNot(BeNil())
-				// assert cache reponse ID matches cache request ID
+				// assert cache response ID matches cache request ID
 				Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 				// assert CacheRequestOutcome is Ok
 				Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))
@@ -2812,7 +2812,7 @@ var _ = Describe("Cache Strategy", func() {
 				var cacheResponse solace.CacheResponse
 				Eventually(channel, "30s").Should(Receive(&cacheResponse))
 				Expect(cacheResponse).ToNot(BeNil())
-				// assert cache reponse ID matches cache request ID
+				// assert cache response ID matches cache request ID
 				Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 				// assert CacheRequestOutcome is Ok
 				Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))
@@ -2949,7 +2949,7 @@ var _ = Describe("Cache Strategy", func() {
 						Fail("Got unexpected cacheResponseStrategy")
 					}
 					Expect(cacheResponse).ToNot(BeNil())
-					// assert cache reponse ID matches cache request ID
+					// assert cache response ID matches cache request ID
 					Expect(cacheResponse.GetCacheRequestID()).To(Equal(cacheRequestID))
 					// assert CacheRequestOutcome is Ok
 					Expect(cacheResponse.GetCacheRequestOutcome()).To(Equal(solace.CacheRequestOutcomeOk))

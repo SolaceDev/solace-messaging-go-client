@@ -200,6 +200,6 @@ solClientgo_filterCachedMessageByCacheRequestId(solClient_opaqueSession_pt opaqu
     )
 
 solClient_returnCode_t
-solClientgo_msg_isRequestReponseMsg(solClient_opaqueMsg_pt msg_p, char **correlationId_p);
+solClientgo_msg_isRequestResponseMsg(solClient_opaqueMsg_pt msg_p, char **correlationId_p);
 
 #endif

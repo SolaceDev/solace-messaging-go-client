@@ -9,7 +9,7 @@ jobs:
   # this job sets up the oldest version of go to check lang compatibility
   CompatibilityCheck:
     runs-on: ubuntu-24.04
-    #Steps for the compatiblity test
+    #Steps for the compatibility test
     steps:
       - uses: actions/checkout@v4
       - name: Setup Go Environment

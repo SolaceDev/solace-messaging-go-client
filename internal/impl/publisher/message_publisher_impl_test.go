@@ -26,6 +26,7 @@ import (
 	"solace.dev/go/messaging/internal/impl/core"
 )
 
+//gocyclo:ignore
 func TestMessagePublisherStartStateChecks(t *testing.T) {
 	publisher := &basicMessagePublisher{}
 	publisher.construct(&mockInternalPublisher{})

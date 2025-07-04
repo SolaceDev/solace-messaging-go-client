@@ -155,7 +155,7 @@ func (publisher *ccsmpBackedPublisher) AddRequestorReplyHandler(replyHandler Req
 	// create correlationId generator
 
 	// create reply to topic
-	// create unique id to incorperate into replyTo topic
+	// create unique id to incorporate into replyTo topic
 	pubID := atomic.AddUint64(&publisher.replyDispatchID, 1)
 	replyToTopic := fmt.Sprintf("%s%016X", publisher.replyToPrefix, pubID)
 

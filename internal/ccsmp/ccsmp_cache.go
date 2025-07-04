@@ -284,7 +284,7 @@ func CacheEventInfoFromCoreCacheEventInfo(eventCallbackInfo CacheEventInfoPt, us
 func goCacheEventCallback( /*opaqueSessionP*/ _ SolClientSessionPt, eventCallbackInfo CacheEventInfoPt, userP unsafe.Pointer) {
 	/* NOTE: We don't need to use the session pointer since we can use the user_p(a.k.a. the cache session pointer)
 	 * which is guaranteed to be unique for at least the duration that the cache session pointer is in the global
-	 * map since during receiver termination we destory the cache session only after we remove it from all maps.
+	 * map since during receiver termination we destroy the cache session only after we remove it from all maps.
 	 */
 	if callback, ok := cacheToEventCallbackMap.Load(SolClientCacheSessionPt(uintptr(userP))); ok {
 		eventInfo := CacheEventInfoFromCoreCacheEventInfo(eventCallbackInfo, uintptr(userP))

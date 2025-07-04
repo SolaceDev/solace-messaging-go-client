@@ -166,6 +166,7 @@ func TestBuilderWithSubscriptions(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestDirectMessageReceiverImplLifecycle(t *testing.T) {
 	gracePeriod := 10 * time.Second
 
@@ -1160,6 +1161,7 @@ func TestDirectMessageReceiverTerminateIdempotence(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestDirectReceiverUnsolicitedTermination(t *testing.T) {
 	internalReceiver := &mockInternalReceiver{}
 	receiver := &directMessageReceiverImpl{}

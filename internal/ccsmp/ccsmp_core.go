@@ -117,7 +117,7 @@ func goMessageReceiveCallback(sessionP SolClientSessionPt, msgP SolClientMessage
 
 //export goReplyMessageReceiveCallback
 func goReplyMessageReceiveCallback(sessionP SolClientSessionPt, msgP SolClientMessagePt, userP unsafe.Pointer, correlationIDP SolClientCorrelationID) C.solClient_rxMsgCallback_returnCode_t {
-	// propagate to request reponse reply message handler
+	// propagate to request response reply message handler
 	if callback, ok := sessionToReplyRXCallbackMap.Load(sessionP); ok {
 		if callback.(SolClientReplyMessageCallback)(msgP, userP, C.GoString(correlationIDP)) {
 			return C.SOLCLIENT_CALLBACK_TAKE_MSG

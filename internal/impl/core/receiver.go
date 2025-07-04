@@ -189,7 +189,7 @@ func (receiver *ccsmpBackedReceiver) IsRunning() bool {
 }
 
 func (receiver *ccsmpBackedReceiver) Replier() Replier {
-	// use ccsmpBackedReceiver struct for now seperate later if needed
+	// use ccsmpBackedReceiver struct for now separate later if needed
 	return receiver
 }
 
