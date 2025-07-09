@@ -499,6 +499,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					helpers.TestConnectDisconnectMessagingService(builder)
 				})
 				It("should be able to connect with cipher suite", func() {
+					Skip("Broker instability - EBP-327")
 					builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().
 						WithCipherSuites("AES128-SHA"))
 					helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
