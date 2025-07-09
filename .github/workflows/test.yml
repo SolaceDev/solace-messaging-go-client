@@ -121,6 +121,6 @@ jobs:
             ./unitcoverage.out
             ./test/reports/report.xml
             ./test/reports/coverage.out
-            ./test/diagnostics.tgz
+            ./test/diagnostics.tgz.p7m
           overwrite: true
 

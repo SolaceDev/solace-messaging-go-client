@@ -9,6 +9,7 @@
 
 test/reports
 test/diagnostics.tgz
+test/diagnostics.tgz.p7m
 
 test/sempclient/action/*
 !test/sempclient/action/go.mod
