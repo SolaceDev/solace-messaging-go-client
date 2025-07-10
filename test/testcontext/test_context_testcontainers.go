@@ -20,6 +20,7 @@
 package testcontext
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -27,7 +28,9 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/testcontainers/testcontainers-go"
+	// "github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/modules/compose"
+	// "github.com/testcontainers/testcontainers-go/wait"
 )
 
 // the default config file relative to the location the tests are run from
@@ -47,11 +50,14 @@ const solCacheSuspectHostNameDefaultValue = "solcache_suspect"
 
 type testContainersTestContext struct {
 	testContextCommon
-	compose *testcontainers.LocalDockerCompose
+	compose *compose.DockerCompose
+	ctx     context.Context
 }
 
 func getTestContext() testContext {
-	context := testContainersTestContext{}
+	context := testContainersTestContext{
+		ctx: context.Background(),
+	}
 	return &context
 }
 
@@ -99,8 +105,17 @@ func (context *testContainersTestContext) Setup() error {
 		composeFilePaths = append(composeFilePaths, cacheProxyComposeFilePath)
 	}
 	identifier := strings.ToLower(uuid.New().String())
-	compose := testcontainers.NewLocalDockerCompose(composeFilePaths, identifier)
 
+	// Create the docker compose instance (new compose stack)
+	compose, err := compose.NewDockerComposeWith(
+		compose.StackIdentifier(identifier),
+		compose.WithStackFiles(composeFilePaths...),
+	)
+	if err != nil {
+		return err
+	}
+
+	compose.WithEnv(context.config.ToEnvironment()).WithOsEnv()
 	context.compose = compose
 
 	context.semp = newSempV2(context.config.SEMP)
@@ -108,12 +123,8 @@ func (context *testContainersTestContext) Setup() error {
 
 	fmt.Println("Starting dockerized broker via docker-compose")
 
-	execError := context.compose.
-		WithEnv(context.config.ToEnvironment()).
-		WithCommand([]string{"up", "-d"}).
-		Invoke()
-
-	err := execError.Error
+	// Start the docker compose stack
+	err = context.compose.Up(context.ctx)
 	if err != nil {
 		return err
 	}
@@ -206,10 +217,15 @@ func (context *testContainersTestContext) Teardown() error {
 		fmt.Println("Encountered error getting " + pubsubHostname + " diagnostics err:" + err.Error())
 	}
 
-	composeResult := context.compose.Down()
-	if composeResult.Error != nil {
-		err = composeResult.Error
-		fmt.Println("Encountered error tearing down docker compose: " + composeResult.Error.Error())
+	// Tear down the docker compose stack
+	err = context.compose.Down(
+		context.ctx,
+		compose.RemoveOrphans(true),
+		compose.RemoveVolumes(true),
+		compose.RemoveImagesLocal,
+	)
+	if err != nil {
+		fmt.Println("Encountered error tearing down docker compose: " + err.Error())
 	}
 	fmt.Println("-- TESTCONTAINERS TEARDOWN COMPLETE --")
 	return err
