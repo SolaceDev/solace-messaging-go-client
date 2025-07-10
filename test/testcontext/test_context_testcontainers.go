@@ -28,9 +28,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	// "github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/compose"
-	// "github.com/testcontainers/testcontainers-go/wait"
 )
 
 // the default config file relative to the location the tests are run from
