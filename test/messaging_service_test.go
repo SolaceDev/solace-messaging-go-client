@@ -500,14 +500,13 @@ var _ = Describe("MessagingService Lifecycle", func() {
 				})
 				It("should be able to connect with cipher suite", func() {
 					builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().
-						WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2). // cipher suite selection only available in TLS <= v1.2
-						WithCipherSuites("ECDHE-RSA-AES128-SHA"))
+						WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2). // cipher suite selection only available in TLSv1.2
+						WithCipherSuites("ECDHE-RSA-AES128-GCM-SHA256"))
 					helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
 						Expect(client.TlsVersion).To(BeEquivalentTo(config.TransportSecurityProtocolTLSv1_2))
-						Expect(client.TlsCipherDescription).To(HavePrefix("ECDHE-RSA-AES128-SHA"))
+						Expect(client.TlsCipherDescription).To(HavePrefix("ECDHE-RSA-AES128-GCM-SHA256"))
 					})
 				})
-
 				// Originally this explicitly test tls1.1
 				// on systems with new openssl (3.0 or later) tls1.1 is no longer supported from the client
 				// As a result this is adapted to explicitly verify tls1.2 in anticipation for tls1.3
