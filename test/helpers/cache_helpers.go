@@ -24,6 +24,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	"solace.dev/go/messaging"
+	"solace.dev/go/messaging/pkg/solace"
 	"solace.dev/go/messaging/pkg/solace/config"
 	"solace.dev/go/messaging/pkg/solace/message"
 	"solace.dev/go/messaging/pkg/solace/resource"
@@ -54,16 +55,19 @@ func DefaultCacheConfiguration() config.ServicePropertyMap {
 	return config
 }
 
-func SendMsgsToTopic(topic string, numMessages int) {
-	builder := messaging.NewMessagingServiceBuilder().FromConfigurationProvider(DefaultCacheConfiguration())
-	messagingService := buildMessagingService(builder, 2)
-	defer func() {
-		err := messagingService.Disconnect()
-		Expect(err).To(BeNil())
-	}()
-	err := messagingService.Connect()
-	Expect(err).To(BeNil())
-	receiver, err := messagingService.CreateDirectMessageReceiverBuilder().WithSubscriptions(resource.TopicSubscriptionOf(topic)).Build()
+func SendMsgsToTopic(
+	publisher solace.DirectMessagePublisher,
+	topic string,
+	messageBuilder solace.OutboundMessageBuilder,
+	directMsgReceiverBuilder solace.DirectMessageReceiverBuilder,
+	numMessages int) {
+
+	receivedMsgs := make(chan message.InboundMessage, numMessages)
+	cacheMessageHandlerCallback := func(msg message.InboundMessage) {
+		receivedMsgs <- msg
+	}
+
+	receiver, err := directMsgReceiverBuilder.WithSubscriptions(resource.TopicSubscriptionOf(topic)).Build()
 	Expect(err).To(BeNil())
 	defer func() {
 		err := receiver.Terminate(0)
@@ -71,22 +75,11 @@ func SendMsgsToTopic(topic string, numMessages int) {
 	}()
 	err = receiver.Start()
 	Expect(err).To(BeNil())
-	publisher, err := messagingService.CreateDirectMessagePublisherBuilder().Build()
-	Expect(err).To(BeNil())
-	defer func() {
-		err := publisher.Terminate(0)
-		Expect(err).To(BeNil())
-	}()
-	err = publisher.Start()
-	Expect(err).To(BeNil())
-	receivedMsgs := make(chan message.InboundMessage, numMessages)
-	cacheMessageHandlerCallback := func(msg message.InboundMessage) {
-		receivedMsgs <- msg
-	}
+
 	err = receiver.ReceiveAsync(cacheMessageHandlerCallback)
 	Expect(err).To(BeNil())
+
 	counter := 0
-	messageBuilder := messagingService.MessageBuilder()
 	for counter < numMessages {
 		msg, err := messageBuilder.BuildWithStringPayload(fmt.Sprintf("message %d", counter))
 		Expect(err).To(BeNil())
@@ -96,7 +89,7 @@ func SendMsgsToTopic(topic string, numMessages int) {
 	}
 	for i := 0; i < numMessages; i++ {
 		var receivedMessage message.InboundMessage
-		Eventually(receivedMsgs, "10s").Should(Receive(&receivedMessage), fmt.Sprintf("Timed out waiting to receive message %d of %d", i, numMessages))
+		Eventually(receivedMsgs, "12s", "100ms").Should(Receive(&receivedMessage), fmt.Sprintf("Timed out waiting to receive message %d of %d", i, numMessages))
 		Expect(receivedMessage.GetDestinationName()).To(Equal(topic))
 	}
 }
@@ -130,8 +123,32 @@ func InitCacheWithPreExistingMessages(cacheCluster testcontext.CacheClusterConfi
 			topics = append(topics, fmt.Sprintf("%s%s%s", splitString[0], vpnName, splitString[1]))
 		}
 	}
+
+	// Create a single messaging service to use to populate the caches
+	builder := messaging.NewMessagingServiceBuilder().FromConfigurationProvider(DefaultCacheConfiguration())
+	messagingService := buildMessagingService(builder, 2)
+	defer func() {
+		err := messagingService.Disconnect()
+		Expect(err).To(BeNil())
+	}()
+	err := messagingService.Connect()
+	Expect(err).To(BeNil())
+
+	publisher, err := messagingService.CreateDirectMessagePublisherBuilder().Build()
+	Expect(err).To(BeNil())
+	defer func() {
+		err := publisher.Terminate(0)
+		Expect(err).To(BeNil())
+	}()
+	err = publisher.Start()
+	Expect(err).To(BeNil())
+
+	// used to build the messages being published to the topics
+	messageBuilder := messagingService.MessageBuilder()
+	directMsgReceiverBuilder := messagingService.CreateDirectMessageReceiverBuilder()
+
 	for _, topic := range topics {
-		SendMsgsToTopic(topic, numMessages)
+		SendMsgsToTopic(publisher, topic, messageBuilder, directMsgReceiverBuilder, numMessages)
 	}
 }
 

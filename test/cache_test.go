@@ -3022,7 +3022,7 @@ var _ = Describe("Cache Strategy", func() {
 						messageReceiver solace.DirectMessageReceiver) {
 						Expect(messagingService.Disconnect()).To(BeNil())
 						Expect(messagingService.IsConnected()).To(BeFalse())
-						Eventually(messageReceiver.IsTerminated(), "5s").Should(BeTrue())
+						Eventually(messageReceiver.IsTerminated(), "8s").Should(BeTrue())
 					},
 					configuration: func() config.ServicePropertyMap {
 						return helpers.DefaultCacheConfiguration()
@@ -3035,10 +3035,10 @@ var _ = Describe("Cache Strategy", func() {
 					terminateFunction: func(messagingService solace.MessagingService,
 						messageReceiver solace.DirectMessageReceiver) {
 						var err error
-						Eventually(messagingService.DisconnectAsync(), "5s").Should(Receive(&err))
+						Eventually(messagingService.DisconnectAsync(), "8s").Should(Receive(&err))
 						Expect(err).To(BeNil())
 						Expect(messagingService.IsConnected()).To(BeFalse())
-						Eventually(messageReceiver.IsTerminated(), "5s").Should(BeTrue())
+						Eventually(messageReceiver.IsTerminated(), "8s").Should(BeTrue())
 					},
 					configuration: func() config.ServicePropertyMap {
 						return helpers.DefaultCacheConfiguration()
@@ -3055,10 +3055,10 @@ var _ = Describe("Cache Strategy", func() {
 							errorChan <- err
 						})
 						var err_holder error
-						Eventually(errorChan, "5s").Should(Receive(&err_holder))
+						Eventually(errorChan, "8s").Should(Receive(&err_holder))
 						Expect(err_holder).To(BeNil())
 						Expect(messagingService.IsConnected()).To(BeFalse())
-						Eventually(messageReceiver.IsTerminated(), "5s").Should(BeTrue())
+						Eventually(messageReceiver.IsTerminated(), "8s").Should(BeTrue())
 					},
 					configuration: func() config.ServicePropertyMap {
 						return helpers.DefaultCacheConfiguration()

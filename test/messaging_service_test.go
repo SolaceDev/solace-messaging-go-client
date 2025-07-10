@@ -499,10 +499,11 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					helpers.TestConnectDisconnectMessagingService(builder)
 				})
 				It("should be able to connect with cipher suite", func() {
-					Skip("Broker instability - EBP-327")
 					builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().
+						WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2). // cipher suite selection only available in TLS <= v1.2
 						WithCipherSuites("AES128-SHA"))
 					helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
+						Expect(client.TlsVersion).To(BeEquivalentTo(config.TransportSecurityProtocolTLSv1_2))
 						Expect(client.TlsCipherDescription).To(HavePrefix("AES128-SHA"))
 					})
 				})
@@ -511,7 +512,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 				// As a result this is adapted to explicitly verify tls1.2 in anticipation for tls1.3
 				// once openssl 1.1 support is deprecated this maybe
 				// We need to explicitly enable TLS1.2 to test a few cases
-				Context("when allowing TLS1.2 connections", func() {
+				Context("when allowing TLS1.2 and TLS1.3 connections", func() {
 					BeforeEach(func() {
 						// semp configuration for tls version support
 						// revist for enabling support for tls 1.2 in the future
@@ -529,16 +530,16 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					})
 					It("should be able to connect with excluded protocols", func() {
 						builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().
-							WithExcludedProtocols(config.TransportSecurityProtocolSSLv3, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1_1))
+							WithExcludedProtocols(config.TransportSecurityProtocolSSLv3, config.TransportSecurityProtocolTLSv1_3, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1_1))
 						helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
 							Expect(client.TlsVersion).To(BeEquivalentTo(config.TransportSecurityProtocolTLSv1_2))
 						})
 					})
 					It("should be able to connect with minimum protocol", func() {
 						builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().
-							WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_2))
+							WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3))
 						helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
-							Expect(client.TlsVersion).To(BeEquivalentTo(config.TransportSecurityProtocolTLSv1_2))
+							Expect(client.TlsVersion).To(BeEquivalentTo(config.TransportSecurityProtocolTLSv1_3))
 						})
 					})
 					It("should be able to connect with maximum protocol", func() {
@@ -564,7 +565,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 						tss := config.NewTransportSecurityStrategy()
 						tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_2)
 						tss.WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2)
-						tss.WithExcludedProtocols(config.TransportSecurityProtocolSSLv3, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1_1)
+						tss.WithExcludedProtocols(config.TransportSecurityProtocolSSLv3, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1_1)
 						builder.WithTransportSecurityStrategy(tss)
 						_, err := builder.Build()
 						Expect(err).To(HaveOccurred())
@@ -572,14 +573,14 @@ var _ = Describe("MessagingService Lifecycle", func() {
 						Expect(err.Error()).To(ContainSubstring("Attempt to configure both deprecated and new tls version control properties."))
 					})
 
-					// When we upgrade the broker, this will fail by conneccting successfully, but until then, it's useful.
-					// EBP-511
-					It("fails to connect with TLSv1.3 because the broker is old", func() {
+					// This will fail on older broker versions.
+					It("should connect with TLSv1.3 on newer broker versions", func() {
 						tss := config.NewTransportSecurityStrategy()
 						tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3)
 						builder.WithTransportSecurityStrategy(tss)
-						helpers.TestFailedConnectMessagingService(builder, func(err error) {
-							helpers.ValidateNativeError(err, subcode.CommunicationError)
+
+						helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
+							Expect(client.TlsVersion).To(BeEquivalentTo(config.TransportSecurityProtocolTLSv1_3))
 						})
 					})
 				})
