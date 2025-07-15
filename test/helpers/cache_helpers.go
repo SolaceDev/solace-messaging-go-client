@@ -20,7 +20,9 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"solace.dev/go/messaging"
@@ -87,9 +89,18 @@ func SendMsgsToTopic(
 		Expect(err).To(BeNil())
 		counter++
 	}
+
+	// wait for 10 seconds per message to receive all messages
+	totalMsgWaitTime := time.Duration(10*numMessages) * time.Second
+	Eventually(receivedMsgs, totalMsgWaitTime).Should(HaveLen(numMessages), fmt.Sprintf("Timed out waiting to receive %d message(s)", numMessages)) // messages should have been sent
+
+	var receivedMessage message.InboundMessage
 	for i := 0; i < numMessages; i++ {
-		var receivedMessage message.InboundMessage
-		Eventually(receivedMsgs, "12s", "100ms").Should(Receive(&receivedMessage), fmt.Sprintf("Timed out waiting to receive message %d of %d", i, numMessages))
+		select {
+		case receivedMessage = <-receivedMsgs:
+		case <-time.After(2 * time.Second):
+			Fail("Timed out waiting to receive message %d of %d", i, numMessages)
+		}
 		Expect(receivedMessage.GetDestinationName()).To(Equal(topic))
 	}
 }
