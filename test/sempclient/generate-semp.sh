@@ -53,7 +53,6 @@ DUMMY_CONTAINER="temp-output-$$"
 docker run --name "$DUMMY_CONTAINER" -v "$VOLUME_NAME:/workspace" alpine:latest true
 
 # Step 5: Docker cp from the dummy container
-rm -rf "$SCRIPT_DIR"/{action,config,monitor} 2>/dev/null || true
 docker cp "$DUMMY_CONTAINER:/workspace/action" "$SCRIPT_DIR/"
 docker cp "$DUMMY_CONTAINER:/workspace/config" "$SCRIPT_DIR/"
 docker cp "$DUMMY_CONTAINER:/workspace/monitor" "$SCRIPT_DIR/"

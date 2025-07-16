@@ -18,4 +18,5 @@
 package sempclient
 
 // generate SEMP client files using Docker volumes (works with remote Docker daemons)
+//go:generate ./makeclean
 //go:generate ./generate-semp.sh
