@@ -14,17 +14,21 @@ require (
 	github.com/onsi/ginkgo/v2 v2.19.0
 	github.com/onsi/gomega v1.33.1
 	github.com/opencontainers/image-spec v1.1.1 // indirect
-	github.com/testcontainers/testcontainers-go v0.37.0 // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
-	google.golang.org/genproto v0.0.0-20220304144024-325a89244dc8 // indirect
 	solace.dev/go/messaging v0.0.0
 	solace.dev/go/messaging/test/sempclient/action v0.0.0
 	solace.dev/go/messaging/test/sempclient/config v0.0.0
 	solace.dev/go/messaging/test/sempclient/monitor v0.0.0
 )
 
-require github.com/testcontainers/testcontainers-go/modules/compose v0.37.0
+require github.com/testcontainers/testcontainers-go/modules/compose v0.35.0
+
+require (
+	github.com/shirou/gopsutil/v3 v3.23.12 // indirect
+	github.com/shoenig/go-m1cpu v0.1.6 // indirect
+	github.com/testcontainers/testcontainers-go v0.35.0 // indirect
+)
 
 require (
 	dario.cat/mergo v1.0.1 // indirect
@@ -77,7 +81,6 @@ require (
 	github.com/docker/go-connections v0.5.0 // indirect
 	github.com/docker/go-metrics v0.0.1 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
-	github.com/ebitengine/purego v0.8.2 // indirect
 	github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
@@ -160,7 +163,6 @@ require (
 	github.com/secure-systems-lab/go-securesystemslib v0.4.0 // indirect
 	github.com/serialx/hashring v0.0.0-20200727003509-22c0c7ab6b1b // indirect
 	github.com/shibumi/go-pathspec v1.3.0 // indirect
-	github.com/shirou/gopsutil/v4 v4.25.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966 // indirect
 	github.com/spf13/cobra v1.9.1 // indirect
@@ -206,6 +208,8 @@ require (
 	golang.org/x/text v0.24.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
 	golang.org/x/tools v0.27.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20250106144421-5f5ef82da422 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f // indirect
 	google.golang.org/grpc v1.71.0 // indirect
 	google.golang.org/protobuf v1.36.4 // indirect
 	gopkg.in/cenkalti/backoff.v1 v1.1.0 // indirect

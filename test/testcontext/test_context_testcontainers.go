@@ -48,7 +48,7 @@ const solCacheSuspectHostNameDefaultValue = "solcache_suspect"
 
 type testContainersTestContext struct {
 	testContextCommon
-	compose *compose.DockerCompose
+	compose compose.ComposeStack
 	ctx     context.Context
 }
 
