@@ -9,7 +9,7 @@ services:
   solbroker:
     image: $PUBSUB_REPO_BASE-$PUBSUB_EDITION:$PUBSUB_TAG
     hostname: "$PUBSUB_HOSTNAME"
-    container_name: "$PUBSUB_HOSTNAME"
+    container_name: "${PUBSUB_HOSTNAME}_broker"
     networks:
       - solace_internal_net
     env_file:

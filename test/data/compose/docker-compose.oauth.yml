@@ -12,7 +12,7 @@ services:
   oauth_endpoints:
     image: $OAUTH_TEST_IMAGE
     hostname: $PUBSUB_OAUTHSERVER_HOSTNAME
-    container_name: $PUBSUB_OAUTHSERVER_HOSTNAME
+    container_name: ${PUBSUB_OAUTHSERVER_HOSTNAME}_oauth
     ports:
       - "30000-30010:30000-30010"
     command: supervisord -n -c /etc/supervisord.conf

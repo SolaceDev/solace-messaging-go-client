@@ -12,5 +12,5 @@ services:
       - "750:750/udp"
       - "48081:8081"
     hostname: $PUBSUB_KDC_HOSTNAME
-    container_name: $PUBSUB_KDC_HOSTNAME
+    container_name: ${PUBSUB_KDC_HOSTNAME}_kdc
     domainname: $PUBSUB_DOMAIN
