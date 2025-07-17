@@ -20,7 +20,7 @@ properties([
 ])
 currentBuild.rawBuild.getParent().setQuietPeriod(0)
 
-library 'jenkins-pipeline-library@alpinemuslfdlimitincrease'
+library 'jenkins-pipeline-library@main'
 
 /*
   Go Version examples:
@@ -47,7 +47,7 @@ builder.goapi([
     // run tests on the last stable Go version (1.22.4) for linux musl
     // See EBP-46
     // and this issue here - https://go-review.googlesource.com/c/go/+/600296
-    permutations << [builder.LINUX_MUSL, 'auto-v1.22.4']
+    permutations << [builder.LINUX_MUSL, 'auto-latest']
     return permutations
   }
 ]) 
