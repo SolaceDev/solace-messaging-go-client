@@ -153,6 +153,7 @@ func (context *testContainersTestContext) Setup() error {
 		fmt.Println("Setting up Kerberos")
 		err = context.setupKerberos()
 		if err != nil {
+			fmt.Println("Encountered error setting up kerberos: " + err.Error())
 			return err
 		}
 	}
