@@ -27,11 +27,7 @@ docker volume create "$VOLUME_NAME"
 TEMP_CONTAINER="temp-setup-$$"
 docker run --name "$TEMP_CONTAINER" -v "$VOLUME_NAME:/workspace" alpine:latest true
 docker cp "$SCRIPT_DIR/spec" "$TEMP_CONTAINER:/workspace/"
-docker cp "$SCRIPT_DIR/makeclean" "$TEMP_CONTAINER:/workspace/"
 docker rm "$TEMP_CONTAINER"
-
-# Clean existing files
-docker run --rm -v "$VOLUME_NAME:/workspace" -w /workspace "$IMAGE_TAG" /workspace/makeclean
 
 # Step 3: Run the 3 codegen commands
 echo "Generating clients..."
