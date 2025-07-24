@@ -90,6 +90,10 @@ jobs:
             exit 1
           fi
 
+      - name: Check for race conditions
+        if: ${{ success() }}
+        run: go test -race ./...
+      
       - name: Runs unit tests
         if: ${{ success() }}
         run: go test -coverprofile ./unitcoverage.out ./...
