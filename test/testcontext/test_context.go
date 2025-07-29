@@ -259,6 +259,7 @@ func (context *testContextCommon) WaitForSEMPReachable() error {
 }
 
 func (context *testContextCommon) waitForToxiProxy() error {
+	fmt.Println("Waiting for ToxiProxy to be reachable at", context.config.ToxiProxy.Host, ":", context.config.ToxiProxy.Port)
 	err := waitForEndpoint(fmt.Sprintf("http://%s:%d", context.config.ToxiProxy.Host, context.config.ToxiProxy.Port), 404)
 	if err != nil {
 		return err
@@ -267,6 +268,7 @@ func (context *testContextCommon) waitForToxiProxy() error {
 }
 
 func (context *testContextCommon) waitForSEMP() error {
+	fmt.Printf("Waiting for SEMP to be reachable at %s:%d\n", context.config.SEMP.Host, context.config.SEMP.Port)
 	err := waitForEndpoint(fmt.Sprintf("http://%s:%d/SEMP/v2/config/help/", context.config.SEMP.Host, context.config.SEMP.Port), 200)
 	if err != nil {
 		return err

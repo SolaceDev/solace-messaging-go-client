@@ -9,7 +9,7 @@ services:
   solbroker:
     image: $PUBSUB_REPO_BASE-$PUBSUB_EDITION:$PUBSUB_TAG
     hostname: "$PUBSUB_HOSTNAME"
-    container_name: "${PUBSUB_HOSTNAME}_broker"
+    container_name: "$PUBSUB_CONTAINER_NAME"
     networks:
       - solace_internal_net
     env_file:
@@ -35,7 +35,7 @@ services:
 
   toxiproxy:
     image: ghcr.io/shopify/toxiproxy
-    container_name: toxiproxy
+    container_name: "$TOXIPROXY_CONTAINER_NAME"
     hostname: "$TOXIPROXY_HOSTNAME"
     ports:
       - "$TOXIPROXY_PORT:8474"
