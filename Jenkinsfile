@@ -48,7 +48,6 @@ builder.goapi([
     // See EBP-46
     // and this issue here - https://go-review.googlesource.com/c/go/+/600296
     permutations << [builder.LINUX_MUSL, 'auto-v1.22.4']
-    permutations = [[builder.LINUX_ARM, 'auto-latest'],[builder.DARWIN_X86_64, 'auto-latest'], [builder.DARWIN_ARM, 'auto-latest']]
     return permutations
   }
 ]) 
