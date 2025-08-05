@@ -193,26 +193,26 @@ func (context *testContainersTestContext) Setup() error {
 func (context *testContainersTestContext) Teardown() error {
 	fmt.Println()
 	fmt.Println("-- TESTCONTAINERS TEARDOWN --")
-	pubsubHostname := context.config.TestContainers.BrokerHostname
+	pubsubContainerName := context.config.TestContainers.BrokerContainerName
 	err := context.toxi.teardown()
 	if err != nil {
 		fmt.Println("Encountered error tearing down toxiproxy: " + err.Error())
 	}
-	rc, output, err := context.dockerLogs(pubsubHostname)
+	rc, output, err := context.dockerLogs(pubsubContainerName)
 	if err == nil {
-		fmt.Println("Broker logs for " + pubsubHostname + ":")
+		fmt.Println("Broker logs for " + pubsubContainerName + ":")
 		fmt.Println(output)
 	} else {
-		fmt.Println("Encountered error getting docker logs from " + pubsubHostname + ": rc=" + string(rc) + " err:" + err.Error())
+		fmt.Println("Encountered error getting docker logs from " + pubsubContainerName + ": rc=" + string(rc) + " err:" + err.Error())
 	}
 	wd, err := os.Getwd()
 	if err != nil {
-		fmt.Println("Encountered error getting working directory for " + pubsubHostname + " diagnostics err:" + err.Error())
+		fmt.Println("Encountered error getting working directory for " + pubsubContainerName + " diagnostics err:" + err.Error())
 	}
 
 	err = context.gatherBrokerDiagnostics(path.Join(wd, "diagnostics.tgz"))
 	if err != nil {
-		fmt.Println("Encountered error getting " + pubsubHostname + " diagnostics err:" + err.Error())
+		fmt.Println("Encountered error getting " + pubsubContainerName + " diagnostics err:" + err.Error())
 	}
 
 	// Tear down the docker compose stack
@@ -231,30 +231,30 @@ func (context *testContainersTestContext) Teardown() error {
 
 func (context *testContainersTestContext) gatherBrokerDiagnostics(destinationPath string) error {
 	fmt.Println()
-	pubsubHostname := context.config.TestContainers.BrokerHostname
-	// gather all important information and logs from pubsubHostname container
-	fmt.Println("Run gather-diagnostics for " + pubsubHostname + "...")
-	resp, output, err := context.dockerExec(pubsubHostname, []string{"/bin/bash", "-l", "-c", "\"gather-diagnostics\""})
+	pubsubContainerName := context.config.TestContainers.BrokerContainerName
+	// gather all important infomation and logs from pubsubContainerName container
+	fmt.Println("Run gather-diagnostics for " + pubsubContainerName + "...")
+	resp, output, err := context.dockerExec(pubsubContainerName, []string{"/bin/bash", "-l", "-c", "\"gather-diagnostics\""})
 	if err != nil {
 		return err
 	}
 	fmt.Println(output)
 	if resp != 0 {
-		return fmt.Errorf("failed to gather %s diagnostics", pubsubHostname)
+		return fmt.Errorf("failed to gather %s diagnostics", pubsubContainerName)
 	}
-	fmt.Println("Gathered gather-diagnostics for " + pubsubHostname)
+	fmt.Println("Gathered gather-diagnostics for " + pubsubContainerName)
 	// extract diagnostic to host
 	// first get absolute path from container
-	resp, diagnosticPath, err := context.dockerExec(pubsubHostname, []string{"/bin/bash", "-l", "-c", "ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz | tail -n 1"})
+	resp, diagnosticPath, err := context.dockerExec(pubsubContainerName, []string{"/bin/bash", "-l", "-c", "ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz | tail -n 1"})
 	//resp, diagnosticPath, err := context.dockerExec(pubsubHostname, []string{"/bin/bash", "-l", "-c", " realpath $(ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz | tail -n 1)"})
 	if err != nil {
 		return err
 	}
 	if resp != 0 {
-		return fmt.Errorf("failed to locate %s diagnostics", pubsubHostname)
+		return fmt.Errorf("failed to locate %s diagnostics", pubsubContainerName)
 	}
-	fmt.Println("Exacting gather-diagnostics " + diagnosticPath + " for " + pubsubHostname + " to " + destinationPath + "...")
-	err = context.dockerCpToHost(pubsubHostname, strings.TrimSpace(diagnosticPath), destinationPath)
+	fmt.Println("Exacting gather-diagnostics " + diagnosticPath + " for " + pubsubContainerName + " to " + destinationPath + "...")
+	err = context.dockerCpToHost(pubsubContainerName, strings.TrimSpace(diagnosticPath), destinationPath)
 	return err
 }
 

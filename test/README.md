@@ -53,10 +53,13 @@ Cache tests can be run when using testcontainers by exporting the variables:
 - `PUBSUB_CACHE_SUPSECT_HOSTNAME=<name of suspect cache instance>`
 - `SOLCACHE_TEST_IMAGE=<name of docker image for cache instances>`
 - `SOLCACHEPROXY_TEST_IMAGE=<name of docker image for cahce proxy instances>`
+- `PUBSUB_CACHE_CONTAINER_NAME=[optional base name used when creating cache containers]`
+- `PUBSUB_CACHE_SUSPECT_CONTAINER_NAME=[optional name used when creating cache suspect container]`
 These environment variables are used to create and destroy the various docker containers that are required for testing. Modifying these variables after they have been used to create containers will lead to undefined behaviour and should not be done. Populating these variables during test execution should not be expected to cause the containers to be created partway through the tests, and will lead to undefined behaviour.
 `PUBSUB_CACHE_HOSTNAME`, `PUBSUB_CACHE_SUPSECT_HOSTNAME`, and `SOLCACHE_TEST_IMAGE` are all necessary to run cache tests.
 `PUBSUB_CACHE_HOSTNAME`, and `SOLCACHEPROXY_TEST_IMAGE` are all necessary to run cache proxy tests. For tests that use both cache and cache proxy, all four variables are needed. Cache suspect is just a specfially configured cache instance, so tests that use suspect cache have the same requirements as those that use cache.
 The docker images for cache and suspect cache instances are the same. The docker images for cache and cache proxy are distinct. The cache docker image is proprietary and can only be gotten through a purchased product key. The docker image for cache proxy is proprietary, for internal use only, and not available to the general public.
+The PUBSUB_CACHE_SUSPECT_CONTAINER_NAME and PUBSUB_CACHE_CONTAINER_NAME variables are completely optional, and can be used to rename the created containers.
 
 ### Running the tests from inside a docker container
 To run the tests from inside a docker container, the `TEST_FOLDER` variable inside the container must be set to the absolute path of the parent directory of the fixtures directory in your mounted Go API clone. This will allow docker-compose to find the fixtures directory, which it must resolve to stand up the containers for the broker, and others.

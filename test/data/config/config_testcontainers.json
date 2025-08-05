@@ -15,26 +15,32 @@
     },
     "testcontainers": {
         "broker_hostname": "solbroker",
+        "broker_container_name": "solbroker",
         "broker_tag": "10.4",
         "broker_repo": "solace/solace-pubsub",
         "broker_edition": "standard",
         "toxiproxy_hostname": "toxiproxy",
+        "toxiproxy_container_name": "toxiproxy",
         "network_name": "solace_msg_net"
     },
     "kerberos": {
         "hostname": "ats-kdc-server",
+        "container_name": "ats-kdc-server",
         "domain": "ATS.SOLACE.COM",
         "username": "localtest@LOCAL.ATS.SOLACE.COM",
         "password": "localtest"
     },
     "oauth": {
         "hostname": "solaceOAuth",
+        "container_name": "solaceOAuth",
         "endpoints": {
             "jwks": "https://solaceOAuth:30000/",
             "user_info": "https://solaceOAuth:30001/"
         }
     },
     "cache": {
+        "container_name": "solcache",
+        "suspect_container_name": "solcache_suspect",
         "vpn": "SolCacheUT",
         "distributed_caches": [
             {
