@@ -183,6 +183,8 @@ func (opaqueContainer *SolClientOpaqueContainer) SolClientContainerGetField(key 
 // GetData converts the field into the relevant golang type. In particular,
 // fbool, uint8-64, int8-64, string, byte array, float, double, nil,
 // wchar, *SolClientOpaqueContainer or *SolClientContainerDest
+//
+//gocyclo:ignore
 func GetData(field SolClientField) (interface{}, bool) {
 	switch field._type {
 	case C.SOLCLIENT_BOOL:

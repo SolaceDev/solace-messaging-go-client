@@ -17,7 +17,7 @@
 //go:build dummy
 // +build dummy
 
-// dummy.go includes the relevant ccsmp library directories to suport go vendoring.
+// dummy.go includes the relevant ccsmp library directories to support go vendoring.
 // It is excluded from all builds and exists as a workaround for https://github.com/golang/go/issues/26366.
 
 package ccsmp

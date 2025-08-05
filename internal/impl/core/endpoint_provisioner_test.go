@@ -148,7 +148,7 @@ func TestSolClientEndpointProvisionerClearProvisionCorrelation(t *testing.T) {
 }
 
 // TestSolClientEndpointProvisionerHandleProvisionOkEvent - tests the provision event handlers
-// Mock emit an event and checking that the result in the channel is the emited event
+// Mock emit an event and checking that the result in the channel is the emitted event
 func TestSolClientEndpointProvisionerHandleProvisionOkEvent(t *testing.T) {
 	events := dummyEvents()
 	endpointProvisioner := newCcsmpEndpointProvisioner(nil, events)
@@ -187,7 +187,7 @@ func TestSolClientEndpointProvisionerHandleProvisionOkEvent(t *testing.T) {
 }
 
 // TestSolClientEndpointProvisionerHandleProvisionErrorEvent - tests the provision event handlers
-// Mock emit an event and checking that the result in the channel is the emited event
+// Mock emit an event and checking that the result in the channel is the emitted event
 func TestSolClientEndpointProvisionerHandleProvisionErrorEvent(t *testing.T) {
 	events := dummyEvents()
 	endpointProvisioner := newCcsmpEndpointProvisioner(nil, events)

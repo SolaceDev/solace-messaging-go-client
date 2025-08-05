@@ -72,6 +72,8 @@ func (builder *OutboundMessageBuilderImpl) build(additionalConfiguration ...conf
 }
 
 // SetProperties function
+//
+//gocyclo:ignore
 func SetProperties(message *OutboundMessageImpl, properties config.MessagePropertyMap) error {
 	userProperties := sdt.Map{}
 	for property, value := range properties {
@@ -412,6 +414,7 @@ func sdtStreamToContainer(container *ccsmp.SolClientOpaqueContainer, sdtStream s
 	return nil
 }
 
+//gocyclo:ignore
 func addItemToContainer(container *ccsmp.SolClientOpaqueContainer, item sdt.Data, key string) error {
 	var errInfo core.ErrorInfo
 	if item == nil {

@@ -306,8 +306,6 @@ func NewCachedMessageSubscriptionRequest(cachedMessageSubscriptionStrategy Cache
 	case CacheRequestStrategyLiveCancelsCached:
 		// these are valid
 		cachedMsgSubStrategy = &cachedMessageSubscriptionStrategy
-	default:
-		cachedMsgSubStrategy = nil
 	}
 	// return back a valid cache message subscription request if everything checks out
 	return &cachedMessageSubscriptionRequest{

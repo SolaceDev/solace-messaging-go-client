@@ -162,6 +162,7 @@ func TestPersistentMessagePublisherBuilderWithInvalidCustomPropertiesMapWrongStr
 	}
 }
 
+//gocyclo:ignore
 func TestPersistentMessagePublisherImplLifecycle(t *testing.T) {
 	gracePeriod := 10 * time.Second
 
@@ -433,6 +434,7 @@ func TestPersistentMessagePublisherImplLifecycleNoBuffer(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestPersistentMessagePublisherLifecycleIdempotence(t *testing.T) {
 	publisher := &persistentMessagePublisherImpl{}
 	publisher.construct(&mockInternalPublisher{}, backpressureConfigurationWait, 1)
@@ -670,6 +672,7 @@ func TestPersistentMessagePublisherTerminateWithUnackedMessages(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestPersistentMessagePublisherUnsolicitedTerminationWithUnpublishedMessages(t *testing.T) {
 	internalPublisher := &mockInternalPublisher{}
 	publisher := &persistentMessagePublisherImpl{}
@@ -804,6 +807,7 @@ func TestPersistentMessagePublisherCallPublishWithBadPayload(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestPersistentMessagePublisherPublishFunctionalityBufferedWait(t *testing.T) {
 	publisher := &persistentMessagePublisherImpl{}
 	publisher.construct(&mockInternalPublisher{}, backpressureConfigurationWait, 1)

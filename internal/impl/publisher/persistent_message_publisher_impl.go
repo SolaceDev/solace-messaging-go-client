@@ -580,6 +580,8 @@ func (publisher *persistentMessagePublisherImpl) publishWithBlockingContext(msg 
 }
 
 // publish impl taking a dup'd message, assuming state has been checked and we are running
+//
+//gocyclo:ignore
 func (publisher *persistentMessagePublisherImpl) publish(msg *message.OutboundMessageImpl, dest *resource.Topic, ctx correlationContext, userContext interface{}) (ret error) {
 
 	// Set the destination for the message which is assumed to be a dup'd message.
