@@ -51,10 +51,10 @@ type TestContainersConfig struct {
 
 // OAuthConfig represents OAuth's config
 type OAuthConfig struct {
-Hostname      string               `json:"hostname,omitempty" env:"PUBSUB_OAUTHSERVER_HOSTNAME"`
-ContainerName string               `json:"container_name,omitempty" env:"PUBSUB_OAUTHSERVER_CONTAINER_NAME"`
-Endpoints     *OAuthEndpointConfig `json:"endpoints,omitempty"`
-Image         string               `env:"OAUTH_TEST_IMAGE"`
+	Hostname      string               `json:"hostname,omitempty" env:"PUBSUB_OAUTHSERVER_HOSTNAME"`
+	ContainerName string               `json:"container_name,omitempty" env:"PUBSUB_OAUTHSERVER_CONTAINER_NAME"`
+	Endpoints     *OAuthEndpointConfig `json:"endpoints,omitempty"`
+	Image         string               `env:"OAUTH_TEST_IMAGE"`
 }
 
 // OAuthEndpointConfig
@@ -65,24 +65,24 @@ type OAuthEndpointConfig struct {
 
 // KerberosConfig represents Kerberos's config
 type KerberosConfig struct {
-Image         string `json:"image" env:"KRB_TEST_IMAGE"`
-Hostname      string `json:"hostname" env:"PUBSUB_KDC_HOSTNAME"`
-ContainerName string `json:"container_name,omitempty" env:"PUBSUB_KDC_CONTAINER_NAME"`
-Domain        string `json:"domain" env:"PUBSUB_DOMAIN"`
-Username      string `json:"username" env:"KUSER"`
-Password      string `json:"password" env:"KPASSWORD"`
+	Image         string `json:"image" env:"KRB_TEST_IMAGE"`
+	Hostname      string `json:"hostname" env:"PUBSUB_KDC_HOSTNAME"`
+	ContainerName string `json:"container_name,omitempty" env:"PUBSUB_KDC_CONTAINER_NAME"`
+	Domain        string `json:"domain" env:"PUBSUB_DOMAIN"`
+	Username      string `json:"username" env:"KUSER"`
+	Password      string `json:"password" env:"KPASSWORD"`
 }
 
 // CacheConfig represents Cache's config
 type CacheConfig struct {
-Image string `env:"SOLCACHE_TEST_IMAGE"` // The image is proprietary, so we don't want to commit its name
-// or other info to vcs.
-Hostname              string                   `json:"hostname" env:"PUBSUB_CACHE_HOSTNAME"`
-ContainerName         string                   `json:"container_name,omitempty" env:"PUBSUB_CACHE_CONTAINER_NAME"`
-SuspectHostname       string                   `json:"suspect_hostname" env:"PUBSUB_CACHE_SUSPECT_HOSTNAME"`
-SuspectContainerName  string                   `json:"suspect_container_name,omitempty" env:"PUBSUB_CACHE_SUSPECT_CONTAINER_NAME"`
-Vpn                   string                   `json:"vpn"`
-DistributedCaches     []DistributedCacheConfig `json:"distributed_caches"`
+	Image string `env:"SOLCACHE_TEST_IMAGE"` // The image is proprietary, so we don't want to commit its name
+	// or other info to vcs.
+	Hostname              string                   `json:"hostname" env:"PUBSUB_CACHE_HOSTNAME"`
+	ContainerName         string                   `json:"container_name,omitempty" env:"PUBSUB_CACHE_CONTAINER_NAME"`
+	SuspectHostname       string                   `json:"suspect_hostname" env:"PUBSUB_CACHE_SUSPECT_HOSTNAME"`
+	SuspectContainerName  string                   `json:"suspect_container_name,omitempty" env:"PUBSUB_CACHE_SUSPECT_CONTAINER_NAME"`
+	Vpn                   string                   `json:"vpn"`
+	DistributedCaches     []DistributedCacheConfig `json:"distributed_caches"`
 }
 
 // DistributedCacheConfig represents the DistributedCache's config
