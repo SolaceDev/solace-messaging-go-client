@@ -18,7 +18,7 @@ trap cleanup EXIT
 
 # Step 1: Build the Docker image
 echo "Building image..."
-docker buildx build -f "$SCRIPT_DIR/Dockerfile" -t "$IMAGE_TAG" --build-arg SWAGGER_VER=3.0.27 "$SCRIPT_DIR" --load
+docker build -f "$SCRIPT_DIR/Dockerfile" -t "$IMAGE_TAG" --build-arg SWAGGER_VER=3.0.27 "$SCRIPT_DIR"
 
 # Step 2: Create a Docker volume
 echo "Creating volume..."
