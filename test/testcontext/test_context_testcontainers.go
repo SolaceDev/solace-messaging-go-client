@@ -105,7 +105,7 @@ func (context *testContainersTestContext) Setup() error {
 	identifier := strings.ToLower(uuid.New().String())
 
 	// Create the docker compose instance (new compose stack)
-	compose, err := compose.NewDockerComposeWith(
+	dockerCompose, err := compose.NewDockerComposeWith(
 		compose.StackIdentifier(identifier),
 		compose.WithStackFiles(composeFilePaths...),
 	)
@@ -113,8 +113,8 @@ func (context *testContainersTestContext) Setup() error {
 		return err
 	}
 
-	compose.WithEnv(context.config.ToEnvironment()).WithOsEnv()
-	context.compose = compose
+	dockerCompose.WithEnv(context.config.ToEnvironment()).WithOsEnv()
+	context.compose = dockerCompose
 
 	context.semp = newSempV2(context.config.SEMP)
 	context.toxi = newToxiProxy(context.config.ToxiProxy)
@@ -155,6 +155,7 @@ func (context *testContainersTestContext) Setup() error {
 	fmt.Println("Setting up ToxiProxy proxies")
 	err = context.toxi.setup()
 	if err != nil {
+		fmt.Println("Encountered error setting up ToxiProxy: " + err.Error())
 		return err
 	}
 
@@ -162,6 +163,7 @@ func (context *testContainersTestContext) Setup() error {
 		fmt.Println("Setting up Kerberos")
 		err = context.setupKerberos()
 		if err != nil {
+			fmt.Println("Encountered error setting up kerberos: " + err.Error())
 			return err
 		}
 	}
@@ -177,6 +179,7 @@ func (context *testContainersTestContext) Setup() error {
 		err = context.setupCache()
 		if err != nil {
 			context.cacheEnabled = false
+			fmt.Println("Encountered error setting up cache: " + err.Error())
 			return err
 		}
 	}

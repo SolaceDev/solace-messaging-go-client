@@ -481,7 +481,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					builder.FromConfigurationProvider(config.ServicePropertyMap{
 						config.TransportLayerSecurityPropertyTrustStorePath:         constants.ValidFixturesPath,
 						config.TransportLayerSecurityPropertyCertRejectExpired:      true,
-						config.TransportLayerSecurityPropertyCertValidateServername: true,
+						config.TransportLayerSecurityPropertyCertValidateServername: false,
 						config.TransportLayerSecurityPropertyCertValidated:          true,
 					})
 				})

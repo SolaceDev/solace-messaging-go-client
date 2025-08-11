@@ -8,6 +8,7 @@ set -e
 # Configuration
 IMAGE_TAG="solace-semp-swagger-codegen-cli:3.0.27"
 VOLUME_NAME="semp-generation-vol-$$"
+# VOLUME_NAME="semp-generation-vol-$(date +%s)-$(hostname)-$(openssl rand -hex 4)"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 cleanup() {
