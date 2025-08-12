@@ -32,15 +32,21 @@ docker rm "$TEMP_CONTAINER"
 
 # Step 3: Run the 3 codegen commands
 echo "Generating clients..."
-docker run --rm -v "$VOLUME_NAME:/workspace" -w /workspace "$IMAGE_TAG" \
+docker run --rm -v "$VOLUME_NAME:/workspace" -w /workspace \
+    --entrypoint java "$IMAGE_TAG" \
+    -jar /opt/swagger-codegen-cli/swagger-codegen-cli.jar \
     generate -l go -i /workspace/spec/spec_action.json -o /workspace/action \
     --type-mappings boolean=*bool --additional-properties packageName=action
 
-docker run --rm -v "$VOLUME_NAME:/workspace" -w /workspace "$IMAGE_TAG" \
+docker run --rm -v "$VOLUME_NAME:/workspace" -w /workspace \
+    --entrypoint java "$IMAGE_TAG" \
+    -jar /opt/swagger-codegen-cli/swagger-codegen-cli.jar \
     generate -l go -i /workspace/spec/spec_config.json -o /workspace/config \
     --type-mappings boolean=*bool --additional-properties packageName=config
 
-docker run --rm -v "$VOLUME_NAME:/workspace" -w /workspace "$IMAGE_TAG" \
+docker run --rm -v "$VOLUME_NAME:/workspace" -w /workspace \
+    --entrypoint java "$IMAGE_TAG" \
+    -jar /opt/swagger-codegen-cli/swagger-codegen-cli.jar \
     generate -l go -i /workspace/spec/spec_monitor.json -o /workspace/monitor \
     --type-mappings boolean=*bool --additional-properties packageName=monitor
 
