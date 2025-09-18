@@ -11,6 +11,6 @@ services:
     networks:
       - solace_internal_net
     container_name: solcacheproxy
-    command: /home/solace/solcacheproxy.sh -h $PUBSUB_HOSTNAME -u unittest -w unittest -v SolCacheUT -c MaxMsgs3,Suspect,MaxMsgs1,MaxMsgs10
+    command: /home/solace/solcacheproxy.sh -h $PUBSUB_CONTAINER_NAME -u unittest -w unittest -v SolCacheUT -c MaxMsgs3,Suspect,MaxMsgs1,MaxMsgs10
     links:
       - solbroker
