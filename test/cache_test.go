@@ -53,7 +53,7 @@ func GetCacheStatsAsString(messagingService solace.MessagingService) string {
 	return fmt.Sprintf("CacheRequestsSent: %d\nCacheRequestsSucceeded: %d\nCacheRequestsFailed: %d\n", messagingService.Metrics().GetValue(metrics.CacheRequestsSent), messagingService.Metrics().GetValue(metrics.CacheRequestsSucceeded), messagingService.Metrics().GetValue(metrics.CacheRequestsFailed))
 }
 
-var _ = FDescribe("Cache Strategy", func() {
+var _ = Describe("Cache Strategy", func() {
 	logging.SetLogLevel(logging.LogLevelDebug)
 	Describe("When the cache is available and configured", func() {
 		var messagingService solace.MessagingService
