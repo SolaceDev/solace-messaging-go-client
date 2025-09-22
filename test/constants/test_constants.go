@@ -18,10 +18,10 @@
 package constants
 
 // ValidFixturesPath constant
-const ValidFixturesPath = "/Users/loadbuild/jenkins/slave2/workspace/ev.pubsubplus-go-client_EBP-1222_2/test/data/fixtures" // "./data/fixtures"
+const ValidFixturesPath = "./data/fixtures"
 
 // InvalidFixturesPath constant
-const InvalidFixturesPath = "/Users/loadbuild/jenkins/slave2/workspace/ev.pubsubplus-go-client_EBP-1222_2/test/data/invalid_fixtures" // "./data/invalid_fixtures"
+const InvalidFixturesPath = "./data/invalid_fixtures"
 
 // ValidClientCertificatePEM to install to the server for valid client authentication
 const ValidClientCertificatePEM = ValidFixturesPath + "/public_root_ca.crt"
