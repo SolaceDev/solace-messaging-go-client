@@ -18,31 +18,31 @@
 package constants
 
 // ValidFixturesPath constant
-const ValidFixturesPath = "./data/fixtures"
+const ValidFixturesPath = "./data/fixtures/"
 
 // InvalidFixturesPath constant
-const InvalidFixturesPath = "./data/invalid_fixtures"
+const InvalidFixturesPath = "./data/invalid_fixtures/"
 
 // ValidClientCertificatePEM to install to the server for valid client authentication
-const ValidClientCertificatePEM = ValidFixturesPath + "/public_root_ca.crt"
+const ValidClientCertificatePEM = ValidFixturesPath + "public_root_ca.crt"
 
 // InvalidClientCertificatePEM constant
-const InvalidClientCertificatePEM = InvalidFixturesPath + "/unused_root_ca.crt"
+const InvalidClientCertificatePEM = InvalidFixturesPath + "unused_root_ca.crt"
 
 // ValidClientCertificateFile constant
-const ValidClientCertificateFile = ValidFixturesPath + "/api-client.crt"
+const ValidClientCertificateFile = ValidFixturesPath + "api-client.crt"
 
 // ExpiredClientCertificateFile constant
-const ExpiredClientCertificateFile = InvalidFixturesPath + "/api-clientExpired.crt"
+const ExpiredClientCertificateFile = InvalidFixturesPath + "api-clientExpired.crt"
 
 // InvalidClientCertificateFile constant
-const InvalidClientCertificateFile = InvalidFixturesPath + "/api-clientInvalidKey.pem"
+const InvalidClientCertificateFile = InvalidFixturesPath + "api-clientInvalidKey.pem"
 
 // ValidClientKeyFile constant
-const ValidClientKeyFile = ValidFixturesPath + "/api-client.key"
+const ValidClientKeyFile = ValidFixturesPath + "api-client.key"
 
 // InvalidClientKeyFile constant
-const InvalidClientKeyFile = InvalidFixturesPath + "/unused.key"
+const InvalidClientKeyFile = InvalidFixturesPath + "unused.key"
 
 // ValidCertificateKeyPassword constant
 const ValidCertificateKeyPassword = "changeme"
@@ -54,10 +54,10 @@ const InvalidCertificateKeyPassword = "thisisnotthepasswordyouarelookingfor"
 const ServerCertificatePassphrase = "No Password"
 
 // ValidServerCertificate constant
-const ValidServerCertificate = ValidFixturesPath + "/api-server.pem"
+const ValidServerCertificate = ValidFixturesPath + "api-server.pem"
 
 // BadServernameServerCertificate constant
-const BadServernameServerCertificate = InvalidFixturesPath + "/api-badserver.pem"
+const BadServernameServerCertificate = InvalidFixturesPath + "api-badserver.pem"
 
 // ExpiredServerCertificate constant
-const ExpiredServerCertificate = InvalidFixturesPath + "/api-serverExpired.pem"
+const ExpiredServerCertificate = InvalidFixturesPath + "api-serverExpired.pem"
