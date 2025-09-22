@@ -20,7 +20,7 @@ properties([
 ])
 currentBuild.rawBuild.getParent().setQuietPeriod(0)
 
-library 'jenkins-pipeline-library@DATAGO-99912'
+library 'jenkins-pipeline-library@main'
 
 /*
   Go Version examples:
