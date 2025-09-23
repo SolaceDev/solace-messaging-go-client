@@ -13,7 +13,7 @@ services:
     image: $SOLCACHE_TEST_IMAGE
     networks:
       - solace_internal_net
-    container_name: ${PUBSUB_CACHE_HOSTNAME}_3
+    container_name: ${PUBSUB_CACHE_CONTAINER_NAME}_3
     hostname: ${PUBSUB_CACHE_HOSTNAME}_3
     environment:
       - CONFIG_FILE_PATH=/home/solace/config/config.txt
@@ -26,7 +26,7 @@ services:
     image: $SOLCACHE_TEST_IMAGE
     networks:
       - solace_internal_net
-    container_name: $PUBSUB_CACHE_SUSPECT_HOSTNAME
+    container_name: ${PUBSUB_CACHE_SUSPECT_CONTAINER_NAME}
     hostname: $PUBSUB_CACHE_SUSPECT_HOSTNAME
     environment:
       - CONFIG_FILE_PATH=/home/solace/config/config.txt
@@ -39,7 +39,7 @@ services:
     image: $SOLCACHE_TEST_IMAGE
     networks:
       - solace_internal_net
-    container_name: ${PUBSUB_CACHE_HOSTNAME}_1
+    container_name: ${PUBSUB_CACHE_CONTAINER_NAME}_1
     hostname: ${PUBSUB_CACHE_HOSTNAME}_1
     environment:
       - CONFIG_FILE_PATH=/home/solace/config/config.txt
@@ -52,7 +52,7 @@ services:
     image: $SOLCACHE_TEST_IMAGE
     networks:
       - solace_internal_net
-    container_name: ${PUBSUB_CACHE_HOSTNAME}_10
+    container_name: ${PUBSUB_CACHE_CONTAINER_NAME}_10
     hostname: ${PUBSUB_CACHE_HOSTNAME}_10
     environment:
       - CONFIG_FILE_PATH=/home/solace/config/config.txt

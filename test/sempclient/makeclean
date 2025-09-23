@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 # pubsubplus-go-client
 #
@@ -22,16 +22,16 @@
 # This command can be run from the host or from the codegen container
 # The files to delete can change over time
 
-BASEDIR=$(cd $(dirname $0) && pwd)
+BASEDIR=$(cd "$(dirname "$0")" && pwd)
 
-function cleanup_files() {
-    echo "from `pwd` cleanup $*"
-    rm -rf $*
+cleanup_files() {
+    echo "from $(pwd) cleanup $*"
+    rm -rf "$@"
 }
-function cleanup() {
+cleanup() {
     echo "args $*"
     echo "script dir $BASEDIR"
-    echo "Current dir `pwd`"
+    echo "Current dir $(pwd)"
 
     local gen_root_dir=${BASEDIR}
     local gen_dirs=" action config monitor "
@@ -39,11 +39,11 @@ function cleanup() {
     local gen_files=" *.go *.sh *.md *.yml .gitignore .*.yml"
 
     for topdir in $gen_dirs ; do
-        local cur_dir=$gen_root_dir/$topdir
-        if [[ -e $cur_dir ]]; then
-            (cd $cur_dir; cleanup_files $sub_gen_dirs ) && (cd $cur_dir; cleanup_files $gen_files )
+        local cur_dir="$gen_root_dir/$topdir"
+        if [ -e "$cur_dir" ]; then
+            (cd "$cur_dir" && cleanup_files $sub_gen_dirs ) && (cd "$cur_dir" && cleanup_files $gen_files )
         fi
     done
 
 }
-cleanup $*
+cleanup "$@"
