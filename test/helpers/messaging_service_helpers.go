@@ -141,6 +141,15 @@ func DefaultConfiguration() config.ServicePropertyMap {
 	return config
 }
 
+// SecureConfiguration returns a configuration for connecting to the broker using TLS
+// with certificate validation but without hostname validation. This is useful when
+// connecting to a broker through a remote Docker daemon where the hostname in the
+// certificate doesn't match the hostname or IP address that the client is connecting to.
+// This function is now in the tls_helpers.go file.
+func SecureConfiguration() config.ServicePropertyMap {
+	return CreateSecureConfiguration()
+}
+
 // helper to connect and disconnect the messaging service
 
 // TestConnectDisconnectMessagingService function

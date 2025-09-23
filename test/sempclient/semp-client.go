@@ -17,11 +17,6 @@
 // Package sempclient contains generated SEMPv2 code
 package sempclient
 
-// create docker image based off of swaggerapi/swagger-codegen-cli-v3
-//go:generate docker build -f Dockerfile -t solace-semp-swagger-codegen-cli:3.0.27 --build-arg SWAGGER_VER=3.0.27 $PWD
-// clean previously generated semp files if any
-//go:generate docker run --rm -v "$PWD:/output" --entrypoint /bin/sh solace-semp-swagger-codegen-cli:3.0.27 -c "/output/makeclean"
-// generate new semp client files using umask 0000 to avoid host mahcine modidifcation after generation
-//go:generate docker run --rm -v "$PWD/spec:/schema" -v "$PWD:/output" --entrypoint /bin/sh solace-semp-swagger-codegen-cli:3.0.27 -c "umask 0000; java -jar /opt/swagger-codegen-cli/swagger-codegen-cli.jar generate -l go -i /schema/spec_action.json -o /output/action --type-mappings boolean=*bool --additional-properties packageName=action"
-//go:generate docker run --rm -v "$PWD/spec:/schema" -v "$PWD:/output" --entrypoint /bin/sh solace-semp-swagger-codegen-cli:3.0.27 -c "umask 0000; java -jar /opt/swagger-codegen-cli/swagger-codegen-cli.jar generate -l go -i /schema/spec_config.json -o /output/config --type-mappings boolean=*bool --additional-properties packageName=config"
-//go:generate docker run --rm -v "$PWD/spec:/schema" -v "$PWD:/output" --entrypoint /bin/sh solace-semp-swagger-codegen-cli:3.0.27 -c "umask 0000; java -jar /opt/swagger-codegen-cli/swagger-codegen-cli.jar generate -l go -i /schema/spec_monitor.json -o /output/monitor --type-mappings boolean=*bool --additional-properties packageName=monitor"
+// generate SEMP client files using Docker volumes (works with remote Docker daemons)
+//go:generate ./makeclean
+//go:generate ./generate-semp.sh
