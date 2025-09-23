@@ -41,6 +41,10 @@ import (
 )
 
 // MessagingService Lifecycle tests test the various connect and disconnect paths validating that everything works as expected
+//
+// Please Note: For the TLS tests, we have disabled hostname validations.
+// Relaxing the hostname validation is required for the remote docker daemon test setup to work properly
+// since we are no more using localhost as the hostname and dynamically allocating the broker containers on a remote machine.
 var _ = Describe("MessagingService Lifecycle", func() {
 	// Before each test, setup a builder with basic connection properties over plaintext
 	var builder solace.MessagingServiceBuilder
@@ -373,7 +377,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 				helpers.TestConnectDisconnectMessagingService(builder)
 			})
 			It("should reject untrusted certificate", func() {
-				builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().WithCertificateValidation(true, true, constants.InvalidFixturesPath, ""))
+				builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().WithCertificateValidation(true, false, constants.InvalidFixturesPath, ""))
 				helpers.TestFailedConnectMessagingService(builder, func(err error) {
 					helpers.ValidateNativeError(err, subcode.UntrustedCertificate)
 				})
@@ -440,7 +444,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					It("fails to connect when server name validaiton is enabled", func() {
 						builder.WithTransportSecurityStrategy(config.
 							NewTransportSecurityStrategy().
-							WithCertificateValidation(false, true, constants.ValidFixturesPath, ""))
+							WithCertificateValidation(false, false, constants.ValidFixturesPath, ""))
 						helpers.TestFailedConnectMessagingService(builder, func(err error) {
 							helpers.ValidateNativeError(err, subcode.UntrustedCertificate)
 						})
@@ -460,7 +464,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					It("fails to connect when expired certificate checking is enabled", func() {
 						builder.WithTransportSecurityStrategy(config.
 							NewTransportSecurityStrategy().
-							WithCertificateValidation(false, true, constants.ValidFixturesPath, ""))
+							WithCertificateValidation(false, false, constants.ValidFixturesPath, ""))
 						helpers.TestFailedConnectMessagingService(builder, func(err error) {
 							helpers.ValidateNativeError(err, subcode.CertificateDateInvalid)
 						})
@@ -468,7 +472,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					It("can connect when expired certificate checking is disabled", func() {
 						builder.WithTransportSecurityStrategy(config.
 							NewTransportSecurityStrategy().
-							WithCertificateValidation(true, true, constants.ValidFixturesPath, ""))
+							WithCertificateValidation(true, false, constants.ValidFixturesPath, ""))
 						helpers.TestConnectDisconnectMessagingService(builder)
 					})
 				})
@@ -494,12 +498,13 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					connectionDetails := testcontext.Messaging()
 					url := fmt.Sprintf("tcps://%s:%d", connectionDetails.Host, connectionDetails.MessagingPorts.SecurePort)
 					builder.FromConfigurationProvider(config.ServicePropertyMap{
-						config.TransportLayerPropertyHost: "tc://localhost1:55443,tcps://localhost2:55443," + url,
+						config.TransportLayerPropertyHost: "tcps://localhost1:55443,tcps://localhost2:55443," + url,
 					})
 					helpers.TestConnectDisconnectMessagingService(builder)
 				})
 				It("should be able to connect with cipher suite", func() {
 					builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().
+						WithCertificateValidation(true, false, constants.ValidFixturesPath, "").
 						WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2). // cipher suite selection only available in TLSv1.2
 						WithCipherSuites("ECDHE-RSA-AES128-GCM-SHA256"))
 					helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
@@ -530,20 +535,24 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					})
 					It("should be able to connect with excluded protocols", func() {
 						builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().
+							WithCertificateValidation(true, false, constants.ValidFixturesPath, "").
 							WithExcludedProtocols(config.TransportSecurityProtocolSSLv3, config.TransportSecurityProtocolTLSv1_3, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1_1))
 						helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
 							Expect(client.TlsVersion).To(BeEquivalentTo(config.TransportSecurityProtocolTLSv1_2))
 						})
 					})
 					It("should be able to connect with minimum protocol", func() {
-						builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().
-							WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3))
+						builder.WithTransportSecurityStrategy(
+							config.NewTransportSecurityStrategy().
+								WithCertificateValidation(true, false, constants.ValidFixturesPath, "").
+								WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3))
 						helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
 							Expect(client.TlsVersion).To(BeEquivalentTo(config.TransportSecurityProtocolTLSv1_3))
 						})
 					})
 					It("should be able to connect with maximum protocol", func() {
 						builder.WithTransportSecurityStrategy(config.NewTransportSecurityStrategy().
+							WithCertificateValidation(true, false, constants.ValidFixturesPath, "").
 							WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2))
 						helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
 							Expect(client.TlsVersion).To(BeEquivalentTo(config.TransportSecurityProtocolTLSv1_2))
@@ -551,6 +560,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					})
 					It("fails to build with min > max", func() {
 						tss := config.NewTransportSecurityStrategy()
+						tss.WithCertificateValidation(true, false, constants.ValidFixturesPath, "")
 						tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3)
 						tss.WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2)
 						builder.WithTransportSecurityStrategy(tss)
@@ -563,6 +573,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 
 					It("fails to build with mixed protocol version configs", func() {
 						tss := config.NewTransportSecurityStrategy()
+						tss.WithCertificateValidation(true, false, constants.ValidFixturesPath, "")
 						tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_2)
 						tss.WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2)
 						tss.WithExcludedProtocols(config.TransportSecurityProtocolSSLv3, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1_1)
@@ -576,6 +587,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					// This will fail on older broker versions.
 					It("should connect with TLSv1.3 on newer broker versions", func() {
 						tss := config.NewTransportSecurityStrategy()
+						tss.WithCertificateValidation(true, false, constants.ValidFixturesPath, "")
 						tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3)
 						builder.WithTransportSecurityStrategy(tss)
 
