@@ -349,11 +349,11 @@ var _ = Describe("MessagingService Lifecycle", func() {
 	}) // End payload compression tests
 
 	schemeTcps := "tcps"
-	// schemeWss := "wss"
+	schemeWss := "wss"
 
 	secureSchemes := map[string](func(config *testcontext.MessagingConfig) int){
 		schemeTcps: func(config *testcontext.MessagingConfig) int { return config.MessagingPorts.SecurePort },
-		// schemeWss:  func(config *testcontext.MessagingConfig) int { return config.MessagingPorts.SecureWebPort },
+		schemeWss:  func(config *testcontext.MessagingConfig) int { return config.MessagingPorts.SecureWebPort },
 	}
 	for iterScheme, iterPortFn := range secureSchemes {
 		scheme := iterScheme
