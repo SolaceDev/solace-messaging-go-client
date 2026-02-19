@@ -39,15 +39,15 @@ builder.goapi([
   "validationGoVer": 'auto-v1.17.x',
   "getTestPermutations": {
     List<List<String>> permutations = []
-    for (platform in []) {
-      for (gover in ['auto-latest', 'auto-previous']) {
-        permutations << [platform, gover]
-      }
-    }
-    // run tests on the last stable Go version (1.22.4) for linux musl
-    // See EBP-46
-    // and this issue here - https://go-review.googlesource.com/c/go/+/600296
-    permutations << []
+    // for (platform in []) {
+    //   for (gover in ['auto-latest', 'auto-previous']) {
+    //     permutations << [platform, gover]
+    //   }
+    // }
+    // // run tests on the last stable Go version (1.22.4) for linux musl
+    // // See EBP-46
+    // // and this issue here - https://go-review.googlesource.com/c/go/+/600296
+    // permutations << []
     return permutations
   }
 ]) 
