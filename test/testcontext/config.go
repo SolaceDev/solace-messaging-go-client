@@ -1,4 +1,4 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
 // Copyright 2021-2025 Solace Corporation. All rights reserved.
 //
@@ -38,14 +38,14 @@ type TestConfig struct {
 
 // TestContainersConfig common context specific config should be placed here
 type TestContainersConfig struct {
-	BrokerHostname        string `json:"broker_hostname,omitempty" env:"PUBSUB_HOSTNAME"`
-	BrokerContainerName   string `json:"broker_container_name,omitempty" env:"PUBSUB_CONTAINER_NAME"`
-	ToxiProxyHostname     string `json:"toxiproxy_hostname,omitempty" env:"TOXIPROXY_HOSTNAME"`
+	BrokerHostname         string `json:"broker_hostname,omitempty" env:"PUBSUB_HOSTNAME"`
+	BrokerContainerName    string `json:"broker_container_name,omitempty" env:"PUBSUB_CONTAINER_NAME"`
+	ToxiProxyHostname      string `json:"toxiproxy_hostname,omitempty" env:"TOXIPROXY_HOSTNAME"`
 	ToxiProxyContainerName string `json:"toxiproxy_container_name,omitempty" env:"TOXIPROXY_CONTAINER_NAME"`
-	BrokerTag             string `json:"broker_tag,omitempty" env:"PUBSUB_TAG"`
-	BrokerRepo            string `json:"broker_repo,omitempty" env:"PUBSUB_REPO_BASE"`
-	BrokerEdition         string `json:"broker_edition,omitempty" env:"PUBSUB_EDITION"`
-	NetworkName           string `json:"network_name,omitempty" env:"PUBSUB_NETWORK_NAME"`
+	BrokerTag              string `json:"broker_tag,omitempty" env:"PUBSUB_TAG"`
+	BrokerRepo             string `json:"broker_repo,omitempty" env:"PUBSUB_REPO_BASE"`
+	BrokerEdition          string `json:"broker_edition,omitempty" env:"PUBSUB_EDITION"`
+	NetworkName            string `json:"network_name,omitempty" env:"PUBSUB_NETWORK_NAME"`
 }
 
 // OAuthConfig represents OAuth's config
@@ -76,12 +76,12 @@ type KerberosConfig struct {
 type CacheConfig struct {
 	Image string `env:"SOLCACHE_TEST_IMAGE"` // The image is proprietary, so we don't want to commit its name
 	// or other info to vcs.
-	Hostname              string                   `json:"hostname" env:"PUBSUB_CACHE_HOSTNAME"`
-	ContainerName         string                   `json:"container_name,omitempty" env:"PUBSUB_CACHE_CONTAINER_NAME"`
-	SuspectHostname       string                   `json:"suspect_hostname" env:"PUBSUB_CACHE_SUSPECT_HOSTNAME"`
-	SuspectContainerName  string                   `json:"suspect_container_name,omitempty" env:"PUBSUB_CACHE_SUSPECT_CONTAINER_NAME"`
-	Vpn                   string                   `json:"vpn"`
-	DistributedCaches     []DistributedCacheConfig `json:"distributed_caches"`
+	Hostname             string                   `json:"hostname" env:"PUBSUB_CACHE_HOSTNAME"`
+	ContainerName        string                   `json:"container_name,omitempty" env:"PUBSUB_CACHE_CONTAINER_NAME"`
+	SuspectHostname      string                   `json:"suspect_hostname" env:"PUBSUB_CACHE_SUSPECT_HOSTNAME"`
+	SuspectContainerName string                   `json:"suspect_container_name,omitempty" env:"PUBSUB_CACHE_SUSPECT_CONTAINER_NAME"`
+	Vpn                  string                   `json:"vpn"`
+	DistributedCaches    []DistributedCacheConfig `json:"distributed_caches"`
 }
 
 // DistributedCacheConfig represents the DistributedCache's config

@@ -1,4 +1,4 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
 // Copyright 2023-2025 Solace Corporation. All rights reserved.
 //

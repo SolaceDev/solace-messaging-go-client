@@ -1,4 +1,4 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
 // Copyright 2021-2025 Solace Corporation. All rights reserved.
 //
@@ -31,7 +31,7 @@ import (
  * Generator utils provides helper functions for generating blocks of go code from C enums
  */
 
-const copyrightHeader = `// pubsubplus-go-client
+const copyrightHeader = `// solace-messaging-go-client
 //
 // Copyright 2021-2025 Solace Corporation. All rights reserved.
 //

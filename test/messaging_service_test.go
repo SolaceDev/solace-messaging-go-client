@@ -1,4 +1,4 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
 // Copyright 2021-2025 Solace Corporation. All rights reserved.
 //
@@ -262,8 +262,8 @@ var _ = Describe("MessagingService Lifecycle", func() {
 	It("should connect with proper version info", func() {
 		helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
 			// Validate that we added some version info
-			Expect(client.SoftwareVersion).To(ContainSubstring("pubsubplus-go-client"))
-			Expect(client.SoftwareDate).To(ContainSubstring("pubsubplus-go-client"))
+			Expect(client.SoftwareVersion).To(ContainSubstring("solace-messaging-go-client"))
+			Expect(client.SoftwareDate).To(ContainSubstring("solace-messaging-go-client"))
 		})
 	})
 
