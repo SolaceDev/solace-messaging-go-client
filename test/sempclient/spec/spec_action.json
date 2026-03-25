@@ -2488,7 +2488,7 @@
   "paths": {
     "/": {
       "get": {
-        "description": "Get a Broker object.\n\nThis object contains global configuration for the message broker.\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/none\" is required to perform this operation.\n\nThis has been available since 2.13.",
+        "description": "Get a Broker object.\n\nThis object contains global configuration for the solace event broker.\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/none\" is required to perform this operation.\n\nThis has been available since 2.13.",
         "operationId": "getBroker",
         "parameters": [
           {
@@ -2776,7 +2776,7 @@
     "/certAuthorities": {
       "get": {
         "deprecated": true,
-        "description": "Get a list of Certificate Authority objects.\n\nClients can authenticate with the message broker over TLS by presenting a valid client certificate. The message broker authenticates the client certificate by constructing a full certificate chain (from the client certificate to intermediate CAs to a configured root CA). The intermediate CAs in this chain can be provided by the client, or configured in the message broker. The root CA must be configured on the message broker.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncertAuthorityName|x|x\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/read-only\" is required to perform this operation.\n\nThis has been deprecated since 2.19. Replaced by clientCertAuthorities and domainCertAuthorities.",
+        "description": "Get a list of Certificate Authority objects.\n\nClients can authenticate with the solace event broker over TLS by presenting a valid client certificate. The solace event broker authenticates the client certificate by constructing a full certificate chain (from the client certificate to intermediate CAs to a configured root CA). The intermediate CAs in this chain can be provided by the client, or configured in the solace event broker. The root CA must be configured on the solace event broker.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncertAuthorityName|x|x\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/read-only\" is required to perform this operation.\n\nThis has been deprecated since 2.19. Replaced by clientCertAuthorities and domainCertAuthorities.",
         "operationId": "getCertAuthorities",
         "parameters": [
           {
@@ -2824,7 +2824,7 @@
     "/certAuthorities/{certAuthorityName}": {
       "get": {
         "deprecated": true,
-        "description": "Get a Certificate Authority object.\n\nClients can authenticate with the message broker over TLS by presenting a valid client certificate. The message broker authenticates the client certificate by constructing a full certificate chain (from the client certificate to intermediate CAs to a configured root CA). The intermediate CAs in this chain can be provided by the client, or configured in the message broker. The root CA must be configured on the message broker.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncertAuthorityName|x|x\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/read-only\" is required to perform this operation.\n\nThis has been deprecated since 2.19. Replaced by clientCertAuthorities and domainCertAuthorities.",
+        "description": "Get a Certificate Authority object.\n\nClients can authenticate with the solace event broker over TLS by presenting a valid client certificate. The solace event broker authenticates the client certificate by constructing a full certificate chain (from the client certificate to intermediate CAs to a configured root CA). The intermediate CAs in this chain can be provided by the client, or configured in the solace event broker. The root CA must be configured on the solace event broker.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncertAuthorityName|x|x\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/read-only\" is required to perform this operation.\n\nThis has been deprecated since 2.19. Replaced by clientCertAuthorities and domainCertAuthorities.",
         "operationId": "getCertAuthority",
         "parameters": [
           {
@@ -2921,7 +2921,7 @@
     },
     "/clientCertAuthorities": {
       "get": {
-        "description": "Get a list of Client Certificate Authority objects.\n\nClients can authenticate with the message broker over TLS by presenting a valid client certificate. The message broker authenticates the client certificate by constructing a full certificate chain (from the client certificate to intermediate CAs to a configured root CA). The intermediate CAs in this chain can be provided by the client, or configured in the message broker. The root CA must be configured on the message broker.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncertAuthorityName|x|\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/read-only\" is required to perform this operation.\n\nThis has been available since 2.19.",
+        "description": "Get a list of Client Certificate Authority objects.\n\nClients can authenticate with the solace event broker over TLS by presenting a valid client certificate. The solace event broker authenticates the client certificate by constructing a full certificate chain (from the client certificate to intermediate CAs to a configured root CA). The intermediate CAs in this chain can be provided by the client, or configured in the solace event broker. The root CA must be configured on the solace event broker.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncertAuthorityName|x|\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/read-only\" is required to perform this operation.\n\nThis has been available since 2.19.",
         "operationId": "getClientCertAuthorities",
         "parameters": [
           {
@@ -2968,7 +2968,7 @@
     },
     "/clientCertAuthorities/{certAuthorityName}": {
       "get": {
-        "description": "Get a Client Certificate Authority object.\n\nClients can authenticate with the message broker over TLS by presenting a valid client certificate. The message broker authenticates the client certificate by constructing a full certificate chain (from the client certificate to intermediate CAs to a configured root CA). The intermediate CAs in this chain can be provided by the client, or configured in the message broker. The root CA must be configured on the message broker.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncertAuthorityName|x|\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/read-only\" is required to perform this operation.\n\nThis has been available since 2.19.",
+        "description": "Get a Client Certificate Authority object.\n\nClients can authenticate with the solace event broker over TLS by presenting a valid client certificate. The solace event broker authenticates the client certificate by constructing a full certificate chain (from the client certificate to intermediate CAs to a configured root CA). The intermediate CAs in this chain can be provided by the client, or configured in the solace event broker. The root CA must be configured on the solace event broker.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncertAuthorityName|x|\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"global/read-only\" is required to perform this operation.\n\nThis has been available since 2.19.",
         "operationId": "getClientCertAuthority",
         "parameters": [
           {
@@ -4892,7 +4892,7 @@
     },
     "/msgVpns/{msgVpnName}/distributedCaches/{cacheName}/clusters": {
       "get": {
-        "description": "Get a list of Cache Cluster objects.\n\nA Cache Cluster is a collection of one or more Cache Instances that subscribe to exactly the same topics. Cache Instances are grouped together in a Cache Cluster for the purpose of fault tolerance and load balancing. As published messages are received, the message broker message bus sends these live data messages to the Cache Instances in the Cache Cluster. This enables client cache requests to be served by any of Cache Instances in the Cache Cluster.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncacheName|x|\nclusterName|x|\nmsgVpnName|x|\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"vpn/read-only\" is required to perform this operation.\n\nThis has been available since 2.11.",
+        "description": "Get a list of Cache Cluster objects.\n\nA Cache Cluster is a collection of one or more Cache Instances that subscribe to exactly the same topics. Cache Instances are grouped together in a Cache Cluster for the purpose of fault tolerance and load balancing. As published messages are received, the solace event broker message bus sends these live data messages to the Cache Instances in the Cache Cluster. This enables client cache requests to be served by any of Cache Instances in the Cache Cluster.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncacheName|x|\nclusterName|x|\nmsgVpnName|x|\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"vpn/read-only\" is required to perform this operation.\n\nThis has been available since 2.11.",
         "operationId": "getMsgVpnDistributedCacheClusters",
         "parameters": [
           {
@@ -4954,7 +4954,7 @@
     },
     "/msgVpns/{msgVpnName}/distributedCaches/{cacheName}/clusters/{clusterName}": {
       "get": {
-        "description": "Get a Cache Cluster object.\n\nA Cache Cluster is a collection of one or more Cache Instances that subscribe to exactly the same topics. Cache Instances are grouped together in a Cache Cluster for the purpose of fault tolerance and load balancing. As published messages are received, the message broker message bus sends these live data messages to the Cache Instances in the Cache Cluster. This enables client cache requests to be served by any of Cache Instances in the Cache Cluster.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncacheName|x|\nclusterName|x|\nmsgVpnName|x|\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"vpn/read-only\" is required to perform this operation.\n\nThis has been available since 2.11.",
+        "description": "Get a Cache Cluster object.\n\nA Cache Cluster is a collection of one or more Cache Instances that subscribe to exactly the same topics. Cache Instances are grouped together in a Cache Cluster for the purpose of fault tolerance and load balancing. As published messages are received, the solace event broker message bus sends these live data messages to the Cache Instances in the Cache Cluster. This enables client cache requests to be served by any of Cache Instances in the Cache Cluster.\n\n\nAttribute|Identifying|Deprecated\n:---|:---:|:---:\ncacheName|x|\nclusterName|x|\nmsgVpnName|x|\n\n\n\nA SEMP client authorized with a minimum access scope/level of \"vpn/read-only\" is required to perform this operation.\n\nThis has been available since 2.11.",
         "operationId": "getMsgVpnDistributedCacheCluster",
         "parameters": [
           {
