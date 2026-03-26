@@ -18,7 +18,7 @@
 
 #### **Do you have questions about the source code?**
 
-* Ask any question about the code or how to use Solace Event Brokers in the [Solace community](https://solace.dev/community/).
+* Ask any question about the code or how to use Solace Event Broker in the [Solace community](https://solace.dev/community/).
 
 ## Developer Guide
 
