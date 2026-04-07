@@ -1,4 +1,4 @@
-# pubsubplus-go-client
+# solace-messaging-go-client
 #
 # Copyright 2023-2025 Solace Corporation. All rights reserved.
 #
@@ -16,8 +16,8 @@
 
 # Based on https://github.com/swagger-api/swagger-codegen/blob/3.0.0/modules/swagger-codegen-cli/Dockerfile as general reference
 # specifically using https://github.com/swagger-api/swagger-codegen/blob/v3.0.40/modules/swagger-codegen-cli/Dockerfile as reference
-# use openjdk:8-jre-alpine as base as multi arch is supported for x86_64 and arm64
-FROM openjdk:8-jre-alpine
+# use amazoncorretto:8-alpine-jre as base as multi arch is supported for x86_64 and arm64
+FROM amazoncorretto:8-alpine-jre
 #pull codegen jar from maven.org
 ARG SWAGGER_VER=3.0.40
 ENV SWAGGER_VERSION=${SWAGGER_VER}

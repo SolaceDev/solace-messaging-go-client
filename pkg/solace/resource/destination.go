@@ -1,4 +1,4 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
 // Copyright 2021-2025 Solace Corporation. All rights reserved.
 //
@@ -61,7 +61,7 @@ func (t *Topic) String() string {
 
 // ShareName is an interface for identifiers that are associated
 // with a shared subscription.
-// See https://docs.solace.com/PubSub-Basics/Direct-Messages.htm#Shared in the Solace documentation.
+// See https://docs.solace.com/Messaging/Direct-Msg/Direct-Messages.htm#Shared in the Solace documentation.
 type ShareName struct {
 	name string
 }
@@ -276,7 +276,7 @@ func (request *cachedMessageSubscriptionRequest) GetCachedMessageSubscriptionReq
 //   - subscription: What topic the cache request should match against.
 //   - cacheAccessTimeout: How long in milliseconds a cache request is permitted to take before it is internally
 //     cancelled. The valid range for this timeout is between 3000 and signed int 32 max. This value specifies a
-//     timer for the internal requests that occur between this API and a PubSub+ cache. A single call to a
+//     timer for the internal requests that occur between this API and a Solace cache. A single call to a
 //     [solace.dev/go/messaging/pkg/solace.ReceiverCacheRequests] interface method can lead to one or more of these internal requests. As long
 //     as each of these internal requests complete before the specified time-out, the timeout value is satisfied.
 //   - maxCachedMessages: The max number of messages expected to be returned as a part of a

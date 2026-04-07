@@ -1,4 +1,4 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
 // Copyright 2021-2025 Solace Corporation. All rights reserved.
 //
@@ -16,5 +16,5 @@
 
 // Package messaging contains the main entrypoint into the API via
 // messaging.NewMessagingServiceBuilder(), which returns a builder
-// implementation based on the Solace PubSub+ Messaging API for C.
+// implementation based on the Solace Messaging API for C.
 package messaging

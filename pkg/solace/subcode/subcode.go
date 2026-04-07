@@ -1,4 +1,4 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
 // Copyright 2021-2025 Solace Corporation. All rights reserved.
 //
@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package subcode contains the subcodes returned from the Solace PubSub+ Messaging API for C.
+// Package subcode contains the subcodes returned from the Solace Messaging API for C.
 // The subcodes are generated in subcode_generated.go. This is an advanced feature and should
 // be used only when absolutely necessary.
 package subcode
