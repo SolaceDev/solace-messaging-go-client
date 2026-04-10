@@ -1,7 +1,7 @@
 /**
 * @file solClientMsgTracingSupport.h include file for Solace Corporation Messaging distributed tracing support
 *
-* Copyright 2023-2025 Solace Corporation. All rights reserved.
+* Copyright 2023-2026 Solace Corporation. All rights reserved.
 */
 
 #ifndef SOLCLIENTMSGTRACINGSUPPORT_H
