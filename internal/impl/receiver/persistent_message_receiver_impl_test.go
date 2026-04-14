@@ -1247,9 +1247,9 @@ func TestPersistentReceiverMultipleFailedStartsNoLeak(t *testing.T) {
 		t.Error("Flow was not destroyed")
 	}
 
-    // Verify buffer channel is closed by checking the atomic flag.
-    // This proves cleanupConstructionResources() was called, which also
-    // terminates the event executor (called before closing the buffer)
+	// Verify buffer channel is closed by checking the atomic flag.
+	// This proves cleanupConstructionResources() was called, which also
+	// terminates the event executor (called before closing the buffer)
 	if atomic.LoadInt32(&receiverImpl.bufferClosed) != 1 {
 		t.Error("Buffer channel should be closed")
 	}
