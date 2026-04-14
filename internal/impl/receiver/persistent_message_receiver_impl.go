@@ -363,15 +363,6 @@ func (receiver *persistentMessageReceiverImpl) cleanupRuntimeSubscriptions() {
 	}
 }
 
-// awaitEventExecutorTermination waits for the event executor to finish terminating.
-// This is a blocking call and should only be used during graceful termination.
-// For ungraceful termination, use cleanupConstructionResources() which terminates
-// the executor without waiting.
-func (receiver *persistentMessageReceiverImpl) awaitEventExecutorTermination() {
-	receiver.logger.Debug("Awaiting termination of event executor")
-	receiver.eventExecutor.AwaitTermination()
-}
-
 // Terminate will terminate the service gracefully and synchronously.
 // This function is idempotent. The only way to resume operation
 // after this function is called is to create a new instance.
@@ -412,8 +403,11 @@ func (receiver *persistentMessageReceiverImpl) Terminate(gracePeriod time.Durati
 	}
 	// Remove the termination event handler
 	receiver.internalReceiver.Events().RemoveEventHandler(receiver.terminationHandlerID)
-	// Defer executor await after removing event handler, maintaining original code structure
-	defer receiver.awaitEventExecutorTermination()
+	defer func() {
+		receiver.logger.Debug("Awaiting termination of event executor")
+		// Allow the event executor to terminate, blocking until it does
+		receiver.eventExecutor.AwaitTermination()
+	}()
 	// Unblock the receiver dispatch routine telling it to not continue
 	select {
 	case receiver.rxCallbackSet <- false:
