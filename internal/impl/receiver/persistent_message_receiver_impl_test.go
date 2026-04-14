@@ -1185,7 +1185,7 @@ func TestPersistentReceiverUnsolicitedTermination(t *testing.T) {
 	}
 }
 
-// TestPersistentReceiverMultipleFailedStartsNoLeak verifies that resources
+// TestPersistentReceiverFailedStartResourceCleanup verifies that resources
 // are properly cleaned up when a receiver fails to start
 //
 // This test verifies the bug fix by checking that:
@@ -1195,7 +1195,7 @@ func TestPersistentReceiverUnsolicitedTermination(t *testing.T) {
 //
 // These checks prove that cleanupConstructionResources() and cleanupStartResources()
 // were called, which means the executor was terminated and resources were freed.
-func TestPersistentReceiverMultipleFailedStartsNoLeak(t *testing.T) {
+func TestPersistentReceiverFailedStartResourceCleanup(t *testing.T) {
 	// Setup mocks
 	internalFlow := &mockPersistentReceiver{}
 	internalReceiver := &mockInternalReceiver{}

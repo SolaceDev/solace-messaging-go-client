@@ -214,10 +214,10 @@ func (receiver *persistentMessageReceiverImpl) Start() (err error) {
 			receiver.logger.Debug("Start receiver complete")
 		} else {
 			receiver.logger.Debug("Start receiver complete with error: " + err.Error())
-			// Clean up resources allocated during construction
-			receiver.cleanupConstructionResources()
-			// Clean up resources allocated during start
+			// Clean up start resources first (stop flow)
 			receiver.cleanupStartResources()
+			// Then clean up construction resources (close buffer and terminate executor)
+			receiver.cleanupConstructionResources()
 			receiver.terminated(nil)
 			receiver.startFuture.Complete(err)
 		}
@@ -327,6 +327,11 @@ func (receiver *persistentMessageReceiverImpl) cleanupConstructionResources() {
 	// This may result in a panic in the rx callback that gets handled and logged
 	close(receiver.buffer)
 	atomic.StoreInt32(&receiver.bufferClosed, 1)
+
+	// Drain any messages that were queued before close and free their native memory
+	for msg := range receiver.buffer {
+		ccsmp.SolClientMessageFree(&msg)
+	}
 }
 
 // cleanupStartResources cleans up resources allocated during receiver startup.
