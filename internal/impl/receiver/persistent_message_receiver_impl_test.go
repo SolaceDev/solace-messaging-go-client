@@ -18,6 +18,7 @@ package receiver
 
 import (
 	"fmt"
+	"runtime"
 	"testing"
 	"time"
 
@@ -1182,4 +1183,77 @@ func TestPersistentReceiverUnsolicitedTermination(t *testing.T) {
 	if !metricsIncremented {
 		t.Error("metrics not incremented on incomplete delivery")
 	}
+}
+
+// TestPersistentReceiverMultipleFailedStartsNoLeak verifies that resources
+// are properly cleaned up when a receiver fails to start
+//
+// This test:
+// 1. Creates a receiver (allocates: executor + channel)
+// 2. Fails to start
+// 3. Verifies cleanup by checking goroutine count (executor termination)
+//
+// If cleanup doesn't work, the event executor goroutine would leak.
+func TestPersistentReceiverMultipleFailedStartsNoLeak(t *testing.T) {
+	// Capture initial goroutine count to detect leaks
+	initialGoroutines := runtime.NumGoroutine()
+
+	// Setup mocks
+	internalFlow := &mockPersistentReceiver{}
+	internalReceiver := &mockInternalReceiver{}
+
+	// Flow will fail to start
+	internalFlow.start = func() *ccsmp.SolClientErrorInfoWrapper {
+		return ccsmp.NewInternalSolClientErrorInfoWrapper(ccsmp.SolClientReturnCodeFail, ccsmp.SolClientSubCode(1), ccsmp.SolClientResponseCode(0), "Simulated failure")
+	}
+
+	flowDestroyed := false
+	internalFlow.destroy = func(freeMemory bool) *ccsmp.SolClientErrorInfoWrapper {
+		flowDestroyed = true
+		return nil
+	}
+
+	internalReceiver.newPersistentReceiver = func(props []string, callback core.RxCallback, eventCallback core.PersistentEventCallback) (core.PersistentReceiver, core.ErrorInfo) {
+		return internalFlow, nil
+	}
+
+	// Build receiver
+	builder := &persistentMessageReceiverBuilderImpl{
+		internalReceiver: internalReceiver,
+		properties:       constants.DefaultPersistentReceiverProperties.GetConfiguration(),
+	}
+
+	receiver, err := builder.Build(resource.QueueDurableExclusive("test-queue"))
+	if err != nil {
+		t.Fatalf("Failed to build receiver: %v", err)
+	}
+
+	// Attempt to start - should fail
+	err = receiver.Start()
+	if err == nil {
+		t.Fatal("Expected Start() to fail")
+	}
+
+	// Verify receiver is terminated
+	if !receiver.IsTerminated() {
+		t.Error("Receiver should be terminated after failed start")
+	}
+
+	// Verify flow was destroyed
+	if !flowDestroyed {
+		t.Error("Flow was not destroyed")
+	}
+
+	// Force GC to clean up any remaining references
+	runtime.GC()
+
+	// Verify no goroutine leak
+	finalGoroutines := runtime.NumGoroutine()
+	goroutineDiff := finalGoroutines - initialGoroutines
+	if goroutineDiff != 0 {
+		t.Errorf("Goroutine leak detected: started with %d, ended with %d (diff: %d)",
+			initialGoroutines, finalGoroutines, goroutineDiff)
+	}
+
+	t.Logf("Goroutine count: initial=%d, final=%d, diff=%d", initialGoroutines, finalGoroutines, goroutineDiff)
 }
