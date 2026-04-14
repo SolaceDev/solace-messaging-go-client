@@ -396,7 +396,7 @@ func (receiver *persistentMessageReceiverImpl) Terminate(gracePeriod time.Durati
 			receiver.logger.Debug("Terminate receiver complete")
 		}
 	}()
-	// Clean up flow - this is done in defer to ensure it happens last
+	// Clean up flow
 	defer receiver.destroyInternalFlow()
 	// Clean up runtime subscriptions added via AddSubscription/RemoveSubscription
 	defer receiver.cleanupRuntimeSubscriptions()
