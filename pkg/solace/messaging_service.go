@@ -31,6 +31,10 @@ type MessagingService interface {
 	// Returns nil if successful, otherwise an error containing failure details, which may be the following:
 	// - solace/errors.*PubSubPlusClientError - If a connection error occurs.
 	// - solace/errors.*IllegalStateError - If MessagingService has already been terminated.
+	//
+	// If Connect returns an error, the MessagingService instance is terminated and
+	// no longer available for network operations such as connect or reconnect.
+	// A new MessagingService instance must be created for any subsequent connection attempts.
 	Connect() error
 
 	// ConnectAsync connects the messaging service asynchronously.
