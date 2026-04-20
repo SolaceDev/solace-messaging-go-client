@@ -121,6 +121,7 @@ func (session *SolClientSession) SolClientSessionCreateFlow(properties []string,
 			C.solClient_uint64_t(flowID))
 	})
 	if err != nil {
+		flow.SolClientFlowRemoveCallbacks()
 		return nil, err
 	}
 	return flow, nil
