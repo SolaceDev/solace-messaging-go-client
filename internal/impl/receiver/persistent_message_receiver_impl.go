@@ -214,10 +214,14 @@ func (receiver *persistentMessageReceiverImpl) Start() (err error) {
 			receiver.logger.Debug("Start receiver complete")
 		} else {
 			receiver.logger.Debug("Start receiver complete with error: " + err.Error())
-			// Clean up start resources first (stop flow)
-			receiver.cleanupStartResources()
-			// Then clean up construction resources (close buffer and terminate executor)
+			// Terminate the executor first so that no flow-event callbacks (submitted via
+			// onFlowEvent → eventExecutor.Submit) can be queued after we destroy the flow.
+			// SolClientFlowDestroy (called inside cleanupStartResources) can fire synchronous
+			// C-level events that reach onFlowEvent while the executor is still live, causing
+			// a race between Submit and the channel close in Terminate.
 			receiver.cleanupConstructionResources()
+			// Now safe to destroy the flow; any Submit() calls from C callbacks will be rejected.
+			receiver.cleanupStartResources()
 			// Drain any messages that were queued before close and free their native memory.
 			// This is necessary because the architecture permits subscriptions to be added to a
 			// receiver before Start() is called
