@@ -218,7 +218,9 @@ func (receiver *persistentMessageReceiverImpl) Start() (err error) {
 			receiver.cleanupStartResources()
 			// Then clean up construction resources (close buffer and terminate executor)
 			receiver.cleanupConstructionResources()
-			// Drain any messages that were queued before close and free their native memory
+			// Drain any messages that were queued before close and free their native memory.
+			// This is necessary because the architecture permits subscriptions to be added to a
+			// receiver before Start() is called
 			receiver.drainQueue()
 			receiver.terminated(nil)
 			receiver.startFuture.Complete(err)
