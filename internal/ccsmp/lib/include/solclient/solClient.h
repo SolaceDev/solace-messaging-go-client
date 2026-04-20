@@ -2213,7 +2213,7 @@ Note: This property is used for all entries specified by the property ::SOLCLIEN
 
 /*@}*/
 /**
- * @defgroup transportProtocol Session Transport Trotocol Types
+ * @defgroup transportProtocol Session Transport Protocol Types
  * Definition of the valid set of transport protocols when setting ::SOLCLIENT_SESSION_PROP_WEB_TRANSPORT_PROTOCOL, or returned
  * via the read-only session property ::SOLCLIENT_SESSION_PROP_WEB_TRANSPORT_PROTOCOL_IN_USE
  * Note: the use of ::SOLCLIENT_SESSION_PROP_GUARANTEED_WITH_WEB_TRANSPORT effects what protocol are available for properties 
