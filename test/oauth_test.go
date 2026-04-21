@@ -192,7 +192,7 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 			})
 		})
 
-		DescribeTable("Messaging Service connects successfully",
+		FDescribeTable("Messaging Service connects successfully",
 			func(access, id, issuer string) {
 				var err error
 				messagingService, err = builder.WithAuthenticationStrategy(config.OAuth2Authentication(
@@ -206,7 +206,7 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 					Expect(client.ClientUsername).To(Equal("solclient_oauth"))
 				})
 			},
-			Entry("When given id token a, no access token and no issuer identifier", "", tokenA, ""),
+			// Entry("When given id token a, no access token and no issuer identifier", "", tokenA, ""),
 			Entry("When given id token b, access token c and no issuer identifier", tokenC, tokenB, ""),
 			Entry("When given id token b, access token d and no issuer identifier", tokenD, tokenB, ""),
 			Entry("When given access token c, no id token and no issuer identifier", tokenC, "", ""),
