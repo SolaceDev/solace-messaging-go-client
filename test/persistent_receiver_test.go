@@ -2404,6 +2404,7 @@ var _ = Describe("PersistentReceiver", func() {
 			startErr := workingReceiver.Start()
 			Expect(startErr).ToNot(HaveOccurred())
 			Expect(workingReceiver.IsRunning()).To(BeTrue())
+			Expect(workingReceiver.IsTerminated()).To(BeFalse())
 
 			messageReceived := make(chan message.InboundMessage, 10)
 			workingReceiver.ReceiveAsync(func(msg message.InboundMessage) {
@@ -2429,14 +2430,17 @@ var _ = Describe("PersistentReceiver", func() {
 				Build(shutdownQueue)
 			Expect(buildErr).ToNot(HaveOccurred())
 			Expect(shutdownReceiver.IsRunning()).To(BeFalse())
+			Expect(shutdownReceiver.IsTerminated()).To(BeFalse())
 
 			startErr = shutdownReceiver.Start()
 			Expect(startErr).To(HaveOccurred())
 			Expect(shutdownReceiver.IsRunning()).To(BeFalse())
+			Expect(shutdownReceiver.IsTerminated()).To(BeTrue())
 			Expect(messagingService.IsConnected()).To(BeTrue())
 
 			By("Verifying the working receiver is unaffected after the second receiver fails to start")
 			Expect(workingReceiver.IsRunning()).To(BeTrue())
+			Expect(workingReceiver.IsTerminated()).To(BeFalse())
 			for i := 0; i < messagesCount; i++ {
 				helpers.PublishOneMessage(messagingService, testTopic)
 			}
@@ -2451,6 +2455,7 @@ var _ = Describe("PersistentReceiver", func() {
 			termErr := workingReceiver.Terminate(5 * time.Second)
 			Expect(termErr).ToNot(HaveOccurred())
 			Expect(workingReceiver.IsRunning()).To(BeFalse())
+			Expect(workingReceiver.IsTerminated()).To(BeTrue())
 		})
 	})
 })
