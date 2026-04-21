@@ -19,6 +19,7 @@ package helpers
 import (
 	"time"
 
+	. "github.com/onsi/gomega"
 	"solace.dev/go/messaging/test/sempclient/config"
 	"solace.dev/go/messaging/test/testcontext"
 )
@@ -212,4 +213,21 @@ func EnsureDeleteDomainCertAuthority(certAuthName string) error {
 		}
 	}
 	return nil
+}
+
+// Creates a queue with egress disabled (shutdown state),
+// causing flow creation to fail with QueueShutdown
+func CreateQueueWithEgressDisabled(queueName string) {
+	_, _, err := testcontext.SEMP().Config().QueueApi.CreateMsgVpnQueue(
+		testcontext.SEMP().ConfigCtx(),
+		config.MsgVpnQueue{
+			QueueName:      queueName,
+			IngressEnabled: True,
+			EgressEnabled:  False,
+			Owner:          "default",
+		},
+		testcontext.Messaging().VPN,
+		nil,
+	)
+	ExpectWithOffset(1, err).ToNot(HaveOccurred(), "Failed to create queue with egress disabled: "+queueName)
 }
