@@ -178,7 +178,7 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 
 			// Additional wait to ensure OAuth profiles are fully operational before first test runs
 			// OAuth profile activation can take additional time beyond SEMP reachability
-			time.Sleep(time.Second * 5)
+			time.Sleep(time.Second * 15)
 
 			url = fmt.Sprintf("tcps://%s:%d", testcontext.Messaging().Host, testcontext.Messaging().MessagingPorts.SecurePort)
 			builder = messaging.NewMessagingServiceBuilder().FromConfigurationProvider(config.ServicePropertyMap{
@@ -190,6 +190,7 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 				config.TransportLayerPropertyHost:                           url,
 				config.TransportLayerPropertyReconnectionAttempts:           0,
 			})
+			time.Sleep(time.Second * 15)
 		})
 
 		FDescribeTable("Messaging Service connects successfully",
