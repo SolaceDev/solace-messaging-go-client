@@ -2364,4 +2364,76 @@ var _ = Describe("PersistentReceiver", func() {
 			})
 		})
 	})
+
+	Describe("Running receiver remains functional when another receiver fails to start", func() {
+		const shutdownQueueName = "shutdown_queue"
+		const workingQueueName = "working_queue"
+		const testTopic = "test"
+
+		var messagingService solace.MessagingService
+
+		BeforeEach(func() {
+			messagingService = helpers.BuildMessagingService(
+				messaging.NewMessagingServiceBuilder().FromConfigurationProvider(helpers.DefaultConfiguration()),
+			)
+			helpers.CreateQueueWithEgressDisabled(shutdownQueueName)
+			helpers.CreateQueue(workingQueueName, testTopic)
+		})
+
+		AfterEach(func() {
+			if messagingService != nil && messagingService.IsConnected() {
+				messagingService.Disconnect()
+			}
+			helpers.DeleteQueue(shutdownQueueName)
+			helpers.DeleteQueue(workingQueueName)
+		})
+
+		It("should continue to receive messages on a healthy receiver after another receiver fails to start", func() {
+            err := messagingService.Connect()
+            Expect(err).ToNot(HaveOccurred())
+
+            shutdownQueue := resource.QueueDurableNonExclusive(shutdownQueueName)
+            workingQueue := resource.QueueDurableNonExclusive(workingQueueName)
+
+            By("Starting a working receiver on a healthy queue")
+            workingReceiver, buildErr := messagingService.CreatePersistentMessageReceiverBuilder().
+                WithMessageClientAcknowledgement().
+                Build(workingQueue)
+            Expect(buildErr).ToNot(HaveOccurred())
+
+            startErr := workingReceiver.Start()
+            Expect(startErr).ToNot(HaveOccurred())
+            Expect(workingReceiver.IsRunning()).To(BeTrue())
+
+            messageReceived := make(chan message.InboundMessage, 10)
+            workingReceiver.ReceiveAsync(func(msg message.InboundMessage) {
+                messageReceived <- msg
+            })
+
+            By("Failing to start a receiver on a shutdown queue")
+            shutdownReceiver, buildErr := messagingService.CreatePersistentMessageReceiverBuilder().
+                Build(shutdownQueue)
+            Expect(buildErr).ToNot(HaveOccurred())
+
+            startErr = shutdownReceiver.Start()
+            Expect(startErr).To(HaveOccurred())
+
+            By("Publishing and receiving messages to verify the working receiver is unaffected")
+            messagesCount := 5
+            for i := 0; i < messagesCount; i++ {
+                helpers.PublishOneMessage(messagingService, testTopic)
+            }
+
+            for i := 0; i < messagesCount; i++ {
+                select {
+                case <-messageReceived:
+                case <-time.After(5 * time.Second):
+                    Fail(fmt.Sprintf("Timed out waiting for message %d/%d", i+1, messagesCount))
+                }
+            }
+
+            termErr := workingReceiver.Terminate(5 * time.Second)
+            Expect(termErr).ToNot(HaveOccurred())
+        })
+	})
 })

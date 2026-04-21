@@ -214,10 +214,18 @@ func (receiver *persistentMessageReceiverImpl) Start() (err error) {
 			receiver.logger.Debug("Start receiver complete")
 		} else {
 			receiver.logger.Debug("Start receiver complete with error: " + err.Error())
-			receiver.internalReceiver.Events().RemoveEventHandler(receiver.terminationHandlerID)
-			if receiver.internalFlow != nil {
-				receiver.internalFlow.Destroy(true)
-			}
+			// Terminate the executor first so that no flow-event callbacks (submitted via
+			// onFlowEvent → eventExecutor.Submit) can be queued after we destroy the flow.
+			// SolClientFlowDestroy (called inside cleanupStartResources) can fire synchronous
+			// C-level events that reach onFlowEvent while the executor is still live, causing
+			// a race between Submit and the channel close in Terminate.
+			receiver.cleanupConstructionResources()
+			// Now safe to destroy the flow; any Submit() calls from C callbacks will be rejected.
+			receiver.cleanupStartResources()
+			// Drain any messages that were queued before close and free their native memory.
+			// This is necessary because the architecture permits subscriptions to be added to a
+			// receiver before Start() is called
+			receiver.drainQueue()
 			receiver.terminated(nil)
 			receiver.startFuture.Complete(err)
 		}
@@ -314,6 +322,55 @@ func (receiver *persistentMessageReceiverImpl) StartAsyncCallback(callback func(
 	}()
 }
 
+// cleanupConstructionResources cleans up resources allocated during receiver construction.
+// This includes resources allocated in the construct() method:
+// - Event executor
+// - Message buffer channel
+// This method should be called when the receiver fails to start or during termination.
+func (receiver *persistentMessageReceiverImpl) cleanupConstructionResources() {
+	// Terminate the event executor
+	receiver.eventExecutor.Terminate()
+
+	// Close the buffer channel to prevent any further messages from being added
+	// This may result in a panic in the rx callback that gets handled and logged
+	close(receiver.buffer)
+	atomic.StoreInt32(&receiver.bufferClosed, 1)
+}
+
+// cleanupStartResources cleans up resources allocated during receiver startup.
+// This includes resources allocated in the Start() method:
+// - Event handler registration
+// - Internal flow
+// This method should be called when the receiver fails to start.
+func (receiver *persistentMessageReceiverImpl) cleanupStartResources() {
+	// Remove the termination event handler
+	receiver.internalReceiver.Events().RemoveEventHandler(receiver.terminationHandlerID)
+	// Destroy the internal flow
+	receiver.destroyInternalFlow()
+}
+
+// destroyInternalFlow destroys the internal flow and logs any errors.
+func (receiver *persistentMessageReceiverImpl) destroyInternalFlow() {
+	if receiver.internalFlow != nil {
+		errInfoWrapper := receiver.internalFlow.Destroy(true)
+		if errInfoWrapper != nil {
+			receiver.logger.Info("Encountered error while trying to clean up receiver flow: " + errInfoWrapper.String())
+		}
+	}
+}
+
+// cleanupRuntimeSubscriptions cleans up subscription correlations that were
+// added during runtime via AddSubscription/RemoveSubscription.
+// This should only be called during graceful termination.
+func (receiver *persistentMessageReceiverImpl) cleanupRuntimeSubscriptions() {
+	receiver.outstandingSubscriptionEventsLock.Lock()
+	defer receiver.outstandingSubscriptionEventsLock.Unlock()
+	for k := range receiver.outstandingSubscriptionEvents {
+		receiver.internalReceiver.ClearSubscriptionCorrelation(k)
+		delete(receiver.outstandingSubscriptionEvents, k)
+	}
+}
+
 // Terminate will terminate the service gracefully and synchronously.
 // This function is idempotent. The only way to resume operation
 // after this function is called is to create a new instance.
@@ -338,23 +395,10 @@ func (receiver *persistentMessageReceiverImpl) Terminate(gracePeriod time.Durati
 			receiver.logger.Debug("Terminate receiver complete")
 		}
 	}()
-	defer func() {
-		// Last thing we want to do is destroy the flow
-		errInfoWrapper := receiver.internalFlow.Destroy(true)
-		if errInfoWrapper != nil {
-			// We should not encounter issues destroying the flow
-			receiver.logger.Info("Encountered error while trying to clean up receiver flow: " + errInfoWrapper.String())
-		}
-	}()
-	defer func() {
-		// we still might get subscription responses so we'll delay as long as possible
-		receiver.outstandingSubscriptionEventsLock.Lock()
-		defer receiver.outstandingSubscriptionEventsLock.Unlock()
-		for k := range receiver.outstandingSubscriptionEvents {
-			receiver.internalReceiver.ClearSubscriptionCorrelation(k)
-			delete(receiver.outstandingSubscriptionEvents, k)
-		}
-	}()
+	// Clean up flow
+	defer receiver.destroyInternalFlow()
+	// Clean up runtime subscriptions added via AddSubscription/RemoveSubscription
+	defer receiver.cleanupRuntimeSubscriptions()
 	// First set the internal flow stopped to terminating state, this way we will never resume flow
 	// as we must do an atomic compare and set to call start or stop.
 	// Note that there is a potential race here where we change the flow stopped state after the check and
@@ -442,12 +486,9 @@ func (receiver *persistentMessageReceiverImpl) unsolicitedTermination(eventInfo 
 	receiver.internalFlow.Destroy(shouldCleanUpNative)
 	// Remove the event handler
 	receiver.internalReceiver.Events().RemoveEventHandler(receiver.terminationHandlerID)
-	// Shutdown the event executor but do not wait for remaining events to be processed
-	receiver.eventExecutor.Terminate()
-	// Block any new messages from making it into the buffer
-	// This may result in a panic in the rx callback that gets handled and logged
-	close(receiver.buffer)
-	atomic.StoreInt32(&receiver.bufferClosed, 1)
+
+	// Clean up construction resources (executor and buffer)
+	receiver.cleanupConstructionResources()
 
 	// Unblock the receiver dispatch routine telling it to not continue
 	select {

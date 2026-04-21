@@ -18,6 +18,7 @@ package receiver
 
 import (
 	"fmt"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -1181,5 +1182,75 @@ func TestPersistentReceiverUnsolicitedTermination(t *testing.T) {
 	}
 	if !metricsIncremented {
 		t.Error("metrics not incremented on incomplete delivery")
+	}
+}
+
+// TestPersistentReceiverFailedStartResourceCleanup verifies that resources
+// are properly cleaned up when a receiver fails to start
+//
+// This test verifies the bug fix by checking that:
+// 1. The flow is destroyed
+// 2. The receiver is terminated
+// 3. The buffer channel is closed
+//
+// These checks prove that cleanupConstructionResources() and cleanupStartResources()
+// were called, which means the executor was terminated and resources were freed.
+func TestPersistentReceiverFailedStartResourceCleanup(t *testing.T) {
+	// Setup mocks
+	internalFlow := &mockPersistentReceiver{}
+	internalReceiver := &mockInternalReceiver{}
+
+	// Flow will fail to start
+	internalFlow.start = func() *ccsmp.SolClientErrorInfoWrapper {
+		return ccsmp.NewInternalSolClientErrorInfoWrapper(ccsmp.SolClientReturnCodeFail, ccsmp.SolClientSubCode(1), ccsmp.SolClientResponseCode(0), "Simulated failure")
+	}
+
+	flowDestroyed := false
+	internalFlow.destroy = func(freeMemory bool) *ccsmp.SolClientErrorInfoWrapper {
+		flowDestroyed = true
+		return nil
+	}
+
+	internalReceiver.newPersistentReceiver = func(props []string, callback core.RxCallback, eventCallback core.PersistentEventCallback) (core.PersistentReceiver, core.ErrorInfo) {
+		return internalFlow, nil
+	}
+
+	// Build receiver
+	builder := &persistentMessageReceiverBuilderImpl{
+		internalReceiver: internalReceiver,
+		properties:       constants.DefaultPersistentReceiverProperties.GetConfiguration(),
+	}
+
+	receiver, err := builder.Build(resource.QueueDurableExclusive("test-queue"))
+	if err != nil {
+		t.Fatalf("Failed to build receiver: %v", err)
+	}
+
+	receiverImpl, ok := receiver.(*persistentMessageReceiverImpl)
+	if !ok {
+		t.Fatal("Expected persistentMessageReceiverImpl")
+	}
+
+	// Attempt to start - should fail
+	err = receiverImpl.Start()
+	if err == nil {
+		t.Fatal("Expected Start() to fail")
+	}
+
+	// Verify receiver is terminated
+	if !receiverImpl.IsTerminated() {
+		t.Error("Receiver should be terminated after failed start")
+	}
+
+	// Verify flow was destroyed
+	if !flowDestroyed {
+		t.Error("Flow was not destroyed")
+	}
+
+	// Verify buffer channel is closed by checking the atomic flag.
+	// This proves cleanupConstructionResources() was called, which also
+	// terminates the event executor (called before closing the buffer)
+	if atomic.LoadInt32(&receiverImpl.bufferClosed) != 1 {
+		t.Error("Buffer channel should be closed")
 	}
 }
