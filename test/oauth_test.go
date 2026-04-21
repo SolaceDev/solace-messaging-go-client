@@ -176,6 +176,10 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 			// wait for base semp service to reload before sending the next SEMP request
 			WaitForSEMPReachableBeforeNextRequest(waitBeforeNextSEMPRequest)
 
+			// Additional wait to ensure OAuth profiles are fully operational before first test runs
+			// OAuth profile activation can take additional time beyond SEMP reachability
+			time.Sleep(time.Second * 5)
+
 			url = fmt.Sprintf("tcps://%s:%d", testcontext.Messaging().Host, testcontext.Messaging().MessagingPorts.SecurePort)
 			builder = messaging.NewMessagingServiceBuilder().FromConfigurationProvider(config.ServicePropertyMap{
 				config.ServicePropertyVPNName:                               testcontext.Messaging().VPN,
