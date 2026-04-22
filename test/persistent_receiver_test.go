@@ -740,11 +740,13 @@ var _ = Describe("PersistentReceiver", func() {
 					Expect(subscriptions).To(ContainElement(topicString))
 				})
 				It("fails to add the queue topic subscription to the queue", func() {
-					err := receiver.AddSubscription(resource.TopicSubscriptionOf("#P2P/QUE/v:solbroker/" + queueName))
+					hostName, _ := helpers.GetHostName(messagingService, queueName+"_tmp")
+					err := receiver.AddSubscription(resource.TopicSubscriptionOf("#P2P/QUE/v:" + hostName + "/" + queueName))
 					helpers.ValidateNativeError(err, subcode.PermissionNotAllowed)
 				})
 				It("fails to remove the queue topic subscription from the queue", func() {
-					err := receiver.RemoveSubscription(resource.TopicSubscriptionOf("#P2P/QUE/v:solbroker/" + queueName))
+					hostName, _ := helpers.GetHostName(messagingService, queueName+"_tmp")
+					err := receiver.RemoveSubscription(resource.TopicSubscriptionOf("#P2P/QUE/v:" + hostName + "/" + queueName))
 					helpers.ValidateNativeError(err, subcode.PermissionNotAllowed)
 				})
 				It("fails to add an invalid subscription", func() {
