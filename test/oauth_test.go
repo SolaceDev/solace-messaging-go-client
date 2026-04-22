@@ -17,7 +17,9 @@
 package test
 
 import (
+	"crypto/tls"
 	"fmt"
+	"net/http"
 	"os"
 	"time"
 
@@ -176,9 +178,29 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 			// wait for base semp service to reload before sending the next SEMP request
 			WaitForSEMPReachableBeforeNextRequest(waitBeforeNextSEMPRequest)
 
-			// Additional wait to ensure OAuth profiles are fully operational before first test runs
-			// OAuth profile activation can take additional time beyond SEMP reachability
-			time.Sleep(time.Second * 15)
+			// Wait for OAuth JWKS endpoint to be reachable
+			// The broker fetches public keys from this endpoint to validate JWT tokens
+			// If the endpoint isn't ready, authentication will fail with "Unauthorized"
+			Eventually(func() error {
+				client := &http.Client{
+					Transport: &http.Transport{
+						TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+					},
+					Timeout: 5 * time.Second,
+				}
+				resp, err := client.Get(endpointJwks)
+				if err != nil {
+					return err
+				}
+				defer resp.Body.Close()
+				if resp.StatusCode != 200 {
+					return fmt.Errorf("JWKS endpoint returned status %d", resp.StatusCode)
+				}
+				return nil
+			}, 60*time.Second, 1*time.Second).Should(Succeed(), "OAuth JWKS endpoint should be reachable at %s", endpointJwks)
+
+			// Additional wait to ensure OAuth profiles have fetched keys from JWKS endpoint
+			time.Sleep(time.Second * 5)
 
 			url = fmt.Sprintf("tcps://%s:%d", testcontext.Messaging().Host, testcontext.Messaging().MessagingPorts.SecurePort)
 			builder = messaging.NewMessagingServiceBuilder().FromConfigurationProvider(config.ServicePropertyMap{
