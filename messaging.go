@@ -20,6 +20,7 @@ import (
 	"solace.dev/go/messaging/internal/impl"
 	"solace.dev/go/messaging/pkg/solace"
 	"solace.dev/go/messaging/pkg/solace/message/rgmid"
+	"github.com/spf13/cobra"
 )
 
 // NewMessagingServiceBuilder returns an instance of solace.MessagingServiceBuilder that can be used
