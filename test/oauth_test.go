@@ -17,9 +17,7 @@
 package test
 
 import (
-	"crypto/tls"
 	"fmt"
-	"net/http"
 	"os"
 	"time"
 
@@ -178,29 +176,52 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 			// wait for base semp service to reload before sending the next SEMP request
 			WaitForSEMPReachableBeforeNextRequest(waitBeforeNextSEMPRequest)
 
-			// Wait for OAuth JWKS endpoint to be reachable
-			// The broker fetches public keys from this endpoint to validate JWT tokens
-			// If the endpoint isn't ready, authentication will fail with "Unauthorized"
+			// Wait for OAuth profiles to be active and have successfully fetched JWKS
+			// The broker polls JWKS endpoint every 30 seconds (configurable via EndpointJwksRefreshInterval)
+			// We check the operational state via SEMP monitor API rather than polling JWKS directly
 			Eventually(func() error {
-				client := &http.Client{
-					Transport: &http.Transport{
-						TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-					},
-					Timeout: 5 * time.Second,
-				}
-				resp, err := client.Get(endpointJwks)
+				// Check SolaceOauthClient profile
+				clientProfile, _, err := testcontext.SEMP().Monitor().AuthenticationOauthProfileApi.GetMsgVpnAuthenticationOauthProfile(
+					testcontext.SEMP().MonitorCtx(),
+					testcontext.Messaging().VPN,
+					"SolaceOauthClient",
+					nil,
+				)
 				if err != nil {
-					return err
+					return fmt.Errorf("failed to get SolaceOauthClient profile: %w", err)
 				}
-				defer resp.Body.Close()
-				if resp.StatusCode != 200 {
-					return fmt.Errorf("JWKS endpoint returned status %d", resp.StatusCode)
+				if clientProfile.Data.Active == nil || *clientProfile.Data.Active == nil || !**clientProfile.Data.Active {
+					return fmt.Errorf("SolaceOauthClient profile not active, reason: %s", clientProfile.Data.InactiveReason)
 				}
-				return nil
-			}, 60*time.Second, 1*time.Second).Should(Succeed(), "OAuth JWKS endpoint should be reachable at %s", endpointJwks)
+				if clientProfile.Data.JwksLastRefreshTime == 0 {
+					return fmt.Errorf("SolaceOauthClient JWKS not yet refreshed (last refresh time is 0)")
+				}
+				if clientProfile.Data.JwksLastRefreshFailureReason != "" {
+					return fmt.Errorf("SolaceOauthClient JWKS refresh failed: %s", clientProfile.Data.JwksLastRefreshFailureReason)
+				}
 
-			// Additional wait to ensure OAuth profiles have fetched keys from JWKS endpoint
-			time.Sleep(time.Second * 5)
+				// Check SolaceOauthResourceServer profile
+				rsProfile, _, err := testcontext.SEMP().Monitor().AuthenticationOauthProfileApi.GetMsgVpnAuthenticationOauthProfile(
+					testcontext.SEMP().MonitorCtx(),
+					testcontext.Messaging().VPN,
+					"SolaceOauthResourceServer",
+					nil,
+				)
+				if err != nil {
+					return fmt.Errorf("failed to get SolaceOauthResourceServer profile: %w", err)
+				}
+				if rsProfile.Data.Active == nil || *rsProfile.Data.Active == nil || !**rsProfile.Data.Active {
+					return fmt.Errorf("SolaceOauthResourceServer profile not active, reason: %s", rsProfile.Data.InactiveReason)
+				}
+				if rsProfile.Data.JwksLastRefreshTime == 0 {
+					return fmt.Errorf("SolaceOauthResourceServer JWKS not yet refreshed (last refresh time is 0)")
+				}
+				if rsProfile.Data.JwksLastRefreshFailureReason != "" {
+					return fmt.Errorf("SolaceOauthResourceServer JWKS refresh failed: %s", rsProfile.Data.JwksLastRefreshFailureReason)
+				}
+
+				return nil
+			}, 90*time.Second, 2*time.Second).Should(Succeed(), "OAuth profiles should be active with JWKS successfully fetched")
 
 			url = fmt.Sprintf("tcps://%s:%d", testcontext.Messaging().Host, testcontext.Messaging().MessagingPorts.SecurePort)
 			builder = messaging.NewMessagingServiceBuilder().FromConfigurationProvider(config.ServicePropertyMap{
@@ -212,10 +233,9 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 				config.TransportLayerPropertyHost:                           url,
 				config.TransportLayerPropertyReconnectionAttempts:           0,
 			})
-			time.Sleep(time.Second * 15)
 		})
 
-		FDescribeTable("Messaging Service connects successfully",
+		DescribeTable("Messaging Service connects successfully",
 			func(access, id, issuer string) {
 				var err error
 				messagingService, err = builder.WithAuthenticationStrategy(config.OAuth2Authentication(
