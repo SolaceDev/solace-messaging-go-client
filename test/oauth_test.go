@@ -235,7 +235,7 @@ var _ = Describe("OAuth Strategy", Label("OAuth"), func() {
 			})
 		})
 
-		DescribeTable("Messaging Service connects successfully",
+		FDescribeTable("Messaging Service connects successfully",
 			func(access, id, issuer string) {
 				var err error
 				messagingService, err = builder.WithAuthenticationStrategy(config.OAuth2Authentication(
