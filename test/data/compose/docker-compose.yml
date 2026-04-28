@@ -28,7 +28,7 @@ services:
       memlock: -1
       nofile:
         soft: 2448
-        hard: 42192
+        hard: 1048576
     secrets:
       - server.pem
       - server_passphrase

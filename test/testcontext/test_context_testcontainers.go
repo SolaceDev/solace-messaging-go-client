@@ -213,7 +213,7 @@ func (context *testContainersTestContext) Teardown() error {
 		fmt.Println("Encountered error getting working directory for " + pubsubContainerName + " diagnostics err:" + err.Error())
 	}
 
-	err = context.gatherBrokerDiagnostics(path.Join(wd, "diagnostics.tgz"))
+	err = context.gatherBrokerDiagnostics(path.Join(wd, "diagnostics.tgz.p7m"))
 	if err != nil {
 		fmt.Println("Encountered error getting " + pubsubContainerName + " diagnostics err:" + err.Error())
 	}
@@ -248,7 +248,8 @@ func (context *testContainersTestContext) gatherBrokerDiagnostics(destinationPat
 	fmt.Println("Gathered gather-diagnostics for " + pubsubContainerName)
 	// extract diagnostic to host
 	// first get absolute path from container
-	resp, diagnosticPath, err := context.dockerExec(pubsubContainerName, []string{"/bin/bash", "-l", "-c", "ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz | tail -n 1"})
+	resp, diagnosticPath, err := context.dockerExec(pubsubContainerName, []string{"/bin/bash", "-l", "-c", "ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz.p7m | tail -n 1"})
+	// resp, diagnosticPath, err := context.dockerExec(pubsubContainerName, []string{"/bin/bash", "-l", "-c", "ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz | tail -n 1"})
 	//resp, diagnosticPath, err := context.dockerExec(pubsubHostname, []string{"/bin/bash", "-l", "-c", " realpath $(ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz | tail -n 1)"})
 	if err != nil {
 		return err

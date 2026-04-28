@@ -259,13 +259,9 @@ func (tss TransportSecurityStrategy) WithCertificateValidation(
 //	+-----------------+-------------------------------+--------------------+
 //	| 'AES256-SHA256' | 'ECDHE-RSA-AES256-GCM-SHA384' | 'AES128-SHA256'    |
 //	+-----------------+-------------------------------+--------------------+
-//	| 'DES-CBC3-SHA'  | 'ECDHE-RSA-DES-CBC3-SHA'      |                    |
-//	+-----------------+-------------------------------+--------------------+
-//	| 'RC4-SHA'       | 'ECDHE-RSA-AES256-SHA384'     | 'AES128            |
-//	+-----------------+-------------------------------+--------------------+
-//	| 'ECDHE-RSA-AES128-SHA256'                       | 'AES128-GCM-SHA256'|
-//	+-----------------+-------------------------------+--------------------+
-//	| 'RC4-MD5'       | 'ECDHE-RSA-AES128-GCM-SHA256' |                    |
+//	| 'ECDHE-RSA-AES256-SHA384' 			 | 'ECDHE-RSA-AES128-SHA256'   |
+//	+----------------------------------------+-----------------------------+
+//	| 'AES128-GCM-SHA256'       			 |'ECDHE-RSA-AES128-GCM-SHA256'|                    |
 //	+----------------------------------------+-----------------------------+
 //	| 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384'| 'ECDHE-RSA-AES128-SHA'      |
 //	+----------------------------------------+-----------------------------+
@@ -280,16 +276,25 @@ func (tss TransportSecurityStrategy) WithCertificateValidation(
 //	| 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA'   |                             |
 //	+----------------------------------------+-----------------------------+
 //	| 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256'|                             |
-//	+-----------------------------------+----------------------------------+
+//	+----------------------------------------+-----------------------------+
 //	| 'TLS_RSA_WITH_AES_128_GCM_SHA256' |                                  |
 //	+-----------------------------------+----------------------------------+
-//	| 'TLS_RSA_WITH_AES_128_CBC_SHA256' |'TLS_RSA_WITH_AES_256_GCM_SHA384' |
+//	| 'TLS_RSA_WITH_AES_128_CBC_SHA256' |'TLS_RSA_WITH_AES_256_CBC_SHA256' |
 //	+-----------------------------------+----------------------------------+
-//	| 'TLS_RSA_WITH_AES_256_CBC_SHA256' | 'TLS_RSA_WITH_AES_256_CBC_SHA'   |
+//	| 'TLS_RSA_WITH_AES_256_CBC_SHA' 	| 'TLS_RSA_WITH_AES_128_CBC_SHA'   |
 //	+-----------------------------------+----------------------------------+
-//	| 'SSL_RSA_WITH_3DES_EDE_CBC_SHA    | 'TLS_RSA_WITH_AES_128_CBC_SHA'   |
+//
+//	Unsupported cipher suites (previously supported on older brokers):
 //	+-----------------------------------+----------------------------------+
-//	| 'SSL_RSA_WITH_RC4_128_SHA'        | 'SSL_RSA_WITH_RC4_128_MD5'       |
+//	| 'DES-CBC3-SHA' 					|'ECDHE-RSA-DES-CBC3-SHA' 		   |
+//	+-----------------------------------+----------------------------------+
+//	| 'RC4-SHA' 						| 'AES128'   					   |
+//	+-----------------------------------+----------------------------------+
+//	| 'TLS_RSA_WITH_AES_256_GCM_SHA384' | 'RC4-MD5'   					   |
+//	+-----------------------------------+----------------------------------+
+//	| 'SSL_RSA_WITH_3DES_EDE_CBC_SHA'   | 'SSL_RSA_WITH_RC4_128_SHA'   	   |
+//	+-----------------------------------+----------------------------------+
+//	| 'SSL_RSA_WITH_RC4_128_MD5'        |        						   |
 //	+-----------------------------------+----------------------------------+
 func (tss TransportSecurityStrategy) WithCipherSuites(cipherSuiteList string) TransportSecurityStrategy {
 	tss.config[TransportLayerSecurityPropertyCipherSuites] = cipherSuiteList
