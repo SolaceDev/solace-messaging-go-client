@@ -1,530 +1,918 @@
-LICENSE SUMMARY
-===============
-
-License terms can be found at the bottom of this file.
-
-Apache 2.0
-BSD 1
-BSD 2
-BSD 3
-BSD 4 UC
-MIT
-Solace
-Zlib
-
-
-THIRD-PARTY SOFTWARE USED
-=========================
-
-c-ares-1.34.6.tar.gz
---------------------
-Licensed under MIT
-License terms can be found at: https://github.com/c-ares/c-ares/blob/v1.34.6/LICENSE.md
-Copyright 1998 Massachusetts Institute of Technology
-Copyright 2007-2023 Daniel Stenberg with many contributors, see AUTHORS file.
-Home page: https://c-ares.haxx.se/
-
-getopt_long.c.tar.gz
---------------------
-Licensed under BSD 4 UC
-License terms can be found at: From source file header.
-Copyright (c) 1987, 1993, 1994, 1996 The Regents of the University of
-California.  All rights reserved.
-
-msinttypes-r21
---------------
-Licensed under BSD 3
-License terms can be found at: https://code.google.com/archive/p/msinttypes/
-Copyright 2008 Alexander Chemeris
-Home page: https://code.google.com/archive/p/msinttypes/
-
-openssl-3.0.8.tar.gz
---------------------
-Licensed under Apache 2.0
-License terms can be found at: https://github.com/openssl/openssl/blob/openssl-3.0.8/LICENSE.txt
-Copyright 1995-1998 Eric A. Young, Tim J. Hudson
-Copyright 1998-2022 The OpenSSL Project
-Home page: https://github.com/openssl/openssl
-
-rax-1.2.0.tar.gz
-----------------
-Licensed under BSD 2
-License terms can be found at: https://github.com/antirez/rax/blob/master/COPYING
-Copyright 2017 Salvatore Sanfilippo (antirez@gmail.com)
-
-uthash-2.3.0.tar.gz
--------------------
-Licensed under BSD 1
-License terms can be found at: https://github.com/troydhanson/uthash/blob/master/LICENSE
-Copyright 2005-2022 Troy D. Hanson  https://troydhanson.github.io/uthash/
-
-zlib-1.2.11.tar.gz
-------------------
-Licensed under Zlib
-License terms can be found at: http://www.zlib.net/
-Copyright 1995-2017 Jean-loup Gailly and Mark Adler
-Home page: https://zlib.net
-
-
-LICENSE REQUIREMENTS & SPECIFICATIONS
-======================================
-
-Apache 2.0
-----------
-
-Apache License
-Version 2.0, January 2004
-http://www.apache.org/licenses/
-
-TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
-
-1. Definitions.
-
-"License" shall mean the terms and conditions for use, reproduction, and distribution as defined by
-Sections 1 through 9 of this document.
-
-"Licensor" shall mean the copyright owner or entity authorized by the copyright owner that is
-granting the License.
-
-"Legal Entity" shall mean the union of the acting entity and all other entities that control, are
-controlled by, or are under common control with that entity. For the purposes of this definition,
-"control" means (i) the power, direct or indirect, to cause the direction or management of such
-entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the
-outstanding shares, or (iii) beneficial ownership of such entity.
-
-"You" (or "Your") shall mean an individual or Legal Entity exercising permissions granted by this
-License.
-
-"Source" form shall mean the preferred form for making modifications, including but not limited to
-software source code, documentation source, and configuration files.
-
-"Object" form shall mean any form resulting from mechanical transformation or translation of a
-Source form, including but not limited to compiled object code, generated documentation, and
-conversions to other media types.
-
-"Work" shall mean the work of authorship, whether in Source or Object form, made available under
-the License, as indicated by a copyright notice that is included in or attached to the work (an
-example is provided in the Appendix below).
-
-"Derivative Works" shall mean any work, whether in Source or Object form, that is based on (or
-derived from) the Work and for which the editorial revisions, annotations, elaborations, or other
-modifications represent, as a whole, an original work of authorship. For the purposes of this
-License, Derivative Works shall not include works that remain separable from, or merely link (or
-bind by name) to the interfaces of, the Work and Derivative Works thereof.
-
-"Contribution" shall mean any work of authorship, including the original version of the Work and
-any modifications or additions to that Work or Derivative Works thereof, that is intentionally
-submitted to Licensor for inclusion in the Work by the copyright owner or by an individual or Legal
-Entity authorized to submit on behalf of the copyright owner. For the purposes of this definition,
-"submitted" means any form of electronic, verbal, or written communication sent to the Licensor or
-its representatives, including but not limited to communication on electronic mailing lists, source
-code control systems, and issue tracking systems that are managed by, or on behalf of, the Licensor
-for the purpose of discussing and improving the Work, but excluding communication that is
-conspicuously marked or otherwise designated in writing by the copyright owner as "Not a
-Contribution."
-
-"Contributor" shall mean Licensor and any individual or Legal Entity on behalf of whom a
-Contribution has been received by Licensor and subsequently incorporated within the Work.
-
-2. Grant of Copyright License. Subject to the terms and conditions of this License, each
-Contributor hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free,
-irrevocable copyright license to reproduce, prepare Derivative Works of, publicly display, publicly
-perform, sublicense, and distribute the Work and such Derivative Works in Source or Object form.
-
-3. Grant of Patent License. Subject to the terms and conditions of this License, each Contributor
-hereby grants to You a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable
-(except as stated in this section) patent license to make, have made, use, offer to sell, sell,
-import, and otherwise transfer the Work, where such license applies only to those patent claims
-licensable by such Contributor that are necessarily infringed by their Contribution(s) alone or by
-combination of their Contribution(s) with the Work to which such Contribution(s) was submitted. If
-You institute patent litigation against any entity (including a cross-claim or counterclaim in a
-lawsuit) alleging that the Work or a Contribution incorporated within the Work constitutes direct
-or contributory patent infringement, then any patent licenses granted to You under this License for
-that Work shall terminate as of the date such litigation is filed.
-
-4. Redistribution. You may reproduce and distribute copies of the Work or Derivative Works thereof
-in any medium, with or without modifications, and in Source or Object form, provided that You meet
-the following conditions:
-
-     (a) You must give any other recipients of the Work or Derivative Works a copy of this License;
-and
-
-     (b) You must cause any modified files to carry prominent notices stating that You changed the
-files; and
-
-     (c) You must retain, in the Source form of any Derivative Works that You distribute, all
-copyright, patent, trademark, and attribution notices from the Source form of the Work, excluding
-those notices that do not pertain to any part of the Derivative Works; and
-
-     (d) If the Work includes a "NOTICE" text file as part of its distribution, then any Derivative
-Works that You distribute must include a readable copy of the attribution notices contained within
-such NOTICE file, excluding those notices that do not pertain to any part of the Derivative Works,
-in at least one of the following places: within a NOTICE text file distributed as part of the
-Derivative Works; within the Source form or documentation, if provided along with the Derivative
-Works; or, within a display generated by the Derivative Works, if and wherever such third-party
-notices normally appear. The contents of the NOTICE file are for informational purposes only and do
-not modify the License. You may add Your own attribution notices within Derivative Works that You
-distribute, alongside or as an addendum to the NOTICE text from the Work, provided that such
-additional attribution notices cannot be construed as modifying the License.
-
-     You may add Your own copyright statement to Your modifications and may provide additional or
-different license terms and conditions for use, reproduction, or distribution of Your
-modifications, or for any such Derivative Works as a whole, provided Your use, reproduction, and
-distribution of the Work otherwise complies with the conditions stated in this License.
-
-5. Submission of Contributions. Unless You explicitly state otherwise, any Contribution
-intentionally submitted for inclusion in the Work by You to the Licensor shall be under the terms
-and conditions of this License, without any additional terms or conditions. Notwithstanding the
-above, nothing herein shall supersede or modify the terms of any separate license agreement you may
-have executed with Licensor regarding such Contributions.
-
-6. Trademarks. This License does not grant permission to use the trade names, trademarks, service
-marks, or product names of the Licensor, except as required for reasonable and customary use in
-describing the origin of the Work and reproducing the content of the NOTICE file.
-
-7. Disclaimer of Warranty. Unless required by applicable law or agreed to in writing, Licensor
-provides the Work (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT
-WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any
-warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR
-PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing
-the Work and assume any risks associated with Your exercise of permissions under this License.
-
-8. Limitation of Liability. In no event and under no legal theory, whether in tort (including
-negligence), contract, or otherwise, unless required by applicable law (such as deliberate and
-grossly negligent acts) or agreed to in writing, shall any Contributor be liable to You for
-damages, including any direct, indirect, special, incidental, or consequential damages of any
-character arising as a result of this License or out of the use or inability to use the Work
-(including but not limited to damages for loss of goodwill, work stoppage, computer failure or
-malfunction, or any and all other commercial damages or losses), even if such Contributor has been
-advised of the possibility of such damages.
-
-9. Accepting Warranty or Additional Liability. While redistributing the Work or Derivative Works
-thereof, You may choose to offer, and charge a fee for, acceptance of support, warranty, indemnity,
-or other liability obligations and/or rights consistent with this License. However, in accepting
-such obligations, You may act only on Your own behalf and on Your sole responsibility, not on
-behalf of any other Contributor, and only if You agree to indemnify, defend, and hold each
-Contributor harmless for any liability incurred by, or claims asserted against, such Contributor by
-reason of your accepting any such warranty or additional liability.
-
-END OF TERMS AND CONDITIONS
-
-APPENDIX: How to apply the Apache License to your work.
-
-To apply the Apache License to your work, attach the following boilerplate notice, with the fields
-enclosed by brackets "[]" replaced with your own identifying information. (Don't include the
-brackets!)  The text should be enclosed in the appropriate comment syntax for the file format. We
-also recommend that a file or class name and description of purpose be included on the same
-"printed page" as the copyright notice for easier identification within third-party archives.
-
-Copyright [yyyy] [name of copyright owner]
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-
-BSD 1
------
-
-Copyright (c) [Year]
-[Name of Organization] [All rights reserved].
-
-Redistribution and use in source and binary forms, with or without modification, are permitted
-provided that the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list of conditions and
-the following disclaimer.
-
-THIS SOFTWARE IS PROVIDED BY [Name of Organization] “AS IS'' AND ANY EXPRESS OR IMPLIED
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL [Name of Organisation] BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-BSD 2
------
-
-Copyright (c) <year> <owner> 
-
-Redistribution and use in source and binary forms, with or without modification, are permitted
-provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions
-and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of
-conditions and the following disclaimer in the documentation and/or other materials provided with
-the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
-IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
-IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-BSD 3
------
-
-Copyright (c) <year> <owner>. 
-
-Redistribution and use in source and binary forms, with or without modification, are permitted
-provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions
-and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of
-conditions and the following disclaimer in the documentation and/or other materials provided with
-the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be used to
-endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
-IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
-IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-BSD 4 UC
---------
-
-BSD-4-Clause (University of California-Specific)
-
-Copyright [various years] The Regents of the University of California. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted
-provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions
-and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of
-conditions and the following disclaimer in the documentation and/or other materials provided with
-the distribution.
-
-3. All advertising materials mentioning features or use of this software must display the following
-acknowledgement: This product includes software developed by the University of California, Berkeley
-and its contributors.
-
-4. Neither the name of the University nor the names of its contributors may be used to endorse or
-promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED
-WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-
-MIT
----
-
-MIT License
-
-Copyright (c) <year> <copyright holders>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
-associated documentation files (the "Software"), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge, publish, distribute,
-sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or
-substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
-NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
-OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-Solace
-------
+================================================================================
+================================================================================
+
+          Third-Party Software for Solace Messaging API for C (CCSMP)
+
+--------------------------------------------------------------------------------
+
+The following 3rd-party software packages may be used by or distributed with Solace Messaging API for C (CCSMP). Any information relevant to third-party vendors listed below are collected using common, reasonable means.
+
+Date generated: 2026-4-28
+
+Revision ID: 33703
+
+================================================================================
+================================================================================
+
+
+
+
+================================================================================
+
+                              First Party Licenses
+
+================================================================================
+
+
+* solace-api-1.1 *
+
+
+File Count: n/a
+
+
+License Text:
 
 SOLACE API LICENSE AGREEMENT
-
 Version 1.1
 
-This Solace API License Agreement Version 1.1 ("Agreement") sets forth the 
-terms and conditions on which Solace Corporation ("Solace") makes available 
-certain of its APIs (defined below). BY INSTALLING, DOWNLOADING, ACCESSING, OR 
-USING ANY OF THE APIs, YOU AGREE TO THE TERMS AND CONDITIONS OF THIS AGREEMENT.
-IF YOU DO NOT AGREE TO SUCH TERMS AND CONDITIONS, YOU MUST NOT USE THE APIs. IF
-YOU ARE RECEIVING THE APIs ON BEHALF OF A LEGAL ENTITY, YOU REPRESENT AND 
-WARRANT THAT YOU HAVE THE ACTUAL AUTHORITY TO AGREE TO THE TERMS AND CONDITIONS
-OF THIS AGREEMENT ON BEHALF OF SUCH ENTITY.
+This Solace API License Agreement Version 1.1 ("Agreement") sets forth the terms and conditions on which Solace Corporation ("Solace") makes available certain of its APIs (defined below).
 
-"API" means a collection of routines, classes, function parameters, protocols, 
-tools, and software (including related libraries) created by Solace that allow 
-access to or interoperability with Solace products, as may be updated or 
-modified by Solace from time to time.
+BY INSTALLING, DOWNLOADING, ACCESSING, OR USING ANY OF THE APIs, YOU AGREE TO THE TERMS AND CONDITIONS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO SUCH TERMS AND CONDITIONS, YOU MUST NOT USE THE APIs. IF YOU ARE RECEIVING THE APIs ON BEHALF OF A LEGAL ENTITY, YOU REPRESENT AND WARRANT THAT YOU HAVE THE ACTUAL AUTHORITY TO AGREE TO THE TERMS AND CONDITIONS OF THIS AGREEMENT ON BEHALF OF SUCH ENTITY.
 
-"Application" means the software created or modified by the Licensee to enable 
-its product to access or otherwise interoperate with Solace products via an 
-API.
+"API" means a collection of routines, classes, function parameters, protocols, tools, and software (including related libraries) created by Solace that allow access to or interoperability with Solace products, as may be updated or modified by Solace from time to time.
+
+"Application" means the software created or modified by the Licensee to enable its product to access or otherwise interoperate with Solace products via an API.
 
 "License" means the license granted in Section 1.1.
 
-"Licensee" means you, an individual, or the entity on whose behalf you are 
-receiving the Software.
+"Licensee" means you, an individual, or the entity on whose behalf you are receiving the Software.
 
-1	LICENSE GRANT AND CONDITIONS.
+1 LICENSE GRANT AND CONDITIONS.
 
-1.1.	License. Subject to the terms and conditions of this Agreement, Solace 
-hereby grants to Licensee a non-exclusive, royalty-free, worldwide, 
-non-transferable, non-sublicensable, license during the term of this Agreement 
-to (a) use APIs for the sole purpose of creating Applications including the 
-incorporation of API software into such Applications and (b) distribute such 
-Applications to its customers for the sole purpose of enabling interoperability
-between Licensee products and Solace products. 
+1.1. License. Subject to the terms and conditions of this Agreement, Solace hereby grants to Licensee a non-exclusive, royalty-free, worldwide, non-transferable, non-sublicensable, license during the term of this Agreement to (a) use APIs for the sole purpose of creating Applications including the incorporation of API software into such Applications and (b) distribute such Applications to its customers for the sole purpose of enabling interoperability between Licensee products and Solace products.
 
-1.2.	Conditions. In consideration of the License, Licensee's use and 
-distribution of Applications is subject to the following conditions:
+1.2. Conditions. In consideration of the License, Licensee's use and distribution of Applications is subject to the following conditions:
 
-1.2.1.	Licensee shall not use or attempt to use the APIs (a) in violation or 
-contravention of any applicable law, regulation or generally accepted practices
- or guidelines in the relevant jurisdictions or (b) other than as expressly set
-forth in this Agreement.
+1.2.1. Licensee shall not use or attempt to use the APIs (a) in violation or contravention of any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions or (b) other than as expressly set forth in this Agreement.
 
-1.2.2.	Licensee acknowledges that future updates or modifications to the APIs 
-by Solace may: (a) remove or restrict previously existing functionality and/or 
-(b) require the Licensee to update or modify its Applications.
+1.2.2. Licensee acknowledges that future updates or modifications to the APIs by Solace may: (a) remove or restrict previously existing functionality and/or (b) require the Licensee to update or modify its Applications.
 
-1.2.3.	In any distribution of the Applications, Licensee will retain and 
-reproduce in their entirety any Solace or third-party disclaimers, copyright 
-notices, licenses, and other proprietary notices provided with the APIs. 
-Licensee will ensure that any API software incorporated into the Application 
-will remain subject to the terms and conditions set out in this Agreement.
 
-1.2.4.	Licensee shall not reverse engineer, disassemble, decompile, translate,
-or otherwise attempt to derive the source code version of any API software 
-provided in object code form, except if and only to the extent expressly 
-permitted by applicable law, and provided that Licensee first approaches 
-Solace and seeks permission in writing.
+1.2.3. In any distribution of the Applications, Licensee will retain and reproduce in their entirety any Solace or third-party disclaimers, copyright notices, licenses, and other proprietary notices provided with the APIs. Licensee will ensure that any API software incorporated into the Application will remain subject to the terms and conditions set out in this Agreement.
 
-1.3.	Publicly Available Software. The APIs may include software programs 
-that are distributed by Solace pursuant to the terms and conditions of a 
-license granted by the copyright owner of such software programs and which 
-governs Licensee's use of such software programs ("Publicly Available 
-Software"). The Licensee's use of Publicly Available Software in conjunction 
-with the APIs in a manner consistent with the terms of this Agreement is 
-permitted, however, the Licensee may have broader rights under the applicable 
-license for Publicly Available Software and nothing contained herein is 
-intended to impose restrictions or limitations on the Licensee's use of the 
-Publicly Available Software.
+1.2.4. Licensee shall not reverse engineer, disassemble, decompile, translate, or otherwise attempt to derive the source code version of any API software provided in object code form, except if and only to the extent expressly permitted by applicable law, and provided that Licensee first approaches Solace and seeks permission in writing.
 
-2.	TERM AND TERMINATION. 
+1.3. Publicly Available Software. The APIs may include software programs that are distributed by Solace pursuant to the terms and conditions of a license granted by the copyright owner of such software programs and which governs Licensee's use of such software programs ("Publicly Available Software").  The Licensee's use of Publicly Available Software in conjunction with the APIs in a manner consistent with the terms of this Agreement is permitted, however, the Licensee may have broader rights under the applicable license for Publicly Available Software and nothing contained herein is intended to impose restrictions or limitations on the Licensee's use of the Publicly Available Software.
 
-This Agreement will commence upon Licensee's first use of an API and will 
-continue unless and until earlier terminated as set forth herein. If Licensee 
-breaches any of its conditions or obligations under this Agreement, this 
-Agreement and the License will terminate automatically and permanently. 
+2. TERM AND TERMINATION.
 
-3.	INTELLECTUAL PROPERTY.
+This Agreement will commence upon Licensee's first use of an API and will continue unless and until earlier terminated as set forth herein. If Licensee breaches any of its conditions or obligations under this Agreement, this Agreement and the License will terminate automatically and permanently.
 
-As between the parties, Solace will retain all right, title, and interest in 
-the APIs, and all intellectual property rights therein. Solace hereby reserves 
-all rights not expressly granted to Licensee in this Agreement. Solace hereby 
-reserves all rights in its trademarks and service marks, and no licenses 
-therein are granted in this Agreement. Subject to Solace's rights in the APIs, 
-Solace agrees that it obtains no right, title, or interest from the Licensee 
-under this Agreement in or to any Applications.
+3. INTELLECTUAL PROPERTY.
 
-4.	DISCLAIMER.
+As between the parties, Solace will retain all right, title, and interest in the APIs, and all intellectual property rights therein. Solace hereby reserves all rights not expressly granted to Licensee in this Agreement. Solace hereby reserves all rights in its trademarks and service marks, and no licenses therein are granted in this Agreement. Subject to Solace's rights in the APIs, Solace agrees that it obtains no right, title, or interest from the Licensee under this Agreement in or to any Applications.
 
-THE APIs ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND. 
-SOLACE HEREBY DISCLAIMS ANY AND ALL WARRANTIES AND CONDITIONS, EXPRESS, 
-IMPLIED, STATUTORY, OR OTHERWISE, AND SPECIFICALLY DISCLAIMS ANY WARRANTY OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT OF 
-THIRD-PARTY INTELLECTUAL PROPERTY RIGHTS, WITH RESPECT TO THE APIs.
+4. DISCLAIMER.
 
-5.	LIMITATION OF LIABILITY.
+THE APIs ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND. SOLACE HEREBY DISCLAIMS ANY AND ALL WARRANTIES AND CONDITIONS, EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, AND SPECIFICALLY DISCLAIMS ANY WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT OF THIRD-PARTY INTELLECTUAL PROPERTY RIGHTS, WITH RESPECT TO THE APIs.
 
-THE LICENSEE AGREES THAT SOLACE WILL HAVE NO LIABILITY WHATSOEVER FOR ANY USE 
-THE LICENSEE MAKES OF THE APIs. SOLACE WILL NOT BE LIABLE FOR ANY DAMAGES OF 
-ANY KIND, INCLUDING BUT NOT LIMITED TO, LOST PROFITS OR ANY CONSEQUENTIAL, 
-SPECIAL, INCIDENTAL, INDIRECT, OR DIRECT DAMAGES, HOWEVER CAUSED AND ON ANY 
-THEORY OF LIABILITY, ARISING OUT OF THIS AGREEMENT. THE FOREGOING SHALL APPLY 
-TO THE EXTENT PERMITTED BY APPLICABLE LAW. 
 
-6.	GENERAL.
+5. LIMITATION OF LIABILITY.
 
-6.1.	Governing Law. This Agreement will be governed by and interpreted in 
-accordance with the laws of the Province of Ontario, without reference to its 
-conflict of laws principles. If Licensee is located within Canada, all disputes
-arising out of this Agreement are subject to the exclusive jurisdiction of 
-courts located in Ottawa, Ontario, Canada. If Licensee is located outside of 
-Canada, any dispute, controversy, or claim arising out of or relating to this 
-Agreement will be referred to and finally determined by arbitration in 
-accordance with the JAMS International Arbitration Rules. The tribunal will 
-consist of one arbitrator. The place of arbitration will be Ottawa, Ontario, 
-Canada. The language to be used in the arbitral proceedings will be English. 
-Judgment upon the award rendered by the arbitrator may be entered in any court 
-having jurisdiction thereof.
+THE LICENSEE AGREES THAT SOLACE WILL HAVE NO LIABILITY WHATSOEVER FOR ANY USE THE LICENSEE MAKES OF THE APIs. SOLACE WILL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND, INCLUDING BUT NOT LIMITED TO, LOST PROFITS OR ANY CONSEQUENTIAL, SPECIAL, INCIDENTAL, INDIRECT, OR DIRECT DAMAGES, HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, ARISING OUT OF THIS AGREEMENT. THE FOREGOING SHALL APPLY TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
-6.2.	Assignment. Licensee is not authorized to assign its rights under this 
-Agreement to any third party. Solace may freely assign its rights under this 
-Agreement to any third party.
+6. GENERAL.
 
-6.3.	Other. This Agreement is the entire agreement between the parties 
-regarding the subject matter hereof. No amendment or modification of this 
-Agreement will be valid or binding upon the parties unless made in writing and 
-signed by the duly authorized representatives of both parties. If any 
-provision, including without limitation any condition, of this Agreement is 
-held to be unenforceable, this Agreement and all licenses and rights granted 
-hereunder will immediately terminate. Waiver by Solace of a breach of any 
-provision of this Agreement or the failure by Solace to exercise any right 
-hereunder will not be construed as a waiver of any subsequent breach of that 
-right or as a waiver of any other right.
+6.1. Governing Law. This Agreement will be governed by and interpreted in accordance with the laws of the Province of Ontario, without reference to its conflict of laws principles. If Licensee is located within Canada, all disputes arising out of this Agreement are subject to the exclusive jurisdiction of courts located in Ottawa, Ontario, Canada. If Licensee is located outside of Canada, any dispute, controversy, or claim arising out of or relating to this Agreement will be referred to and finally determined by arbitration in accordance with the JAMS International Arbitration Rules. The tribunal will consist of one arbitrator. The place of arbitration will be Ottawa, Ontario, Canada. The language to be used in the arbitral proceedings will be English. Judgment upon the award rendered by the arbitrator may be entered in any court having jurisdiction thereof.
+
+6.2. Assignment. Licensee is not authorized to assign its rights under this Agreement to any third party. Solace may freely assign its rights under this Agreement to any third party.
+
+6.3. Other.  This Agreement is the entire agreement between the parties regarding the subject matter hereof. No amendment or modification of this Agreement will be valid or binding upon the parties unless made in writing and signed by the duly authorized representatives of both parties. If any provision, including without limitation any condition, of this Agreement is held to be unenforceable, this Agreement and all licenses and rights granted hereunder will immediately terminate. Waiver by Solace of a breach of any provision of this Agreement or the failure by Solace to exercise any right hereunder will not be construed as a waiver of any subsequent breach of that right or as a waiver of any other right.
 
 - End -
 
-Version 1.1 
+Version 1.1
 November 2, 2023
 
 
+
+
+
+
+================================================================================
+
+                                  Dependencies
+
+================================================================================
+
+- c-ares (3ac47ee46edd8ea40370222f91613fc16c434853) [BSD-3-Clause, MIT, APSL-2.0, GPL-3.0-with-autoconf-exception, FSFAP, GPL-3.0-only, LGPL-2.1-or-later, LGPL-2.1-only, ISC, gpl-3.0-plus WITH autoconf-macro-exception]
+- getopt_long.c (c8e78e29856652713ee71e67db28174b) [BSD-4-Clause-UC]
+- msinttypes (f9e7c5758ed9e3b9f4b2394de1881c704dd79de0) [BSD-3-Clause]
+- openssl (31157bc0b46e04227b8468d3e6915e4d0332777c) [Apache-2.0, GPL-1.0-or-later, GPL-1.0-only, Artistic-1.0, openssl-ssleay, BSD-3-Clause, MPL-1.1, LGPL-2.1-or-later, GPL-2.0-or-later, GPL-2.0-only, BSD-2-Clause, BSD-Source-Code, CC0-1.0, IETF, public-domain]
+- rax (1927550cb218ec3c3dda8b39d82d1d019bf0476d) [BSD-2-Clause, BSD-3-Clause]
+- uthash (e493aa90a2833b4655927598f169c31cfcdf7861) [BSD-1-Clause, Unlicense]
+- zlib (1.2.11) [BSL-1.0, BSD-3-Clause, gpl-2.0-plus WITH ada-linking-exception, Info-ZIP, mit-old-style, Zlib]
+
+
+--------------------------------------------------------------------------------
+Package Title: c-ares (3ac47ee46edd8ea40370222f91613fc16c434853)
+
+Package Locator: git+github.com/c-ares/c-ares$3ac47ee46edd8ea40370222f91613fc16c434853
+
+Package Depth: Direct
+--------------------------------------------------------------------------------
+
+* Concluded Licenses *
+MIT
+
+
+MIT License
+
+Copyright (c) 1998 Massachusetts Institute of Technology  
+Copyright (c) 2007 - 2023 Daniel Stenberg with many contributors, see AUTHORS
+file.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+MIT License
+
+Copyright (c) 1998 Massachusetts Institute of Technology  
+Copyright (c) 2007 - 2023 Daniel Stenberg with many contributors, see AUTHORS
+file.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next
+paragraph) shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+* Copyrights *
+
+
+
+
+APSL-2.0
+Copyright (c)  years updated, but no other changes have been made to the APSL 2.0.
+Copyright (c)  and other proprietary notices and disclaimers of Apple as they appear in the Original Code, and keep intact all notices in the Original Code that refer to this License; and
+Copyright (c) 1999-2007 Apple Inc.  All Rights Reserved.
+
+GPL-3.0-with-autoconf-exception
+Copyright (c) 2009 Free Software Foundation, Inc. >http://fsf.org/<
+
+
+GPL-3.0-only
+Copyright (c) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+
+
+LGPL-2.1-or-later
+Copyright (c) 1991, 1999 Free Software Foundation, Inc.
+Copyright (c)  the library, and (2) we offer you this license, which gives you legal permission to copy, distribute and/or modify the library.
+Copyright (c)  interest in
+
+LGPL-2.1-only
+Copyright (c) 1991, 1999 Free Software Foundation, Inc.
+Copyright (c)  the library, and (2) we offer you this license, which gives you legal permission to copy, distribute and/or modify the library.
+Copyright (c)  interest in
+* Package Info *
+
+Authors: brad@brad-house.com, 42031238+dankmeme01@users.noreply.github.com, pavlov.pavel@gmail.com, vszakats@users.noreply.github.com, florian.pfisterer1@gmail.com, 61284468+nnv-nick@users.noreply.github.com, dg0yt@darc.de, daniel@haxx.se, nchatz314@gmail.com, gjasny@googlemail.com, jiwoo_90@naver.com, 4347948+Hsilgos@users.noreply.github.com, zcbenz@gmail.com, david.hotham@blueyonder.co.uk, 47375452+VlkrS@users.noreply.github.com, 160491261+oliverwelsh@users.noreply.github.com, 144861942+farazrbx@users.noreply.github.com, fffaraz@gmail.com, 156214846+vojtechvobr@users.noreply.github.com, github@zcbenz.com, cristian@rodriguez.im, andrey_utkin@fastmail.com, erik@halon.se, marty1885@users.noreply.github.com, 152157825+petrvh@users.noreply.github.com, cclauss@me.com, ignat@yandex-team.ru, renodr2002@gmail.com, jmestwa@gmail.com, lifenjoiner@163.com, kaixuan.li@ntu.edu.sg, kodareef5@gmail.com, tom.flynn@alianza.com, 153813563+kolacek-o@users.noreply.github.com, 75133029+nixblik@users.noreply.github.com, 204704591+F3lixTheCat@users.noreply.github.com, sykhro@users.noreply.github.com, oargon@gmail.com, sean.harmer@kdab.com, 68678186+iucoen@users.noreply.github.com, luke@foolishgames.com, mbw330@163.com, mail@georg-pfuetzenreuter.net, shelley.vohr@gmail.com, georg@lysergic.dev, tchaikov@gmail.com, brad@monetra.com, info@bnoordhuis.nl, drysdale@google.com, github@keithws.net, yangsita@gmail.com, william@25thandclement.com, dcm5151@esu.edu, markokr@gmail.com, taipanromania@gmail.com, jhrozek@redhat.com, gvanem@broadpark.no, gk@gknw.de
+
+Project URL: https://github.com/c-ares/c-ares
+
+Package Download URL: https://github.com/c-ares/c-ares/archive/3ac47ee46edd8ea40370222f91613fc16c434853.zip
+
+--------------------------------------------------------------------------------
+Package Title: getopt_long.c (c8e78e29856652713ee71e67db28174b)
+
+Package Locator: archive+48578/getopt_long.c$c8e78e29856652713ee71e67db28174b
+
+Package Depth: Direct
+--------------------------------------------------------------------------------
+
+* Concluded Licenses *
+BSD-4-Clause-UC
+
+
+Copyright [various years] The Regents of the University of California. All rights reserved.
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+   3. All advertising materials mentioning features or use of this software must display the following acknowledgement: This product includes software developed by the University of California, Berkeley and its contributors.
+   4. Neither the name of the University nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ''AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+BSD-4-Clause (University of California-Specific)
+Copyright [various years] The Regents of the University of California. All rights reserved.
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+   1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+   3. All advertising materials mentioning features or use of this software must display the following acknowledgement: This product includes software developed by the University of California, Berkeley and its contributors.
+   4. Neither the name of the University nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ''AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+* Copyrights *
+
+--------------------------------------------------------------------------------
+Package Title: msinttypes (f9e7c5758ed9e3b9f4b2394de1881c704dd79de0)
+
+Package Locator: git+github.com/chemeris/msinttypes$f9e7c5758ed9e3b9f4b2394de1881c704dd79de0
+
+Package Depth: Direct
+--------------------------------------------------------------------------------
+
+* Concluded Licenses *
+BSD-3-Clause
+
+
+Copyright (c) 2006-2013 Alexander Chemeris . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+
+   3. Neither the name of the copyright holder nor the names of its
+      contributors may be used to endorse or promote products derived from
+      this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Copyright (c) <year> <owner>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+
+   3. Neither the name of the copyright holder nor the names of its
+      contributors may be used to endorse or promote products derived from
+      this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+* Copyrights *
+
+* Package Info *
+
+Authors: chemeris@users.noreply.github.com, GoogleCodeExporter@users.noreply.github.com
+
+Project URL: https://github.com/chemeris/msinttypes
+
+Package Download URL: https://github.com/chemeris/msinttypes/archive/f9e7c5758ed9e3b9f4b2394de1881c704dd79de0.zip
+
+--------------------------------------------------------------------------------
+Package Title: openssl (31157bc0b46e04227b8468d3e6915e4d0332777c)
+
+Package Locator: git+github.com/openssl/openssl$31157bc0b46e04227b8468d3e6915e4d0332777c
+
+Package Depth: Direct
+--------------------------------------------------------------------------------
+
+* Concluded Licenses *
+Apache-2.0
+
+
+
+                                 Apache License
+                           Version 2.0, January 2004
+                        https://www.apache.org/licenses/
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+   END OF TERMS AND CONDITIONS
+
+
+
+
+                                 Apache License
+                           Version 2.0, January 2004
+                        https://www.apache.org/licenses/
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+   END OF TERMS AND CONDITIONS
+
+
+
+* Copyrights *
+
+GPL-1.0-or-later
+Copyright (c) 2013 by Mark Jason Dominus <mjd@cpan.org>.
+Copyright (c) 1989 Free Software Foundation, Inc.
+Copyright (c)  the software, and
+Copyright (c)  19yy  <name of author>
+Copyright (c)  19xx name of author
+Copyright (c)  or copyrights for
+
+
+GPL-1.0-only
+Copyright (c) 2013 by Mark Jason Dominus <mjd@cpan.org>.
+Copyright (c) 1989 Free Software Foundation, Inc.
+Copyright (c)  the software, and
+Copyright (c)  19yy  <name of author>
+Copyright (c)  19xx name of author
+Copyright (c)  or copyrights for
+
+Artistic-1.0
+Copyright (c) 2013 by Mark Jason Dominus <mjd@cpan.org>.
+Copyright (c) 1989 Free Software Foundation, Inc.
+Copyright (c)  the software, and
+Copyright (c)  19yy  <name of author>
+Copyright (c)  19xx name of author
+Copyright (c)  or copyrights for
+
+
+
+
+
+
+
+
+
+
+
+* Package Info *
+
+Authors: jaenicke@openssl.org, cvs2svn, ben@openssl.org, appro@openssl.org, steve@openssl.org, bodo@openssl.org, levitte@openssl.org, mark@openssl.org, nils@openssl.org, ulf@openssl.org, geoff@openssl.org, marquess@openssl.com, rsalz@openssl.org, alan.hryngle@yahoo.com, rse@openssl.org, nic.tuv@gmail.com, matt@openssl.org, bernd.edlinger@hotmail.de, Matthias.St.Pierre@ncp-e.com, bbrumley@gmail.com, cesar.pereidagarcia@tut.fi, krists.krilovs@gmail.com, paul.dale@oracle.com, richard@levitte.org, kurt@roeckx.be, shane.lontis@oracle.com, jeffm@suse.com, vinschen@redhat.com, tobias@stoeckmann.org, rod@vagg.org, openssl-users@dukhovni.org, bkaduk@akamai.com, tmraz@fedoraproject.org, soh.19.hassan@gmail.com, acheevbhagat@hotmail.com, emilia@openssl.org, dwmw2@infradead.org, vcizek@suse.com, beldmit@gmail.com, David.Woodhouse@intel.com, k@rhe.jp, cesar.pereida@aalto.fi, davidben@google.com, viktor@twosigma.com, ismo.puustinen@intel.com, rsalz@akamai.com, ivo.raisr@oracle.com, dirk@testssl.sh, loganaden@gmail.com, Martin.Vejnar@avg.com, StudioEtrange@github.com, robert@swiecki.net, Gilles.Khouzam@microsoft.com, marquess@opensslfoundation.com, sashan@openssl.org, MegaManSec@users.noreply.github.com, matt@openssl.foundation, dann.frazier@chainguard.dev, zesheng@tamu.edu, evan9971@gmail.com, tomas@openssl.org, hamzah.yamani125@gmail.com, ousia@users.noreply.github.com, esyr@openssl.org, xaum.io@gmail.com, marcel.d.cornu@intel.com, tomasz.kantecki@intel.com, simo@redhat.com, git@xen0n.name, David.von.Oheimb@siemens.com, dev@ddvo.net, security@1seal.org, nhorman@openssl.org, gmazyland@gmail.com, kenazcharisma@gmail.com, nikolap@openssl.org, daniel.vangeest@cryptonext-security.com, pedroluiscolmenares722@gmail.com, 625173@qq.com, openssl-machine@openssl.org, wo.ideafarm.publication.delayed.4.yrs@ideafarm.com, beck@openssl.org, tgautot.off@gmail.com, norbertp@openssl.org, jon@jlericson.com, kubec@openssl.org, igus68@gmail.com, dimitri.ledkov@surgut.co.uk, frederik.wedel-heinen@dencrypt.dk, stephen.farrell@cs.tcd.ie, samuel.sapalski@nokia.com, dev@drbeat.li, 57787676+baentsch@users.noreply.github.com, anthony.roberts@linaro.org, ppzgs1@gmail.com, Nachel72@outlook.com, ankudutt101@gmail.com, dengler@linux.ibm.com, niels.dossche@ugent.be, 6242627+vkryl@users.noreply.github.com, zacik.pa@gmail.com, itot1198@gmail.com, nikolas.gauder@tum.de, i@zenithal.me, saurabhkushwahjnv@gmail.com, jiashengjiangcool@gmail.com, julian.oerv@isrc.iscas.ac.cn, tacopeland@proton.me, zhou.lu1@zte.com.cn, liuyimingwo@qq.com, lanming@huawei.com, Matthias.Kraft@ibm.com, ryhooper@cisco.com, caolanm@gmail.com, ssam3003@gmail.com, ant.v.moryakov@gmail.com, iakov.polyak@linaro.org, stefanrieche@gmail.com, aicommander@gmail.com, dmitry@openssl.org, syohex@gmail.com, cllang@redhat.com, tripathiaayush249@gmail.com, philipp@redfish-solutions.com, zijie4@illinois.edu, keremkat@gmail.com, tb@openbsd.org, sahana@redhat.com, szidek@redhat.com, praveen.palaniswamy@gmail.com, tejaswid328@gmail.com, nakayamakenjiro@gmail.com, arne@rfc2549.org, anedvedicky@gmail.com, norbertpocs0@gmail.com, git@oneton.nl, kelseymulrooney@kem6536.student.rit.edu, arianaciaschini@MacBook-Air-78.local, zacharythecdr@gmail.com, Martin.MA.Rauch@bmw.de, nm.brink21@gmail.com, tap91624@gmail.com, git@jvdsn.com, kraxel@redhat.com, AWilcox@Wilcox-Tech.com, ryan@rschanz.org, 44705759+lkurlandski@users.noreply.github.com, Malgorzata.Olszowka@stunnel.org, ifranzki@linux.ibm.com, cwansart@users.noreply.github.com, jlu@pengutronix.de, mironenko@rutoken.ru, n.blaismiko@gmail.com, engel.teddy@gmail.com, yugandhar@allthingsincloud.com, 121612281+Kenzlee51@users.noreply.github.com, anr1629@rit.edu, dev.json2@gmail.com, rickandmorty850@gmail.com, vchlup@redhat.com, aitsygunka@yandex.ru, minfrin@sharp.fm, jiasheng@purdue.edu, 49699333+dependabot[bot]@users.noreply.github.com, hangzegao@gmail.com, tianjia.zhang@linux.alibaba.com, yangtianlong1224@163.com, martinlitre@mac.com, pauli@openssl.org, floppym@gentoo.org, gang.c.chen@intel.com, hkario@redhat.com, hlandau@openssl.org, iam@valdikss.org.ru, Todd.Miller@sudo.ws, gb.gwon@stackframe.dev, adam@westernsemico.com, cody.m.blanchard@outlook.com, n42950m@proton.me, jakub.openssl@gmail.com, eburkov@rvision.ru, hyuk.kim@ahnlab.com, sebastian@breakpoint.cc, 72301871+AutoVincent@users.noreply.github.com, mae@vypercore.com, dummyunit@gmail.com, tashernadav@gmail.com, other_ddn@mail.ru, nicknickolaev@gmail.com, tom.cosgrove@arm.com, dg0yt@darc.de, job@sobornost.net, zinger.ad@gmail.com, 1249843194@qq.com, github@mxsasha.eu, shaktishah33@gmail.com, mberchtold@gmail.com, zelda923@gmail.com, rodriguez.twister@gmail.com, oleg.hoefling@gmail.com, artsin666@gmail.com, arsdragonfly@gmail.com, jta2866@rit.edu, viktor@openssl.org, paul.louvel@bootlin.com, dambi@tio.cz, tomas@openssl.foundation, s8lugerl@stud.uni-saarland.de, taavi.eomae+github@gmail.com, drokov@rutoken.ru, staceyzheng10@gmail.com, pranavjeetnaidu@gmail.com, dongbeiouba@gmail.com, igus@openssl.foundation, wmf1426@rit.edu, git@amaanq.com, zac9557@rit.edu, easonysliu@tencent.com, 13811521135@163.com, marcel.merkle@sap.com, 68353531+frostb1ten@users.noreply.github.com, joseph.paul@soti.net, brittany.morris384@gmail.com, johnclaus@gmail.com, mounir.idrassi@idrix.fr, beck.wolfgang@oracle.com, mcr@sandelman.ca, jorton@redhat.com, 33973272+abmusse@users.noreply.github.com, christoph.muellner@vrull.eu, dnsands@sandia.gov, jakub.zelenka@openssl.foundation, ncj2394@rit.edu, kiyolee@gmail.com, liuermeng2@huawei.com, daniel@yesql.se, kubec@openssl.foundation, gellert.nagy@redpanda.com, jlg1061@rit.edu, sunwoolee@kentech.ac.kr, dtsen@us.ibm.com, andrewd@openssl.org, gcwilson@linux.ibm.com, carter.thaxton@gmail.com, helzhang@cisco.com, collin.funk1@gmail.com, ams4222@rit.edu, orgads@gmail.com, abhinavagarwal1996@gmail.com, cjb5326@rit.edu, jaruga@redhat.com, bbb@iki.fi, adityapatil.id@gmail.com, dvd8106@g.rit.edu, jjelen@redhat.com, njh215@snu.ac.kr, daniel@seventysix.io, pimterry@gmail.com, corngood@gmail.com, ranjan.rajeev@siemens.com, stk5106@rit.edu, alexander.heinlein@web.de, 50404684+alexprabhat99@users.noreply.github.com, yavtuk@yandex.ru, julian.klode@canonical.com, jonathan@wilbur.space, artem.bartel@gmail.com, zintensitydev@gmail.com, tom@teamfay.co.uk, coolshrid@hotmail.com, wangxin03@loongson.cn, GermanAizek@yandex.ru, r@dutoit.za.net, paulyang.inf@gmail.com, fdasilvayy@gmail.com, jon.spillett@oracle.com, tshort@akamai.com, rguimaraes@fastly.com, sandersclanfam@gmail.com, randall.becker@nexbridge.ca, scott@elyanlabs.ai, pazdvdv@gmail.com, 2055877225@qq.com, 90088670+TeshanK@users.noreply.github.com, lars.erik.wik@northern.tech, jakubanderle@outlook.cz, abaez0728@gmail.com, 134687127+thomas-baumela-stormshield@users.noreply.github.com, ulrich.weber@gmail.com, bleeqtheproducer@gmail.com, luigino.camastra@aisle.com, grzesiek11@stary.pc.pl, ritesh.kumar0793@gmail.com, kleinmrk@gmail.com, gpe@grahamedgecombe.com, tatsuhiro.t@gmail.com, brnrd@FreeBSD.org
+
+Project URL: https://github.com/openssl/openssl
+
+Package Download URL: https://github.com/openssl/openssl/archive/31157bc0b46e04227b8468d3e6915e4d0332777c.zip
+
+--------------------------------------------------------------------------------
+Package Title: rax (1927550cb218ec3c3dda8b39d82d1d019bf0476d)
+
+Package Locator: git+github.com/antirez/rax$1927550cb218ec3c3dda8b39d82d1d019bf0476d
+
+Package Depth: Direct
+--------------------------------------------------------------------------------
+
+* Concluded Licenses *
+BSD-2-Clause
+
+
+Copyright (c) 2017, Salvatore Sanfilippo <antirez@gmail.com>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+
+Copyright (c) 2017, Salvatore Sanfilippo <antirez@gmail.com>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+
+* Copyrights *
+
+
+BSD-2-Clause
+Copyright (c) 2017 Salvatore Sanfilippo <antirez@gmail.com>
+* Package Info *
+
+Authors: antirez@gmail.com, zhangxiaobin04@meituan.com, sina.yamac@gmail.com, yzx_happyforever@163.com, adrukh@users.noreply.github.com, rdmosolgo@gmail.com, jonmcalder@gmail.com
+
+Project URL: https://github.com/antirez/rax
+
+Package Download URL: https://github.com/antirez/rax/archive/1927550cb218ec3c3dda8b39d82d1d019bf0476d.zip
+
+--------------------------------------------------------------------------------
+Package Title: uthash (e493aa90a2833b4655927598f169c31cfcdf7861)
+
+Package Locator: git+github.com/troydhanson/uthash$e493aa90a2833b4655927598f169c31cfcdf7861
+
+Package Depth: Direct
+--------------------------------------------------------------------------------
+
+* Concluded Licenses *
+BSD-1-Clause
+
+
+Copyright (c) 2005-2021, Troy D. Hanson    http://troydhanson.github.com/uthash/
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+Copyright (c) 2005-2021, Troy D. Hanson    http://troydhanson.github.com/uthash/
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+* Copyrights *
+
+BSD-1-Clause
+Copyright (c) 2005-2021 Troy D. Hanson  http://troydhanson.github.com/uthash/
+Copyright (c) 2005-2021 Troy D. Hanson    http://troydhanson.github.com/uthash/
+
+* Package Info *
+
+Authors: arthur.j.odwyer@gmail.com, tdh@tkhanson.net, troy.hanson@jhuapl.edu, 95807405+BledsoeJoe@users.noreply.github.com, aniketbiswas625@gmail.com, as@php.net, alois@aloisklink.com, guangyao.ma@outlook.com, moritzwarning@web.de, kaloyan_petrov@mail.bg, bergmann@tzi.org, thirdedition@gmx.net, hong@topbug.net, peterkokot@gmail.com, tbeu@users.noreply.github.com, pawel.veselov@gmail.com
+
+Project URL: https://github.com/troydhanson/uthash
+
+Package Download URL: https://github.com/troydhanson/uthash/archive/e493aa90a2833b4655927598f169c31cfcdf7861.zip
+
+--------------------------------------------------------------------------------
+Package Title: zlib (1.2.11)
+
+Package Locator: url-private+48578/https://zlib.net/fossils/zlib-1.2.11.tar.gz$1.2.11
+
+Package Depth: Direct
+--------------------------------------------------------------------------------
+
+* Concluded Licenses *
 Zlib
-----
-
-zlib License
-
-This software is provided 'as-is', without any express or implied warranty.  In no event will the
-authors be held liable for any damages arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose, including commercial
-applications, and to alter it and redistribute it freely, subject to the following restrictions:
-
-     1. The origin of this software must not be misrepresented; you must not claim that you wrote
-the original software. If you use this software in a product, an acknowledgment in the product
-documentation would be appreciated but is not required.
-
-     2. Altered source versions must be plainly marked as such, and must not be misrepresented as
-being the original software.
-
-     3. This notice may not be removed or altered from any source distribution.
 
 
+This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+   1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+   2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+   3. This notice may not be removed or altered from any source distribution.
+
+
+zlib License Copyright (c) <year> <copyright holders>
+This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
+Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+   1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+   2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+   3. This notice may not be removed or altered from any source distribution.
+
+
+* Copyrights *
+
+
+
+
+
+
+* Package Info *
+
+Project URL: https://zlib.net/
+
+Package Download URL: https://zlib.net/fossils/zlib-1.2.11.tar.gz
+
+
+================================================================================
+
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Report Generated by FOSSA on 2026-4-28
