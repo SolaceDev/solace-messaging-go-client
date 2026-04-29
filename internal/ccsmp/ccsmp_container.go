@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -183,6 +183,8 @@ func (opaqueContainer *SolClientOpaqueContainer) SolClientContainerGetField(key 
 // GetData converts the field into the relevant golang type. In particular,
 // fbool, uint8-64, int8-64, string, byte array, float, double, nil,
 // wchar, *SolClientOpaqueContainer or *SolClientContainerDest
+//
+//gocyclo:ignore
 func GetData(field SolClientField) (interface{}, bool) {
 	switch field._type {
 	case C.SOLCLIENT_BOOL:

@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -468,7 +468,7 @@ func (receiver *directMessageReceiverImpl) TerminateAsyncCallback(gracePeriod ti
 	}()
 }
 
-// AddSubscription will subscribe to another message source on a PubSub+ Broker to receive messages from.
+// AddSubscription will subscribe to another message source on a Solace Event Broker to receive messages from.
 // Will block until subscription is added.
 // Returns a solace/errors.*IllegalStateError if the service is not running.
 // Returns a solace/errors.*IllegalArgumentError if unsupported Subscription type is passed.
@@ -627,7 +627,7 @@ func (receiver *directMessageReceiverImpl) unsubscribe(topic string) (core.Subsc
 	return receiver.internalReceiver.Unsubscribe(topic, receiver.dispatch)
 }
 
-// AddSubscriptionAsync will subscribe to another message source on a PubSub+ Broker to receive messages from.
+// AddSubscriptionAsync will subscribe to another message source on a Solace Event Broker to receive messages from.
 // Will block until subscription is added.
 // Returns a solace/errors.*IllegalStateError if the service is not running.
 // Returns a solace/errors.*IllegalArgumentError if unsupported Subscription type is passed.
@@ -986,7 +986,7 @@ func (receiver *directMessageReceiverImpl) addCacheSessionToMapIfNotPresent(cach
 	err = nil
 	if _, found := receiver.cacheRequestMap.Load(cacheRequest.Index()); found {
 		/* Pre-existing cache session found. This error is fatal to the operation but not to the API since
-		 * this does not block other activities like subscribing or trying to send a distint cache request, but does
+		 * this does not block other activities like subscribing or trying to send a distinct cache request, but does
 		 * prevent the API from indexing the cache session which is necessary for tracking cache request lifecycles.
 		 */
 		err = solace.NewError(&solace.IllegalStateError{},
@@ -1001,7 +1001,7 @@ func (receiver *directMessageReceiverImpl) addCacheSessionToMapIfNotPresent(cach
 func (receiver *directMessageReceiverImpl) RequestCachedAsync(cachedMessageSubscriptionRequest resource.CachedMessageSubscriptionRequest, cacheRequestID apimessage.CacheRequestID) (<-chan solace.CacheResponse, error) {
 	/* NOTE: We need to hold the lock around the state check and resource alloc because we need to guard against
 	 * two race conditions:
-	 * 1. Multiple threads submitting cache requests and simlutaneously initializing the cacheResponseChan, thus
+	 * 1. Multiple threads submitting cache requests and simultaneously initializing the cacheResponseChan, thus
 	 *    potentially overwriting any data written to that channel.
 	 * 2. Multiple threads submitting cache requests when the receiver is approaching MaxOutstandingCacheRequests
 	 *    outstanding requests, where the threads would race between checking the numOutstandingCacheRequests

@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import (
 	"bytes"
 	"fmt"
 	"go/format"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
@@ -32,9 +31,9 @@ import (
  * Generator utils provides helper functions for generating blocks of go code from C enums
  */
 
-const copyrightHeader = `// pubsubplus-go-client
+const copyrightHeader = `// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -159,7 +158,7 @@ func FromEnum(inputFile, outputFile, enumName, enumPrefix, variablePrefix, typeN
 }
 
 func readFile(inputFile string) []byte {
-	data, err := ioutil.ReadFile(inputFile)
+	data, err := os.ReadFile(inputFile)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

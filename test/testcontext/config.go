@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package testcontext
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"reflect"
 	"strconv"
@@ -39,19 +38,22 @@ type TestConfig struct {
 
 // TestContainersConfig common context specific config should be placed here
 type TestContainersConfig struct {
-	BrokerHostname    string `json:"broker_hostname,omitempty" env:"PUBSUB_HOSTNAME"`
-	ToxiProxyHostname string `json:"toxiproxy_hostname,omitempty" env:"TOXIPROXY_HOSTNAME"`
-	BrokerTag         string `json:"broker_tag,omitempty" env:"PUBSUB_TAG"`
-	BrokerRepo        string `json:"broker_repo,omitempty" env:"PUBSUB_REPO_BASE"`
-	BrokerEdition     string `json:"broker_edition,omitempty" env:"PUBSUB_EDITION"`
-	NetworkName       string `json:"network_name,omitempty" env:"PUBSUB_NETWORK_NAME"`
+	BrokerHostname         string `json:"broker_hostname,omitempty" env:"PUBSUB_HOSTNAME"`
+	BrokerContainerName    string `json:"broker_container_name,omitempty" env:"PUBSUB_CONTAINER_NAME"`
+	ToxiProxyHostname      string `json:"toxiproxy_hostname,omitempty" env:"TOXIPROXY_HOSTNAME"`
+	ToxiProxyContainerName string `json:"toxiproxy_container_name,omitempty" env:"TOXIPROXY_CONTAINER_NAME"`
+	BrokerTag              string `json:"broker_tag,omitempty" env:"PUBSUB_TAG"`
+	BrokerRepo             string `json:"broker_repo,omitempty" env:"PUBSUB_REPO_BASE"`
+	BrokerEdition          string `json:"broker_edition,omitempty" env:"PUBSUB_EDITION"`
+	NetworkName            string `json:"network_name,omitempty" env:"PUBSUB_NETWORK_NAME"`
 }
 
 // OAuthConfig represents OAuth's config
 type OAuthConfig struct {
-	Hostname  string               `json:"hostname,omitempty" env:"PUBSUB_OAUTHSERVER_HOSTNAME"`
-	Endpoints *OAuthEndpointConfig `json:"endpoints,omitempty"`
-	Image     string               `env:"OAUTH_TEST_IMAGE"`
+	Hostname      string               `json:"hostname,omitempty" env:"PUBSUB_OAUTHSERVER_HOSTNAME"`
+	ContainerName string               `json:"container_name,omitempty" env:"PUBSUB_OAUTHSERVER_CONTAINER_NAME"`
+	Endpoints     *OAuthEndpointConfig `json:"endpoints,omitempty"`
+	Image         string               `env:"OAUTH_TEST_IMAGE"`
 }
 
 // OAuthEndpointConfig
@@ -62,21 +64,24 @@ type OAuthEndpointConfig struct {
 
 // KerberosConfig represents Kerberos's config
 type KerberosConfig struct {
-	Image    string `json:"image" env:"KRB_TEST_IMAGE"`
-	Hostname string `json:"hostname" env:"PUBSUB_KDC_HOSTNAME"`
-	Domain   string `json:"domain" env:"PUBSUB_DOMAIN"`
-	Username string `json:"username" env:"KUSER"`
-	Password string `json:"password" env:"KPASSWORD"`
+	Image         string `json:"image" env:"KRB_TEST_IMAGE"`
+	Hostname      string `json:"hostname" env:"PUBSUB_KDC_HOSTNAME"`
+	ContainerName string `json:"container_name,omitempty" env:"PUBSUB_KDC_CONTAINER_NAME"`
+	Domain        string `json:"domain" env:"PUBSUB_DOMAIN"`
+	Username      string `json:"username" env:"KUSER"`
+	Password      string `json:"password" env:"KPASSWORD"`
 }
 
 // CacheConfig represents Cache's config
 type CacheConfig struct {
 	Image string `env:"SOLCACHE_TEST_IMAGE"` // The image is proprietary, so we don't want to commit its name
 	// or other info to vcs.
-	Hostname          string                   `json:"hostname" env:"PUBSUB_CACHE_HOSTNAME"`
-	SuspectHostname   string                   `json:"suspect_hostname" env:"PUBSUB_CACHE_SUSPECT_HOSTNAME"`
-	Vpn               string                   `json:"vpn"`
-	DistributedCaches []DistributedCacheConfig `json:"distributed_caches"`
+	Hostname             string                   `json:"hostname" env:"PUBSUB_CACHE_HOSTNAME"`
+	ContainerName        string                   `json:"container_name,omitempty" env:"PUBSUB_CACHE_CONTAINER_NAME"`
+	SuspectHostname      string                   `json:"suspect_hostname" env:"PUBSUB_CACHE_SUSPECT_HOSTNAME"`
+	SuspectContainerName string                   `json:"suspect_container_name,omitempty" env:"PUBSUB_CACHE_SUSPECT_CONTAINER_NAME"`
+	Vpn                  string                   `json:"vpn"`
+	DistributedCaches    []DistributedCacheConfig `json:"distributed_caches"`
 }
 
 // DistributedCacheConfig represents the DistributedCache's config
@@ -161,7 +166,7 @@ func toEnvironment(val interface{}) map[string]string {
 
 func (config *TestConfig) loadConfig(configFile string) error {
 	// TODO allow additional config files to be layered through environment variables
-	configJSON, err := ioutil.ReadFile(configFile)
+	configJSON, err := os.ReadFile(configFile)
 	if err != nil {
 		return err
 	}

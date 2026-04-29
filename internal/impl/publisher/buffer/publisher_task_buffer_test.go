@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package buffer
 
 import (
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -32,18 +34,32 @@ func TestTaskBufferSubmitTask(t *testing.T) {
 		close(result)
 	}
 	taskBuffer.Submit(myTask)
+
+	// Use a WaitGroup to ensure the function completes before we check the result
+	var wg sync.WaitGroup
+	wg.Add(1)
+
 	select {
 	case fn := <-testSharedBuffer:
-		fn()
+		go func() {
+			defer wg.Done()
+			fn()
+		}()
 	case <-time.After(100 * time.Millisecond):
 		t.Error("timed out waiting for function to be pushed to the shared buffer")
+		wg.Done() // Ensure WaitGroup is decremented even on error
 	}
+
+	// Wait for the function to complete
+	wg.Wait()
+
 	select {
 	case <-result:
 		// success
 	default:
 		t.Error("function passed through task buffer did not execute")
 	}
+
 	graceful := taskBuffer.Terminate(time.NewTimer(100 * time.Millisecond))
 	if !graceful {
 		t.Error("expected task buffer to be shut down gracefully")
@@ -104,12 +120,14 @@ func TestExecutorTerminateUngracefullyWithInFlightTasks(t *testing.T) {
 		close(done)
 	}
 	taskBuffer.Submit(myTask)
+
 	select {
 	case fn := <-testSharedBuffer:
 		go fn()
 	case <-time.After(100 * time.Millisecond):
 		t.Error("timed out waiting for function to be pushed to the shared buffer")
 	}
+
 	graceful := taskBuffer.Terminate(time.NewTimer(100 * time.Millisecond))
 	if graceful {
 		t.Error("expected an ungraceful shutdown when task is blocking forever, but we shutdown gracefully")
@@ -138,27 +156,43 @@ func TestExecutorTerminationWhileWaitingForTaskSubmission(t *testing.T) {
 	testSharedBuffer := make(chan core.SendTask)
 	taskBuffer := NewChannelBasedPublisherTaskBuffer(100, func() chan core.SendTask { return testSharedBuffer })
 	go taskBuffer.Run()
-	called := false
+
+	var called int32
 	myTask := func(interrupt chan struct{}) {
-		called = true
+		atomic.StoreInt32(&called, 1)
 	}
+
 	success := taskBuffer.Submit(myTask)
 	if !success {
 		t.Error("expected task to be submitted, but it was rejected")
 	}
+
+	// Use a WaitGroup to ensure the task is executed before checking the result
+	var wg sync.WaitGroup
+	wg.Add(1)
+
 	select {
 	case task := <-testSharedBuffer:
-		task()
+		go func() {
+			defer wg.Done()
+			task()
+		}()
 	case <-time.After(100 * time.Millisecond):
 		t.Error("task was not submitted to the shared buffer")
+		wg.Done() // Ensure WaitGroup is decremented even on error
 	}
+
+	// Wait for the task to complete
+	wg.Wait()
+
 	// Wait for the task buffer to start waiting for a task
 	<-time.After(100 * time.Millisecond)
 	graceful := taskBuffer.Terminate(time.NewTimer(100 * time.Millisecond))
 	if !graceful {
 		t.Error("expected task buffer to be shut down gracefully")
 	}
-	if !called {
+
+	if atomic.LoadInt32(&called) != 1 {
 		t.Error("task was never called")
 	}
 }
@@ -188,27 +222,42 @@ func TestExecutorTerminateJoin(t *testing.T) {
 		<-blocker
 	}
 	success := taskBuffer.Submit(myTask)
+
+	// Use a WaitGroup to ensure the task is started
+	var taskStarted sync.WaitGroup
+	taskStarted.Add(1)
+
 	go func() {
-		(<-testSharedBuffer)()
+		task := <-testSharedBuffer
+		taskStarted.Done() // Signal that we've received the task
+		task()
 	}()
+
 	if !success {
 		t.Error("expected task to be submitted, but it was rejected")
 	}
-	unblocked := false
+
+	// Wait for the task to be started
+	taskStarted.Wait()
+
+	var unblocked int32 = 0 // initial state
 	terminateSuccess := make(chan struct{})
+
 	go func() {
 		graceful := taskBuffer.Terminate(time.NewTimer(10 * time.Millisecond))
 		if graceful {
 			t.Error("expected task buffer to be shut down ungracefully")
 		}
-		if !unblocked {
+		if atomic.LoadInt32(&unblocked) != 1 {
 			t.Error("expected terminate to block until threads were joined")
 		}
 		close(terminateSuccess)
 	}()
+
 	<-time.After(100 * time.Millisecond)
-	unblocked = true
+	atomic.StoreInt32(&unblocked, 1)
 	close(blocker)
+
 	select {
 	case <-terminateSuccess:
 		// success
@@ -226,24 +275,39 @@ func TestExecutorTerminateNow(t *testing.T) {
 		<-blocker
 	}
 	success := taskBuffer.Submit(myTask)
+
+	// Use a WaitGroup to ensure the task is started
+	var taskStarted sync.WaitGroup
+	taskStarted.Add(1)
+
 	go func() {
-		(<-testSharedBuffer)()
+		task := <-testSharedBuffer
+		taskStarted.Done() // Signal that we've received the task
+		task()
 	}()
+
 	if !success {
 		t.Error("expected task to be submitted, but it was rejected")
 	}
-	unblocked := false
+
+	// Wait for the task to be started
+	taskStarted.Wait()
+
+	var unblocked int32
 	terminateSuccess := make(chan struct{})
+
 	go func() {
 		taskBuffer.TerminateNow()
-		if unblocked {
+		if atomic.LoadInt32(&unblocked) == 1 {
 			t.Error("expected terminate now to return immediately")
 		}
 		close(terminateSuccess)
 	}()
+
 	<-time.After(100 * time.Millisecond)
-	unblocked = true
+	atomic.StoreInt32(&unblocked, 1)
 	close(blocker)
+
 	select {
 	case <-terminateSuccess:
 		// success

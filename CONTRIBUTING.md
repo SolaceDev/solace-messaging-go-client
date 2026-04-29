@@ -2,9 +2,9 @@
 
 #### **Did you find a bug?**
 
-* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/SolaceProducts/pubsubplus-go-client/issues).
+* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/SolaceProducts/solace-messaging-go-client/issues).
 
-* If you're unable to find an open issue that addresses the problem, [open a new one](https://github.com/SolaceProducts/pubsubplus-go-client/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
+* If you're unable to find an open issue that addresses the problem, [open a new one](https://github.com/SolaceProducts/solace-messaging-go-client/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
 
 #### **Did you write a patch that fixes a bug?**
 
@@ -14,17 +14,17 @@
 
 #### **Do you intend to add a new feature or change an existing one?**
 
-* Open a GitHub [enhancement request issue](https://github.com/SolaceProducts/pubsubplus-go-client/issues/new) and describe the new functionality.
+* Open a GitHub [enhancement request issue](https://github.com/SolaceProducts/solace-messaging-go-client/issues/new) and describe the new functionality.
 
 #### **Do you have questions about the source code?**
 
-* Ask any question about the code or how to use Solace PubSub+ in the [Solace community](https://solace.dev/community/).
+* Ask any question about the code or how to use Solace Event Brokers in the [Solace community](https://solace.dev/community/).
 
 ## Developer Guide
 
 ### Overview
 
-The Solace PubSub+ Messaging API for Go is a wrapper around the [Solace PubSub+ Messaging API for C](https://docs.solace.com/Solace-PubSub-Messaging-APIs/C-API/c-api-home.htm) and uses [Cgo](https://pkg.go.dev/cmd/cgo) for compilation.
+The Solace Messaging API for Go is a wrapper around the [Solace Messaging API for C](https://docs.solace.com/API/Messaging-APIs/C-API/c-api-home.htm) and uses [Cgo](https://pkg.go.dev/cmd/cgo) for compilation.
 
 ### Repository Contents
 
@@ -32,12 +32,12 @@ The following are the directories that are part of the repository:
 - `./`: contains the API's main entrypoints such as messaging.NewMessagingServiceBuilder
 - `pkg`: contains the API's interfaces, constants, configuration options and basic data structures
 - `lib`: contains the native C libraries used for high performance messaging
-- `internal`: contains the implementation for the PubSub+ API for Go
-- `test`: contains integration tests for the PubSub+ API for Go
+- `internal`: contains the implementation for the Solace Messaging API for Go
+- `test`: contains integration tests for the Solace Messaging API for Go
 
 ### Prerequisites
 
-There are a handful of prerequisites for developing the Solace PubSub+ Messaging API for Go:
+There are a handful of prerequisites for developing the Solace Messaging API for Go:
 - Golang version 1.17+
 - A golang enabled code editor, preferably with format on save
     - https://github.com/fatih/vim-go

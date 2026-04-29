@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ package test
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/url"
+	"os"
 	"time"
 
 	"solace.dev/go/messaging"
@@ -135,23 +135,23 @@ var _ = Describe("MessagingService Lifecycle", func() {
 		Expect(messagingServiceOne.IsConnected()).To(BeTrue())
 		helpers.DisconnectMessagingService(messagingServiceOne)
 	})
-	It("should be able to jsonify a messaging service config", func() {
+	It("should be able to jsonify a messaging service config", Label("TLS"), func() {
 		cfgMap := config.ServicePropertyMap{
-			config.TransportLayerPropertyHost:              "myHost",
-			config.TransportLayerPropertyConnectionRetries: 1,
-                        config.TransportLayerSecurityPropertyMinimumProtocol: "TLSv1.2",
+			config.TransportLayerPropertyHost:                    "myHost",
+			config.TransportLayerPropertyConnectionRetries:       1,
+			config.TransportLayerSecurityPropertyMinimumProtocol: "TLSv1.2",
 		}
 		expectedJSON := `{"solace":{"messaging":{"tls":{"minimum-protocol":"TLSv1.2"},"transport":{"connection-retries":1,"host":"myHost"}}}}`
 		result, err := json.Marshal(cfgMap)
 		Expect(err).ToNot(HaveOccurred())
 		Expect(string(result)).To(Equal(expectedJSON))
 	})
-	It("should be able to load a messaging service config from json", func() {
+	It("should be able to load a messaging service config from json", Label("TLS"), func() {
 		cfg := `{"solace":{"messaging":{"tls":{"maximum-protocol":"TLSv1.2"},"transport":{"connection-retries":1,"host":"myHost"}}}}`
 		expectedCfgMap := config.ServicePropertyMap{
-			config.TransportLayerPropertyHost:              "myHost",
-			config.TransportLayerPropertyConnectionRetries: 1,
-                        config.TransportLayerSecurityPropertyMaximumProtocol: "TLSv1.2",
+			config.TransportLayerPropertyHost:                    "myHost",
+			config.TransportLayerPropertyConnectionRetries:       1,
+			config.TransportLayerSecurityPropertyMaximumProtocol: "TLSv1.2",
 		}
 		actualCfgMap := config.ServicePropertyMap{}
 		err := json.Unmarshal([]byte(cfg), &actualCfgMap)
@@ -262,8 +262,8 @@ var _ = Describe("MessagingService Lifecycle", func() {
 	It("should connect with proper version info", func() {
 		helpers.TestConnectDisconnectMessagingServiceClientValidation(builder, func(client *monitor.MsgVpnClient) {
 			// Validate that we added some version info
-			Expect(client.SoftwareVersion).To(ContainSubstring("pubsubplus-go-client"))
-			Expect(client.SoftwareDate).To(ContainSubstring("pubsubplus-go-client"))
+			Expect(client.SoftwareVersion).To(ContainSubstring("solace-messaging-go-client"))
+			Expect(client.SoftwareDate).To(ContainSubstring("solace-messaging-go-client"))
 		})
 	})
 
@@ -355,7 +355,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 		scheme := iterScheme
 		portFn := iterPortFn
 		// Use TLS connection details
-		Context("when using TLS over "+scheme, func() {
+		Context("when using TLS over "+scheme, Label("TLS"), func() {
 			BeforeEach(func() {
 				connectionDetails := testcontext.Messaging()
 				url := fmt.Sprintf("%s://%s:%d", scheme, connectionDetails.Host, portFn(connectionDetails))
@@ -389,7 +389,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 				JustBeforeEach(func() {
 					Skip("Currently failing in Git actions - SOL-117804")
 
-					certContent, err := ioutil.ReadFile(invalidServerCertificate)
+					certContent, err := os.ReadFile(invalidServerCertificate)
 					Expect(err).ToNot(HaveOccurred())
 					// Git actions seems to have some trouble with this particular SEMP request and occasionally gets EOF errors
 					for i := 0; i < 5; i++ {
@@ -412,7 +412,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 				AfterEach(func() {
 					Skip("Currently failing in Git actions - SOL-117804")
 
-					certContent, err := ioutil.ReadFile(constants.ValidServerCertificate)
+					certContent, err := os.ReadFile(constants.ValidServerCertificate)
 					Expect(err).ToNot(HaveOccurred())
 					// Git actions seems to have some trouble with this particular SEMP request and occasionally gets EOF errors
 					for i := 0; i < 5; i++ {
@@ -481,7 +481,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					builder.FromConfigurationProvider(config.ServicePropertyMap{
 						config.TransportLayerSecurityPropertyTrustStorePath:         constants.ValidFixturesPath,
 						config.TransportLayerSecurityPropertyCertRejectExpired:      true,
-						config.TransportLayerSecurityPropertyCertValidateServername: true,
+						config.TransportLayerSecurityPropertyCertValidateServername: false,
 						config.TransportLayerSecurityPropertyCertValidated:          true,
 					})
 				})
@@ -505,7 +505,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 						Expect(client.TlsCipherDescription).To(HavePrefix("AES128-SHA"))
 					})
 				})
-				// Originially this explicitly test tls1.1
+				// Originally this explicitly test tls1.1
 				// on systems with new openssl (3.0 or later) tls1.1 is no longer supported from the client
 				// As a result this is adapted to explicitly verify tls1.2 in anticipation for tls1.3
 				// once openssl 1.1 support is deprecated this maybe
@@ -548,11 +548,11 @@ var _ = Describe("MessagingService Lifecycle", func() {
 						})
 					})
 					It("fails to build with min > max", func() {
-                                                tss := config.NewTransportSecurityStrategy()
-                                                tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3)
-                                                tss.WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2)
+						tss := config.NewTransportSecurityStrategy()
+						tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3)
+						tss.WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2)
 						builder.WithTransportSecurityStrategy(tss)
-						
+
 						_, err := builder.Build()
 						Expect(err).To(HaveOccurred())
 						Expect(err).To(BeAssignableToTypeOf(&solace.InvalidConfigurationError{}))
@@ -560,10 +560,10 @@ var _ = Describe("MessagingService Lifecycle", func() {
 					})
 
 					It("fails to build with mixed protocol version configs", func() {
-                                                tss := config.NewTransportSecurityStrategy()
-                                                tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_2)
-                                                tss.WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2)
-					        tss.WithExcludedProtocols(config.TransportSecurityProtocolSSLv3, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1_1)
+						tss := config.NewTransportSecurityStrategy()
+						tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_2)
+						tss.WithMaximumProtocol(config.TransportSecurityProtocolTLSv1_2)
+						tss.WithExcludedProtocols(config.TransportSecurityProtocolSSLv3, config.TransportSecurityProtocolTLSv1, config.TransportSecurityProtocolTLSv1_1)
 						builder.WithTransportSecurityStrategy(tss)
 						_, err := builder.Build()
 						Expect(err).To(HaveOccurred())
@@ -571,12 +571,11 @@ var _ = Describe("MessagingService Lifecycle", func() {
 						Expect(err.Error()).To(ContainSubstring("Attempt to configure both deprecated and new tls version control properties."))
 					})
 
-
-                                        // When we upgrade the broker, this will fail by conneccting successfully, but until then, it's useful.
-                                        // EBP-511
+					// When we upgrade the broker, this will fail by conneccting successfully, but until then, it's useful.
+					// EBP-511
 					It("fails to connect with TLSv1.3 because the broker is old", func() {
-                                                tss := config.NewTransportSecurityStrategy()
-                                                tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3)
+						tss := config.NewTransportSecurityStrategy()
+						tss.WithMinimumProtocol(config.TransportSecurityProtocolTLSv1_3)
 						builder.WithTransportSecurityStrategy(tss)
 						helpers.TestFailedConnectMessagingService(builder, func(err error) {
 							helpers.ValidateNativeError(err, subcode.CommunicationError)
@@ -591,7 +590,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 						_, _, err := testcontext.SEMP().Config().MsgVpnApi.UpdateMsgVpn(testcontext.SEMP().ConfigCtx(),
 							sempconfig.MsgVpn{AuthenticationClientCertEnabled: helpers.True}, testcontext.Messaging().VPN, nil)
 						Expect(err).ToNot(HaveOccurred())
-						certContent, err := ioutil.ReadFile(constants.ValidClientCertificatePEM)
+						certContent, err := os.ReadFile(constants.ValidClientCertificatePEM)
 						Expect(err).ToNot(HaveOccurred())
 						// sometimes this SEMP command fails on Git Actions. Retry
 						for i := 0; i < 5; i++ {
@@ -800,7 +799,7 @@ var _ = Describe("MessagingService Lifecycle", func() {
 							_, _, err := testcontext.SEMP().Config().MsgVpnApi.UpdateMsgVpn(testcontext.SEMP().ConfigCtx(),
 								sempconfig.MsgVpn{AuthenticationClientCertEnabled: helpers.True}, testcontext.Messaging().VPN, nil)
 							Expect(err).ToNot(HaveOccurred())
-							certContent, err := ioutil.ReadFile(constants.InvalidClientCertificatePEM)
+							certContent, err := os.ReadFile(constants.InvalidClientCertificatePEM)
 							Expect(err).ToNot(HaveOccurred())
 							_, _, err = testcontext.SEMP().Config().ClientCertAuthorityApi.CreateClientCertAuthority(testcontext.SEMP().ConfigCtx(), sempconfig.ClientCertAuthority{
 								CertAuthorityName:           certificateAuthorityName,

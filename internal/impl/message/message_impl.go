@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -194,7 +194,7 @@ func (message *MessageImpl) GetCorrelationID() (id string, ok bool) {
 
 // GetExpiration will return the expiration time of the message.
 // The expiration time is UTC time when the message is discarded or
-// moved to the Dead Message Queue by the PubSub+ broker.
+// moved to the Dead Message Queue by the Solace Event Broker.
 // A value of 0 (as determined by time.isZero()) indicates that the
 // message never expires. The default value is 0.
 func (message *MessageImpl) GetExpiration() time.Time {

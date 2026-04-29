@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -580,6 +580,8 @@ func (publisher *persistentMessagePublisherImpl) publishWithBlockingContext(msg 
 }
 
 // publish impl taking a dup'd message, assuming state has been checked and we are running
+//
+//gocyclo:ignore
 func (publisher *persistentMessagePublisherImpl) publish(msg *message.OutboundMessageImpl, dest *resource.Topic, ctx correlationContext, userContext interface{}) (ret error) {
 
 	// Set the destination for the message which is assumed to be a dup'd message.

@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 // You can use MessagingServiceBuilder to create a client-based messaging service.
 // If you want to  use secure socket layer (SSL) endpoints, OpenSSL must installed on the systems
 // that run your client applications. Client applications secure connections to an event broker (or broker) using
-// SSL endpoints. For example on PubSub+ software event brokers, you can use
+// SSL endpoints. For example on Solace software event brokers, you can use
 // SMF TLS/SSL (default port of 55443) and Web Transport TLS/SSL connectivity (default port 1443)
 // for messaging. The ports that are utilized depends on the configuration broker.
 //

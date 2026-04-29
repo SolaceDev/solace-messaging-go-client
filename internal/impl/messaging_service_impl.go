@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -527,12 +527,12 @@ type apiInfo struct {
 	buildDate, version, vendor, userID string
 }
 
-// GetAPIBuildDate will return the build date of the Solace PubSub+ Golang API in use.
+// GetAPIBuildDate will return the build date of the Solace Messaging API for Go in use.
 func (info *apiInfo) GetAPIBuildDate() string {
 	return info.buildDate
 }
 
-// GetAPIVersion will return the version of the Solace PubSub+ Golang API in use.
+// GetAPIVersion will return the version of the Solace Messaging API for Go in use.
 func (info *apiInfo) GetAPIVersion() string {
 	return info.version
 }

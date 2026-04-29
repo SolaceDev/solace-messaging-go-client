@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,15 +39,11 @@ builder.goapi([
   "validationGoVer": 'auto-v1.17.x',
   "getTestPermutations": {
     List<List<String>> permutations = []
-    for (platform in [builder.LINUX_ARM, builder.LINUX_X86_64, builder.DARWIN_X86_64,  builder.DARWIN_ARM]) {
+    for (platform in [builder.LINUX_ARM, builder.LINUX_X86_64, builder.DARWIN_X86_64,  builder.DARWIN_ARM, builder.LINUX_MUSL]) {
       for (gover in ['auto-latest', 'auto-previous']) {
         permutations << [platform, gover]
       }
     }
-    // run tests on the last stable Go version (1.22.4) for linux musl
-    // See EBP-46
-    // and this issue here - https://go-review.googlesource.com/c/go/+/600296
-    permutations << [builder.LINUX_MUSL, 'auto-v1.22.4']
     return permutations
   }
 ]) 

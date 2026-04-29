@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 //go:build dummy
 // +build dummy
 
-// dummy.go includes the relevant ccsmp library directories to suport go vendoring.
+// dummy.go includes the relevant ccsmp library directories to support go vendoring.
 // It is excluded from all builds and exists as a workaround for https://github.com/golang/go/issues/26366.
 
 package ccsmp

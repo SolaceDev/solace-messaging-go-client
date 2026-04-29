@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2025 Solace Corporation. All rights reserved.
+// Copyright 2025-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -159,7 +159,7 @@ func (receiver *ccsmpBackedReceiver) CleanupCacheRequestSubscriptions(cacheReque
 // SendCacheRequest sends a creates a cache session and sends a cache request on that session. This method
 // assumes the receiver is in the proper state (running). The caller must guarantee this state before
 // attempting to send a cache request. Failing to do so will result in undefined behaviour.
-// dispatchID needs to be passed because the [DirectMessageReceiver] posesses a dispatch ID that can be
+// dispatchID needs to be passed because the [DirectMessageReceiver] possesses a dispatch ID that can be
 // different from the one maintained by the [ccsmpBackedReceiver]. When the [DirectMessageReceiver] is started,
 // it increments the service-wide dispatchID that is maintained by the [ccsmpBackedReceiver], and maintains a
 // copy of that dispatchID for the remainder of its lifecycle. It is not documented that this copy of the

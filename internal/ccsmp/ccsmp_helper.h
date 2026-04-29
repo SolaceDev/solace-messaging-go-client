@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -200,6 +200,6 @@ solClientgo_filterCachedMessageByCacheRequestId(solClient_opaqueSession_pt opaqu
     )
 
 solClient_returnCode_t
-solClientgo_msg_isRequestReponseMsg(solClient_opaqueMsg_pt msg_p, char **correlationId_p);
+solClientgo_msg_isRequestResponseMsg(solClient_opaqueMsg_pt msg_p, char **correlationId_p);
 
 #endif

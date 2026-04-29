@@ -1,23 +1,23 @@
 # Solace: solace.dev/go/messaging
-[![Test](https://github.com/SolaceProducts/pubsubplus-go-client/actions/workflows/test.yml/badge.svg)](https://github.com/SolaceProducts/pubsubplus-go-client/actions/workflows/test.yml)
+[![Test](https://github.com/SolaceProducts/solace-messaging-go-client/actions/workflows/test.yml/badge.svg)](https://github.com/SolaceProducts/solace-messaging-go-client/actions/workflows/test.yml)
 [![PkgGoDev](https://pkg.go.dev/badge/solace.dev/go/messaging.svg)](https://pkg.go.dev/solace.dev/go/messaging)
 [![Go Report Card](https://goreportcard.com/badge/solace.dev/go/messaging)](https://goreportcard.com/report/solace.dev/go/messaging)
 
-The Solace PubSub+ API for Go is used to access the services of a Solace PubSub+ Event Broker.
+The Solace Messaging API for Go is used to access the services of a Solace Event Broker.
 
 ## Getting Started
 
-To get started using the Solace PubSub+ API for Go, simply include it as a required module in your Go project by running `go get solace.dev/go/messaging`. The Solace PubSub+ API for Go requires Go version 1.17+.
+To get started using the Solace Messaging API for Go, simply include it as a required module in your Go project by running `go get solace.dev/go/messaging`. The Solace Messaging API for Go requires Go version 1.17+.
 
 ### Usage
 
 - Sample applications https://github.com/SolaceSamples/solace-samples-go.
-- Documentation https://docs.solace.com/Solace-PubSub-Messaging-APIs/Go-API/go-home.htm
+- Documentation https://docs.solace.com/API/Messaging-APIs/Go-API/go-home.htm
 - Developer reference https://docs.solace.com/API-Developer-Online-Ref-Documentation/go/
 
 ### OS Support
 
-The Solace PubSub+ API for Go is a wrapper around the high performance Solace C API via Cgo and has support for the following operating systems:
+The Solace Messaging API for Go is a wrapper around the high performance Solace C API via Cgo and has support for the following operating systems:
 - Linux (x86/x86_64) variants with Linux 2.6 or later (compatible with glibc (desktop/server) and musl-c (Alpine Linux))
 - Linux (arm64) variants compatible with glibc (desktop/server)
 - Windows WSL 2.0
@@ -30,7 +30,7 @@ Ensure that you read [CONTRIBUTING](CONTRIBUTING.md) for details on the process 
 
 ## Authors
 
-See the list of [contributors](https://github.com/SolaceProducts/pubsubplus-go-client/graphs/contributors) who participated in this project.
+See the list of [contributors](https://github.com/SolaceProducts/solace-messaging-go-client/graphs/contributors) who participated in this project.
 
 ## License
 
@@ -58,4 +58,4 @@ https://solace.com/support
 - The [Solace Developer Portal](https://dev.solace.com)
 - Understanding [Solace technology](https://solace.com/products/tech/)
 
-Copyright 2021-2025 Solace Corporation. All rights reserved.
+Copyright 2021-2026 Solace Corporation. All rights reserved.

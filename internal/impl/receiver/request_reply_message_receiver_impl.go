@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2024-2025 Solace Corporation. All rights reserved.
+// Copyright 2024-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ func (receiver *requestReplyMessageReceiverImpl) TerminateAsyncCallback(gracePer
 	receiver.directReceiver.TerminateAsyncCallback(gracePeriod, callback)
 }
 
-// AddSubscription will subscribe to another message source on a PubSub+ Broker to receive messages from.
+// AddSubscription will subscribe to another message source on a Solace Event Broker to receive messages from.
 // Will block until subscription is added.
 // Returns a solace/errors.*IllegalStateError if the service is not running.
 // Returns a solace/errors.*IllegalArgumentError if unsupported Subscription type is passed.
@@ -151,7 +151,7 @@ func (receiver *requestReplyMessageReceiverImpl) RemoveSubscription(subscription
 	return receiver.directReceiver.RemoveSubscription(subscription)
 }
 
-// AddSubscriptionAsync will subscribe to another message source on a PubSub+ Broker to receive messages from.
+// AddSubscriptionAsync will subscribe to another message source on a Solace Event Broker to receive messages from.
 // Will block until subscription is added.
 // Returns a solace/errors.*IllegalStateError if the service is not running.
 // Returns a solace/errors.*IllegalArgumentError if unsupported Subscription type is passed.

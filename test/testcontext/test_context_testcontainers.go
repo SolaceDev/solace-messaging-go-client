@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 package testcontext
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -27,7 +28,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/modules/compose"
 )
 
 // the default config file relative to the location the tests are run from
@@ -47,11 +48,14 @@ const solCacheSuspectHostNameDefaultValue = "solcache_suspect"
 
 type testContainersTestContext struct {
 	testContextCommon
-	compose *testcontainers.LocalDockerCompose
+	compose compose.ComposeStack
+	ctx     context.Context
 }
 
 func getTestContext() testContext {
-	context := testContainersTestContext{}
+	context := testContainersTestContext{
+		ctx: context.Background(),
+	}
 	return &context
 }
 
@@ -99,21 +103,26 @@ func (context *testContainersTestContext) Setup() error {
 		composeFilePaths = append(composeFilePaths, cacheProxyComposeFilePath)
 	}
 	identifier := strings.ToLower(uuid.New().String())
-	compose := testcontainers.NewLocalDockerCompose(composeFilePaths, identifier)
 
-	context.compose = compose
+	// Create the docker compose instance (new compose stack)
+	dockerCompose, err := compose.NewDockerComposeWith(
+		compose.StackIdentifier(identifier),
+		compose.WithStackFiles(composeFilePaths...),
+	)
+	if err != nil {
+		return err
+	}
+
+	dockerCompose.WithEnv(context.config.ToEnvironment()).WithOsEnv()
+	context.compose = dockerCompose
 
 	context.semp = newSempV2(context.config.SEMP)
 	context.toxi = newToxiProxy(context.config.ToxiProxy)
 
 	fmt.Println("Starting dockerized broker via docker-compose")
 
-	execError := context.compose.
-		WithEnv(context.config.ToEnvironment()).
-		WithCommand([]string{"up", "-d"}).
-		Invoke()
-
-	err := execError.Error
+	// Start the docker compose stack
+	err = context.compose.Up(context.ctx)
 	if err != nil {
 		return err
 	}
@@ -146,6 +155,7 @@ func (context *testContainersTestContext) Setup() error {
 	fmt.Println("Setting up ToxiProxy proxies")
 	err = context.toxi.setup()
 	if err != nil {
+		fmt.Println("Encountered error setting up ToxiProxy: " + err.Error())
 		return err
 	}
 
@@ -153,6 +163,7 @@ func (context *testContainersTestContext) Setup() error {
 		fmt.Println("Setting up Kerberos")
 		err = context.setupKerberos()
 		if err != nil {
+			fmt.Println("Encountered error setting up kerberos: " + err.Error())
 			return err
 		}
 	}
@@ -168,6 +179,7 @@ func (context *testContainersTestContext) Setup() error {
 		err = context.setupCache()
 		if err != nil {
 			context.cacheEnabled = false
+			fmt.Println("Encountered error setting up cache: " + err.Error())
 			return err
 		}
 	}
@@ -184,32 +196,37 @@ func (context *testContainersTestContext) Setup() error {
 func (context *testContainersTestContext) Teardown() error {
 	fmt.Println()
 	fmt.Println("-- TESTCONTAINERS TEARDOWN --")
-	pubsubHostname := context.config.TestContainers.BrokerHostname
+	pubsubContainerName := context.config.TestContainers.BrokerContainerName
 	err := context.toxi.teardown()
 	if err != nil {
 		fmt.Println("Encountered error tearing down toxiproxy: " + err.Error())
 	}
-	rc, output, err := context.dockerLogs(pubsubHostname)
+	rc, output, err := context.dockerLogs(pubsubContainerName)
 	if err == nil {
-		fmt.Println("Broker logs for " + pubsubHostname + ":")
+		fmt.Println("Broker logs for " + pubsubContainerName + ":")
 		fmt.Println(output)
 	} else {
-		fmt.Println("Encountered error getting docker logs from " + pubsubHostname + ": rc=" + string(rc) + " err:" + err.Error())
+		fmt.Println("Encountered error getting docker logs from " + pubsubContainerName + ": rc=" + string(rc) + " err:" + err.Error())
 	}
 	wd, err := os.Getwd()
 	if err != nil {
-		fmt.Println("Encountered error getting working directory for " + pubsubHostname + " diagnostics err:" + err.Error())
+		fmt.Println("Encountered error getting working directory for " + pubsubContainerName + " diagnostics err:" + err.Error())
 	}
 
 	err = context.gatherBrokerDiagnostics(path.Join(wd, "diagnostics.tgz"))
 	if err != nil {
-		fmt.Println("Encountered error getting " + pubsubHostname + " diagnostics err:" + err.Error())
+		fmt.Println("Encountered error getting " + pubsubContainerName + " diagnostics err:" + err.Error())
 	}
 
-	composeResult := context.compose.Down()
-	if composeResult.Error != nil {
-		err = composeResult.Error
-		fmt.Println("Encountered error tearing down docker compose: " + composeResult.Error.Error())
+	// Tear down the docker compose stack
+	err = context.compose.Down(
+		context.ctx,
+		compose.RemoveOrphans(true),
+		compose.RemoveVolumes(true),
+		compose.RemoveImagesLocal,
+	)
+	if err != nil {
+		fmt.Println("Encountered error tearing down docker compose: " + err.Error())
 	}
 	fmt.Println("-- TESTCONTAINERS TEARDOWN COMPLETE --")
 	return err
@@ -217,30 +234,30 @@ func (context *testContainersTestContext) Teardown() error {
 
 func (context *testContainersTestContext) gatherBrokerDiagnostics(destinationPath string) error {
 	fmt.Println()
-	pubsubHostname := context.config.TestContainers.BrokerHostname
-	// gather all important infomation and logs from pubsubHostname container
-	fmt.Println("Run gather-diagnostics for " + pubsubHostname + "...")
-	resp, output, err := context.dockerExec(pubsubHostname, []string{"/bin/bash", "-l", "-c", "\"gather-diagnostics\""})
+	pubsubContainerName := context.config.TestContainers.BrokerContainerName
+	// gather all important infomation and logs from pubsubContainerName container
+	fmt.Println("Run gather-diagnostics for " + pubsubContainerName + "...")
+	resp, output, err := context.dockerExec(pubsubContainerName, []string{"/bin/bash", "-l", "-c", "\"gather-diagnostics\""})
 	if err != nil {
 		return err
 	}
 	fmt.Println(output)
 	if resp != 0 {
-		return fmt.Errorf("failed to gather %s diagnostics", pubsubHostname)
+		return fmt.Errorf("failed to gather %s diagnostics", pubsubContainerName)
 	}
-	fmt.Println("Gathered gather-diagnostics for " + pubsubHostname)
+	fmt.Println("Gathered gather-diagnostics for " + pubsubContainerName)
 	// extract diagnostic to host
 	// first get absolute path from container
-	resp, diagnosticPath, err := context.dockerExec(pubsubHostname, []string{"/bin/bash", "-l", "-c", "ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz | tail -n 1"})
+	resp, diagnosticPath, err := context.dockerExec(pubsubContainerName, []string{"/bin/bash", "-l", "-c", "ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz | tail -n 1"})
 	//resp, diagnosticPath, err := context.dockerExec(pubsubHostname, []string{"/bin/bash", "-l", "-c", " realpath $(ls -rt /usr/sw/jail/logs/gather-diagnostics*.tgz | tail -n 1)"})
 	if err != nil {
 		return err
 	}
 	if resp != 0 {
-		return fmt.Errorf("failed to locate %s diagnostics", pubsubHostname)
+		return fmt.Errorf("failed to locate %s diagnostics", pubsubContainerName)
 	}
-	fmt.Println("Exacting gather-diagnostics " + diagnosticPath + " for " + pubsubHostname + " to " + destinationPath + "...")
-	err = context.dockerCpToHost(pubsubHostname, strings.TrimSpace(diagnosticPath), destinationPath)
+	fmt.Println("Exacting gather-diagnostics " + diagnosticPath + " for " + pubsubContainerName + " to " + destinationPath + "...")
+	err = context.dockerCpToHost(pubsubContainerName, strings.TrimSpace(diagnosticPath), destinationPath)
 	return err
 }
 

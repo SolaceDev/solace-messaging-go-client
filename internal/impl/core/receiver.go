@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -189,7 +189,7 @@ func (receiver *ccsmpBackedReceiver) IsRunning() bool {
 }
 
 func (receiver *ccsmpBackedReceiver) Replier() Replier {
-	// use ccsmpBackedReceiver struct for now seperate later if needed
+	// use ccsmpBackedReceiver struct for now separate later if needed
 	return receiver
 }
 

@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -148,7 +148,7 @@ func TestSolClientEndpointProvisionerClearProvisionCorrelation(t *testing.T) {
 }
 
 // TestSolClientEndpointProvisionerHandleProvisionOkEvent - tests the provision event handlers
-// Mock emit an event and checking that the result in the channel is the emited event
+// Mock emit an event and checking that the result in the channel is the emitted event
 func TestSolClientEndpointProvisionerHandleProvisionOkEvent(t *testing.T) {
 	events := dummyEvents()
 	endpointProvisioner := newCcsmpEndpointProvisioner(nil, events)
@@ -187,7 +187,7 @@ func TestSolClientEndpointProvisionerHandleProvisionOkEvent(t *testing.T) {
 }
 
 // TestSolClientEndpointProvisionerHandleProvisionErrorEvent - tests the provision event handlers
-// Mock emit an event and checking that the result in the channel is the emited event
+// Mock emit an event and checking that the result in the channel is the emitted event
 func TestSolClientEndpointProvisionerHandleProvisionErrorEvent(t *testing.T) {
 	events := dummyEvents()
 	endpointProvisioner := newCcsmpEndpointProvisioner(nil, events)

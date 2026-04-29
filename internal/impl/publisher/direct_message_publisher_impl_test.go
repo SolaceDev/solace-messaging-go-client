@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -163,6 +163,7 @@ func TestDirectMessagePublisherBuilderWithInvalidCustomPropertiesMapWrongStrateg
 	}
 }
 
+//gocyclo:ignore
 func TestDirectMessagePublisherImplLifecycle(t *testing.T) {
 	gracePeriod := 10 * time.Second
 
@@ -516,16 +517,21 @@ func TestDirectMessagePublisherLifecycleIdempotence(t *testing.T) {
 
 	gracePeriod := 10 * time.Second
 	// terminate
-	err = publisher.Terminate(gracePeriod)
+	checkPublisherTerminate(t, publisher, gracePeriod, eventExecutorTerminated, taskBufferTerminated)
+}
+
+func checkPublisherTerminate(t *testing.T, publisher *directMessagePublisherImpl, gracePeriod time.Duration, eventExecutorTerminated chan interface{}, taskBufferTerminated chan interface{}) {
+	// terminate
+	err := publisher.Terminate(gracePeriod)
 	if err != nil {
 		t.Error("expected error to be nil, got " + err.Error())
 	}
-	// make sure termiante was called
+	// make sure terminate was called
 	select {
 	case <-eventExecutorTerminated:
 		// success
 	case <-time.After(100 * time.Millisecond):
-		t.Error("timed out waiting for event executor to termiante")
+		t.Error("timed out waiting for event executor to terminate")
 	}
 	select {
 	case <-taskBufferTerminated:
@@ -589,6 +595,7 @@ func TestDirectMessagePublisherTerminateWithUnpublishedMessages(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestDirectMessagePublisherUnsolicitedTerminationWithUnpublishedMessages(t *testing.T) {
 	internalPublisher := &mockInternalPublisher{}
 	publisher := &directMessagePublisherImpl{}
@@ -723,6 +730,7 @@ func TestCallPublishWithBadPayload(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestDirectMessagePublisherPublishFunctionalityBufferedWait(t *testing.T) {
 	publisher := &directMessagePublisherImpl{}
 	publisher.construct(&mockInternalPublisher{}, backpressureConfigurationWait, 1)

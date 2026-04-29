@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -62,6 +62,8 @@ func mapEndpointPermissionToCcsmpProp(propValue string) string {
 }
 
 // validateEndpointProperties function
+//
+//gocyclo:ignore
 func validateEndpointProperties(properties config.EndpointPropertyMap) ([]string, error) {
 	propertiesList := []string{}
 	// We can only provision Queue Endpoints for now; should support Topic Endpoints in the future

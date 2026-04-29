@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -740,11 +740,13 @@ var _ = Describe("PersistentReceiver", func() {
 					Expect(subscriptions).To(ContainElement(topicString))
 				})
 				It("fails to add the queue topic subscription to the queue", func() {
-					err := receiver.AddSubscription(resource.TopicSubscriptionOf("#P2P/QUE/v:solbroker/" + queueName))
+					hostName, _ := helpers.GetHostName(messagingService, queueName+"_tmp")
+					err := receiver.AddSubscription(resource.TopicSubscriptionOf("#P2P/QUE/v:" + hostName + "/" + queueName))
 					helpers.ValidateNativeError(err, subcode.PermissionNotAllowed)
 				})
 				It("fails to remove the queue topic subscription from the queue", func() {
-					err := receiver.RemoveSubscription(resource.TopicSubscriptionOf("#P2P/QUE/v:solbroker/" + queueName))
+					hostName, _ := helpers.GetHostName(messagingService, queueName+"_tmp")
+					err := receiver.RemoveSubscription(resource.TopicSubscriptionOf("#P2P/QUE/v:" + hostName + "/" + queueName))
 					helpers.ValidateNativeError(err, subcode.PermissionNotAllowed)
 				})
 				It("fails to add an invalid subscription", func() {
@@ -2362,6 +2364,100 @@ var _ = Describe("PersistentReceiver", func() {
 					)
 				})
 			})
+		})
+	})
+
+	Describe("Running receiver remains functional when another receiver fails to start", func() {
+		const shutdownQueueName = "shutdown_queue"
+		const workingQueueName = "working_queue"
+		const testTopic = "test"
+
+		var messagingService solace.MessagingService
+
+		BeforeEach(func() {
+			messagingService = helpers.BuildMessagingService(
+				messaging.NewMessagingServiceBuilder().FromConfigurationProvider(helpers.DefaultConfiguration()),
+			)
+			helpers.CreateQueueWithEgressDisabled(shutdownQueueName)
+			helpers.CreateQueue(workingQueueName, testTopic)
+		})
+
+		AfterEach(func() {
+			if messagingService != nil && messagingService.IsConnected() {
+				messagingService.Disconnect()
+			}
+			helpers.DeleteQueue(shutdownQueueName)
+			helpers.DeleteQueue(workingQueueName)
+		})
+
+		It("should continue to receive messages on a healthy receiver after another receiver fails to start", func() {
+			err := messagingService.Connect()
+			Expect(err).ToNot(HaveOccurred())
+
+			shutdownQueue := resource.QueueDurableNonExclusive(shutdownQueueName)
+			workingQueue := resource.QueueDurableNonExclusive(workingQueueName)
+
+			By("Starting a working receiver on a healthy queue")
+			workingReceiver, buildErr := messagingService.CreatePersistentMessageReceiverBuilder().
+				WithMessageClientAcknowledgement().
+				Build(workingQueue)
+			Expect(buildErr).ToNot(HaveOccurred())
+
+			startErr := workingReceiver.Start()
+			Expect(startErr).ToNot(HaveOccurred())
+			Expect(workingReceiver.IsRunning()).To(BeTrue())
+			Expect(workingReceiver.IsTerminated()).To(BeFalse())
+
+			messageReceived := make(chan message.InboundMessage, 10)
+			workingReceiver.ReceiveAsync(func(msg message.InboundMessage) {
+				messageReceived <- msg
+			})
+
+			By("Publishing and receiving messages on the working receiver before the second receiver fails to start")
+			messagesCount := 5
+			for i := 0; i < messagesCount; i++ {
+				helpers.PublishOneMessage(messagingService, testTopic)
+			}
+			for i := 0; i < messagesCount; i++ {
+				select {
+				case <-messageReceived:
+				case <-time.After(5 * time.Second):
+					Fail(fmt.Sprintf("Timed out waiting for message %d/%d before second receiver start", i+1, messagesCount))
+				}
+			}
+			Expect(workingReceiver.IsRunning()).To(BeTrue())
+
+			By("Failing to start a receiver on a shutdown queue")
+			shutdownReceiver, buildErr := messagingService.CreatePersistentMessageReceiverBuilder().
+				Build(shutdownQueue)
+			Expect(buildErr).ToNot(HaveOccurred())
+			Expect(shutdownReceiver.IsRunning()).To(BeFalse())
+			Expect(shutdownReceiver.IsTerminated()).To(BeFalse())
+
+			startErr = shutdownReceiver.Start()
+			Expect(startErr).To(HaveOccurred())
+			Expect(shutdownReceiver.IsRunning()).To(BeFalse())
+			Expect(shutdownReceiver.IsTerminated()).To(BeTrue())
+			Expect(messagingService.IsConnected()).To(BeTrue())
+
+			By("Verifying the working receiver is unaffected after the second receiver fails to start")
+			Expect(workingReceiver.IsRunning()).To(BeTrue())
+			Expect(workingReceiver.IsTerminated()).To(BeFalse())
+			for i := 0; i < messagesCount; i++ {
+				helpers.PublishOneMessage(messagingService, testTopic)
+			}
+			for i := 0; i < messagesCount; i++ {
+				select {
+				case <-messageReceived:
+				case <-time.After(5 * time.Second):
+					Fail(fmt.Sprintf("Timed out waiting for message %d/%d after second receiver failed to start", i+1, messagesCount))
+				}
+			}
+
+			termErr := workingReceiver.Terminate(5 * time.Second)
+			Expect(termErr).ToNot(HaveOccurred())
+			Expect(workingReceiver.IsRunning()).To(BeFalse())
+			Expect(workingReceiver.IsTerminated()).To(BeTrue())
 		})
 	})
 })

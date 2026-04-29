@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,18 +17,16 @@
 package test
 
 import (
-	"fmt"
 	"strconv"
+	"sync/atomic"
 	"time"
 
 	"solace.dev/go/messaging"
 	"solace.dev/go/messaging/pkg/solace"
 	"solace.dev/go/messaging/pkg/solace/config"
+	"solace.dev/go/messaging/pkg/solace/message"
 	"solace.dev/go/messaging/pkg/solace/metrics"
 	"solace.dev/go/messaging/pkg/solace/resource"
-
-	//"solace.dev/go/messaging/pkg/solace/subcode"
-	"solace.dev/go/messaging/pkg/solace/message"
 	"solace.dev/go/messaging/test/helpers"
 	"solace.dev/go/messaging/test/testcontext"
 
@@ -58,6 +56,7 @@ var _ = Describe("Partitioned Queue Tests", func() {
 			var messagingServices [4]solace.MessagingService
 			var partitionKeys [9]string
 			var rebalanceDelayDuration = time.Duration(rebalanceDelay) * 2
+			var receivedMessageCount uint64 = 0
 
 			//generate partition keys
 			for i := 0; i < 9; i++ {
@@ -101,7 +100,8 @@ var _ = Describe("Partitioned Queue Tests", func() {
 			publisher.Terminate(rebalanceDelayDuration * time.Second)
 
 			messageHandler := func(message message.InboundMessage) {
-				fmt.Println("message received")
+				// count the received messages dispatched for the receiver
+				atomic.AddUint64(&receivedMessageCount, 1)
 			}
 
 			receiverOne.ReceiveAsync(messageHandler)
@@ -129,6 +129,10 @@ var _ = Describe("Partitioned Queue Tests", func() {
 				totalMessagesReceived := receiverOneMetrics.
 					GetValue(metrics.PersistentMessagesReceived) + receiverTwoMetrics.GetValue(metrics.PersistentMessagesReceived) + receiverThreeMetrics.GetValue(metrics.PersistentMessagesReceived)
 				return totalMessagesReceived
+			}).WithTimeout(rebalanceDelayDuration * time.Second).Should(Equal(publisherMetrics.GetValue(metrics.TotalMessagesSent)))
+
+			Eventually(func() uint64 {
+				return receivedMessageCount // what was actually received in the API callback
 			}).WithTimeout(rebalanceDelayDuration * time.Second).Should(Equal(publisherMetrics.GetValue(metrics.TotalMessagesSent)))
 
 			Expect(receiverOne.Terminate(10 * time.Second)).ToNot(HaveOccurred())
@@ -279,7 +283,6 @@ var _ = Describe("Partitioned Queue Tests", func() {
 			receiverTwo, _ := messagingServices[2].CreatePersistentMessageReceiverBuilder().
 				WithSubscriptions(resource.TopicSubscriptionOf(topicName)).Build(partitionedQueue)
 			receiverTwoMessageHandler := func(message message.InboundMessage) {
-				//fmt.Println("Received message in receiverTwo")
 				// count the received messages dispatched for the receiver
 				receiverTwoMessageCount += 1
 			}

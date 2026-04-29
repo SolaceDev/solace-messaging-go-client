@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -166,6 +166,7 @@ func TestBuilderWithSubscriptions(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestDirectMessageReceiverImplLifecycle(t *testing.T) {
 	gracePeriod := 10 * time.Second
 
@@ -1160,6 +1161,7 @@ func TestDirectMessageReceiverTerminateIdempotence(t *testing.T) {
 	}
 }
 
+//gocyclo:ignore
 func TestDirectReceiverUnsolicitedTermination(t *testing.T) {
 	internalReceiver := &mockInternalReceiver{}
 	receiver := &directMessageReceiverImpl{}

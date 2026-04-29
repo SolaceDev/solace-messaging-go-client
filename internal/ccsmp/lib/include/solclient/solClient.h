@@ -2,7 +2,7 @@
 *
 * @file solClient.h include file for the Solace Corporation Messaging API for C
 *
-* Copyright 2007-2025 Solace Corporation. All rights reserved.
+* Copyright 2007-2026 Solace Corporation. All rights reserved.
 *
 * This include file provides the public constants and API calls for clients
 * connecting to a Solace messaging broker.
@@ -2213,7 +2213,7 @@ Note: This property is used for all entries specified by the property ::SOLCLIEN
 
 /*@}*/
 /**
- * @defgroup transportProtocol Session Transport Trotocol Types
+ * @defgroup transportProtocol Session Transport Protocol Types
  * Definition of the valid set of transport protocols when setting ::SOLCLIENT_SESSION_PROP_WEB_TRANSPORT_PROTOCOL, or returned
  * via the read-only session property ::SOLCLIENT_SESSION_PROP_WEB_TRANSPORT_PROTOCOL_IN_USE
  * Note: the use of ::SOLCLIENT_SESSION_PROP_GUARANTEED_WITH_WEB_TRANSPORT effects what protocol are available for properties 
@@ -2638,7 +2638,7 @@ Note: This property is used for all entries specified by the property ::SOLCLIEN
 #define SOLCLIENT_TRANSACTEDSESSION_PROP_HAS_PUBLISHER "TRANSACTEDSESSION_HAS_PUBLISHER" /**<If it is enabled, a publisher flow is created when a Transacted Session is created successfully. Default: ::SOLCLIENT_TRANSACTEDSESSION_PROP_DEFAULT_HAS_PUBLISHER. */
 #define SOLCLIENT_TRANSACTEDSESSION_PROP_CREATE_MESSAGE_DISPATCHER "TRANSACTEDSESSION_CREATE_MESSAGE_DISPATCHER" /**<If it is enabled, a TransactedSession-bound Message Dispatcher is lazily created for asynchronous message delivery within a Transacted Session. Default: ::SOLCLIENT_TRANSACTEDSESSION_PROP_DEFAULT_CREATE_MESSAGE_DISPATCHER */  
 #define SOLCLIENT_TRANSACTEDSESSION_PROP_REQUESTREPLY_TIMEOUT_MS "TRANSACTEDSESSION_REQUESTREPLY_TIMEOUT_MS" /**< Timeout (in milliseconds) to wait for a response. The minimum configuration value is 1000. Default: ::SOLCLIENT_TRANSACTEDSESSION_PROP_DEFAULT_REQUESTREPLY_TIMEOUT_MS. */
-#define SOLCLIENT_TRANSACTEDSESSION_PROP_PUB_WINDOW_SIZE "TRANSACTEDSESSION_PUB_WINDOW_SIZE" /**< Transacted publisher window size, if supported by broker. When connecting to PubSub+ brokers 9.8.1 or later, this window allows the application to reduce the outstanding window if there are memory/resource restrictions that preclude the larger window. For example, if the application is only publishing large or max size messages (30mb), it may wish to restrict the number if flight. Range is 1-255, default is ::SOLCLIENT_TRANSACTEDSESSION_PROP_DEFAULT_PUB_WINDOW_SIZE. */
+#define SOLCLIENT_TRANSACTEDSESSION_PROP_PUB_WINDOW_SIZE "TRANSACTEDSESSION_PUB_WINDOW_SIZE" /**< Transacted publisher window size, if supported by broker. When connecting to Solace Event Brokers 9.8.1 or later, this window allows the application to reduce the outstanding window if there are memory/resource restrictions that preclude the larger window. For example, if the application is only publishing large or max size messages (30mb), it may wish to restrict the number if flight. Range is 1-255, default is ::SOLCLIENT_TRANSACTEDSESSION_PROP_DEFAULT_PUB_WINDOW_SIZE. */
 
 /*@}*/
 
@@ -2656,7 +2656,7 @@ Note: This property is used for all entries specified by the property ::SOLCLIEN
 /** @name UserProps
  *  */
 /*@{*/
-#define SOLCLIENT_MESSAGE_USER_PROP_QUEUE_PARTITION_KEY "JMSXGroupID" /**<Key for getting or setting partition key for a queue where the message should/is published to when supported by a PubSub+ messaging broker. This property should be a  part of User Property map. Expected value is UTF-8 encoded up to 255 bytes long string. */
+#define SOLCLIENT_MESSAGE_USER_PROP_QUEUE_PARTITION_KEY "JMSXGroupID" /**<Key for getting or setting partition key for a queue where the message should/is published to when supported by a Solace Event Broker. This property should be a  part of User Property map. Expected value is UTF-8 encoded up to 255 bytes long string. */
 /*@}*/
 
 /**
@@ -4392,7 +4392,7 @@ solClient_session_isCapable(
                                       
 /**
 * Adds a Topic subscription to a Session similar to ::solClient_session_topicSubscribeExt(), 
-* but this function also allows the application to specifiy a different message receive callback and different user_p.
+* but this function also allows the application to specify a different message receive callback and different user_p.
 *
 * The argument list includes a pointer to a struct solClient_session_rxMsgDispatchFuncInfo.
 * Specifying a NULL pointer to this structure, or if struct solClient_session_rxMsgDispatchFuncInfo references a
@@ -4514,7 +4514,7 @@ solClient_session_isCapable(
 
 /**
 * Removes a Topic subscription from a Session similar to ::solClient_session_topicUnsubscribeExt(), 
-* but this function also allows the application to specifiy a different message receive callback and different user_p.
+* but this function also allows the application to specify a different message receive callback and different user_p.
 *
 * The argument list includes a pointer to a struct solClient_session_rxMsgDispatchFuncInfo.
 * Specifying a NULL pointer to this structure, or if struct solClient_session_rxMsgDispatchFuncInfo references a

@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package helpers
 import (
 	"time"
 
+	. "github.com/onsi/gomega"
 	"solace.dev/go/messaging/test/sempclient/config"
 	"solace.dev/go/messaging/test/testcontext"
 )
@@ -158,8 +159,8 @@ func EnsureCreateDomainCertAuthority(certAuthName string, certContent string) er
 			return err
 		}
 		// ensure domain certification authority exists on the broker
-		// wait up to 30 secs after the service is back is overkill however to have an exit condition to prevent hung tests
-		for i := 0; i < 30; i++ {
+		// wait up to 45 secs after the service is back is overkill however to have an exit condition to prevent hung tests
+		for i := 0; i < 45; i++ {
 			found, err = HasDomainCertAuthority(certAuthName)
 
 			if err != nil {
@@ -197,8 +198,8 @@ func EnsureDeleteDomainCertAuthority(certAuthName string) error {
 			return err
 		}
 		// ensure domain certification authority does not exist on the broker
-		// wait up to 30 secs after the service is back is overkill however to have an exit condition to prevent hung tests
-		for i := 0; i < 30; i++ {
+		// wait up to 45 secs after the service is back is overkill however to have an exit condition to prevent hung tests
+		for i := 0; i < 45; i++ {
 			found, err = HasDomainCertAuthority(certAuthName)
 			if err != nil {
 				// the broker can sometimes fail to have semp up after cert auth change
@@ -212,4 +213,21 @@ func EnsureDeleteDomainCertAuthority(certAuthName string) error {
 		}
 	}
 	return nil
+}
+
+// Creates a queue with egress disabled (shutdown state),
+// causing flow creation to fail with QueueShutdown
+func CreateQueueWithEgressDisabled(queueName string) {
+	_, _, err := testcontext.SEMP().Config().QueueApi.CreateMsgVpnQueue(
+		testcontext.SEMP().ConfigCtx(),
+		config.MsgVpnQueue{
+			QueueName:      queueName,
+			IngressEnabled: True,
+			EgressEnabled:  False,
+			Owner:          "default",
+		},
+		testcontext.Messaging().VPN,
+		nil,
+	)
+	ExpectWithOffset(1, err).ToNot(HaveOccurred(), "Failed to create queue with egress disabled: "+queueName)
 }

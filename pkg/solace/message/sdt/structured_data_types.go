@@ -1,6 +1,6 @@
-// pubsubplus-go-client
+// solace-messaging-go-client
 //
-// Copyright 2021-2025 Solace Corporation. All rights reserved.
+// Copyright 2021-2026 Solace Corporation. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -813,6 +813,7 @@ func (sdtStream Stream) GetTopic(index int) (val *resource.Topic, err error) {
 	return getTopic(sdtStream[index])
 }
 
+//gocyclo:ignore
 func getBool(elem interface{}) (bool, error) {
 	switch casted := elem.(type) {
 	case bool:
