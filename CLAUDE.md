@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-The Solace PubSub+ Messaging API for Go (`solace.dev/go/messaging`) is a Go client library for Solace Event Brokers. It wraps the native C library (CCSMP/libsolclient) via Cgo, providing pub/sub, request/reply, persistent messaging, and cache APIs. Current version is in `version.go`.
+The Solace Messaging API for Go (`solace.dev/go/messaging`) is a Go client library for Solace Event Brokers. It wraps the native C library (CCSMP/libsolclient) via Cgo, providing pub/sub, request/reply, persistent messaging, and cache APIs. Current version is in `version.go`.
 
 ## Build Commands
 

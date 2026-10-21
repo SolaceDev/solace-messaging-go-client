@@ -1,10 +1,10 @@
-# Solace PubSub+ Messaging API for Go
+# Solace Messaging API for Go
 
 [![Test](https://github.com/SolaceProducts/solace-messaging-go-client/actions/workflows/test.yml/badge.svg)](https://github.com/SolaceProducts/solace-messaging-go-client/actions/workflows/test.yml)
 [![PkgGoDev](https://pkg.go.dev/badge/solace.dev/go/messaging.svg)](https://pkg.go.dev/solace.dev/go/messaging)
 [![Go Report Card](https://goreportcard.com/badge/solace.dev/go/messaging)](https://goreportcard.com/report/solace.dev/go/messaging)
 
-The Solace PubSub+ Messaging API for Go (`solace.dev/go/messaging`) provides a high-performance Go client for connecting to [Solace PubSub+ Event Brokers](https://solace.com/products/event-broker/). It wraps the Solace C API (CCSMP) via Cgo, supporting pub/sub, request/reply, persistent messaging, and cache operations.
+The Solace Messaging API for Go (`solace.dev/go/messaging`) provides a high-performance Go client for connecting to [Solace Event Brokers](https://solace.com/products/event-broker/). It wraps the Solace C API (CCSMP) via Cgo, supporting pub/sub, request/reply, persistent messaging, and cache operations.
 
 ## Getting Started
 
@@ -59,7 +59,7 @@ go test -race ./...
 
 ### Running Integration Tests
 
-The integration tests live in `./test/` as a **separate Go module**. They use [testcontainers](https://golang.testcontainers.org/) to spin up a Solace PubSub+ broker and [ToxiProxy](https://github.com/Shopify/toxiproxy) for network simulation. Docker must be running.
+The integration tests live in `./test/` as a **separate Go module**. They use [testcontainers](https://golang.testcontainers.org/) to spin up a Solace broker and [ToxiProxy](https://github.com/Shopify/toxiproxy) for network simulation. Docker must be running.
 
 ```bash
 # Generate the SEMPv2 client (required, not committed to repo)
