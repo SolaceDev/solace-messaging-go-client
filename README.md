@@ -33,10 +33,8 @@ The API wraps the native Solace C library via Cgo. Pre-compiled static libraries
 
 ### Prerequisites
 
-- Go 1.17+ (1.22+ recommended for latest tooling)
-- A C compiler (required by Cgo)
+- Go 1.17+ (a [currently supported release](https://go.dev/doc/devel/release#policy) is recommended)
 - Docker (for integration tests)
-- A Go-enabled editor with format-on-save (e.g., VS Code with the [Go extension](https://code.visualstudio.com/docs/languages/go))
 
 ### Building
 
@@ -46,7 +44,7 @@ cd solace-messaging-go-client
 go build ./...
 ```
 
-The library is self-contained: the native `libsolclient.a` static libraries are committed per platform in `internal/ccsmp/lib/`, so no external C library installation is needed.
+The library is self-contained: the native `libsolclient.a` static libraries are committed per platform in `internal/ccsmp/lib/`, so no external C library installation is needed. Cgo must be enabled (`CGO_ENABLED=1`, the default) and requires a C compiler (gcc or clang) on the system.
 
 ### Running Unit Tests
 
