@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> **Human docs:** [README.md](README.md) | **External docs:** [docs.solace.com/Go](https://docs.solace.com/API/Messaging-APIs/Go-API/go-home.htm) | **API ref:** [pkg.go.dev](https://pkg.go.dev/solace.dev/go/messaging)
+> **Human docs:** [README.md](README.md) | **Test docs:** [test/README.md](test/README.md) | **External docs:** [docs.solace.com/Go](https://docs.solace.com/API/Messaging-APIs/Go-API/go-home.htm) | **API ref:** [pkg.go.dev](https://pkg.go.dev/solace.dev/go/messaging)
 
 ## Repository Overview
 
@@ -100,6 +100,13 @@ cd internal/ccsmp && go generate . && cd -
 - **Platform-specific builds.** Code changes must compile across all supported platforms (Linux x86_64/arm64/musl, macOS x86_64/arm64). The CI runs a cross-platform matrix.
 - **Public repo.** Don't commit internal URLs, credentials, or references to internal systems.
 - **Don't edit `*_generated.go` files.** They are overwritten by `go generate`. See "Generated Code" above.
+
+## Testing
+
+- **Unit tests** (`*_test.go` alongside implementation): Standard `go test`, run in CI with race detection.
+- **Integration tests** (`./test/`): Separate module using Ginkgo v2 with Gomega matchers, driven by testcontainers (Docker-based Solace broker + ToxiProxy for network simulation).
+- **SEMPv2 client**: Generated from OpenAPI specs via Docker (not committed to repo; must run `go generate` in `test/sempclient/`).
+- **Environment variables, ToxiProxy, Kerberos, OAuth, Cache configs**: See [test/README.md](test/README.md).
 
 ## Domain Pitfalls
 

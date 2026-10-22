@@ -53,6 +53,9 @@ The library is self-contained: the native `libsolclient.a` static libraries are 
 ```bash
 go test ./...
 
+# Run a specific test by name/regex
+go test -run TestFunctionName ./...
+
 # With race detection (as CI runs it)
 go test -race ./...
 ```
