@@ -160,7 +160,7 @@ This project is released with a Contributor Code of Conduct. By participating in
 ## Resources
 
 - [Solace Developer Portal](https://dev.solace.com)
-- [Solace Technology Overview](https://solace.com/products/tech/)
+- [Solace Technology Overview](https://solace.com/products/platform/)
 - [OpenTelemetry Integration for the Solace Go API](https://github.com/SolaceProducts/pubsubplus-opentelemetry-go-integration)
 
 ---
